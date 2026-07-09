@@ -1,9 +1,10 @@
 # Handoff
 
 ## Current Owner
-z.ai 모델 (Cline)
+Codex
 
 ## Completed Work
+- Codex 리뷰 수행: `npm run build`, `npm run lint`, `npm audit --omit=dev`, 320px/375px/390px 모바일 렌더링, 콘솔 오류, 가로 overflow, OG 이미지 404, 접근성 포커스 상태 확인
 - Header 클럽명 폰트 크기 2배 확대 (EN: text-base→text-2xl / text-lg→text-3xl, KO: text-[10px]→text-sm / text-xs→text-base), 헤더 높이 및 Hero pt 동기화
 - 프로젝트 문서 파일 8개 생성 (BLUEPRINT, SCOPE, WORKFLOW, DEV_LOG, HANDOFF, README, CLAUDE.md, AGENTS.md)
 - Next.js 프로젝트 수동 초기화 (package.json, tsconfig, next.config, tailwind.config, postcss, eslint, gitignore)
@@ -17,7 +18,7 @@ z.ai 모델 (Cline)
 - `npm run build` 2회 통과 (최종: 경고 0, 에러 0, 정적 4페이지, 46.6kB/134kB)
 
 ## Current Stage
-/build Slice 1~7 완료 → /test (빌드 통과) → Netlify 배포 진행 중 → /review 대기
+/build Slice 1~7 완료 → /test (빌드 통과) → /review (Codex 완료) → polish/보안 패치 대기 → Netlify 배포 확인 필요
 
 ## Deployment
 - Platform: Netlify (GitHub repo 자동 연결)
@@ -28,19 +29,18 @@ z.ai 모델 (Cline)
 - 상태: Netlify 대시보드에서 배포 진행 상황 확인 필요
 
 ## Next Owner
-Claude — `/review` 실행 권장 (또는 운영자가 Netlify 배포 완료 확인 후)
+Codex 또는 GLM — 리뷰에서 발견된 polish/보안/자산 이슈 수정
 
 ## Next Task
-`/review` 수행:
-- scope creep 확인 (빌드 브리프 범위 내 구현 여부)
-- HYROX 사용 규칙 위반 여부 (공식 사이트처럼 보이는지, "Official" 표현 있는지)
-- 금지 콘텐츠 포함 여부 (Don/Clinic/PT/의료/면책/결제/로그인)
-- 보안/접근성 일관성 점검
-- TODO placeholder가 fake data로 채워지지 않았는지 확인
-- 모바일 반응형 코드 검토 (320px/375px/390px)
+리뷰 후 수정 권장:
+- Next.js 보안 패치 버전 업그레이드 및 재빌드 검증
+- `/images/og-placeholder.png` 실제 파일 추가 또는 metadata 이미지 경로 제거
+- 모바일 Sticky CTA 숨김 상태에서 focusable link가 tab order에 남지 않도록 수정
+- CTA 버튼 focus ring이 키보드 사용자에게 명확히 보이도록 수정
+- 320px Hero CTA 문구/간격 polish
 
 ## Reason For Handoff
-정확성·보안·일관성 검증은 Claude의 역할(0장 표). z.ai가 구현을 완료했으므로, Claude가 품질 안전망 2차(정확성)를 담당.
+GLM 구현 후 Codex가 런타임/프레임워크/접근성 중심 리뷰를 수행함. 남은 작업은 작은 수정과 보안 패치 검증.
 
 ## Priority
 High
@@ -63,13 +63,15 @@ High
 NY/NJ Hybrid Race Club 모바일 우선 이중언어 랜딩 페이지 MVP 완성. Next.js 14 App Router + TypeScript + Tailwind + Framer Motion(최소). 주요 전환 = Kakao OpenChat (CTA 7곳). HYROX는 훈련 카테고리로만 사용, 공식 사이트처럼 보이지 않음. 미확정값은 전부 TODO placeholder. 빌드 통과(경고 0). 남은 작업 = 운영자 TODO 채우기 + 이미지 제작 + Claude 리뷰 + 수동 모바일 테스트 + Vercel 배포.
 
 ## Known Issues
-- Kakao OpenChat URL 미확정 (TODO_ADD_KAKAO_OPENCHAT_URL) — CTAButton이 비활성 span으로 처리
+- Kakao OpenChat URL은 적용됨 (`https://open.kakao.com/o/gjuedrvi`)
 - 정확한 모임 요일/시간/장소/참가비 미확정 (TODO 표시)
 - QR 이미지 미확정 (kakaoQrAvailable=false로 숨김 처리)
 - OG 이미지 미제작 (og-placeholder.png 경로, 실제 파일 없음 — 배포 전 제작 필요)
 - metadataBase URL placeholder (실제 도메인 확정 시 교체)
-- next 14.2.15 보안 취약점 (patched 버전 업그레이드 권장)
-- 320px/375px/390px 수동 반응형 테스트 미수행
+- next 14.2.15 보안 취약점 (`npm audit --omit=dev`: next critical + bundled postcss moderate)
+- 320px/375px/390px 모바일 확인 완료: 가로 overflow/콘솔 오류 없음, Hero CTA wrapping polish 필요
+- 숨겨진 모바일 Sticky CTA 내부 링크가 focusable 상태로 남음
+- CTA 버튼 focus outline이 투명/약하게 계산되어 키보드 focus 표시 개선 필요
 
 ## Escalation Rules
 - 리뷰 중 아키텍처/보안/HYROX 규칙 문제 발견 → Claude가 직접 수정 판단
