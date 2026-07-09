@@ -6,14 +6,17 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 
 ## Current Status
 
-- Current Feature: MVP 랜딩 페이지 완성
+- Current Feature: MVP 랜딩 페이지 완성 + Netlify 배포 진행 중
 - Current Phase: MVP
 - Current Slice: Slice 7 완료 — 모든 slice 완료
 - Completed Slices: Slice 1~7 전체
-- Remaining Work: 운영자 TODO 값 채우기, 실제 이미지/QR/OG 이미지 추가
+- Remaining Work: 운영자 TODO 값 채우기, 실제 이미지/QR/OG 이미지 추가, Netlify 배포 확인
 - Active Branch: main
 - Build Status: Passing (경고/에러 0)
-- Test Status: Build 통과, 수동 테스트 대기
+- Test Status: Build 통과, 수동 테스트 대기, Netlify 자동 배포 트리거됨
+- Git Remote: github.com:Oplo-Works/hyrox.git
+- Latest Commit: 2da7cb5 (netlify.toml 추가)
+- Deployment: Netlify (GitHub repo 연결, 자동 배포)
 
 ## Current MVP Scope
 
@@ -54,6 +57,8 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 | 2026-07-09 | Slice 7: 페이지 조립 + 메타데이터 + 빌드 테스트 | app/page.tsx, layout.tsx (폰트, OG, metadataBase) |
 | 2026-07-09 | 빌드 경고 2개 수정 | img eslint-disable, metadataBase 추가 |
 | 2026-07-09 | 최종 빌드 통과 | 경고 0, 에러 0, 정적 4페이지 생성 |
+| 2026-07-09 | git init + commit cd34c0b + push to github.com:Oplo-Works/hyrox.git | main 브랜치, 36 files, 11584 insertions |
+| 2026-07-09 | netlify.toml 추가 + commit 2da7cb5 + push | Netlify 자동 배포 트리거 |
 
 ## Open Issues
 

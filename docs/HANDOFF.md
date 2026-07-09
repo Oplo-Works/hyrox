@@ -16,10 +16,18 @@ z.ai 모델 (Cline)
 - `npm run build` 2회 통과 (최종: 경고 0, 에러 0, 정적 4페이지, 46.6kB/134kB)
 
 ## Current Stage
-/build Slice 1~7 완료 → /test (빌드 통과) → /review 대기
+/build Slice 1~7 완료 → /test (빌드 통과) → Netlify 배포 진행 중 → /review 대기
+
+## Deployment
+- Platform: Netlify (GitHub repo 자동 연결)
+- Repo: github.com:Oplo-Works/hyrox.git
+- Branch: main (자동 배포 트리거)
+- Config: netlify.toml (빌드 명령 npm run build, publish .next, Node 20)
+- Latest Commit: 2da7cb5
+- 상태: Netlify 대시보드에서 배포 진행 상황 확인 필요
 
 ## Next Owner
-Claude — `/review` 실행 권장
+Claude — `/review` 실행 권장 (또는 운영자가 Netlify 배포 완료 확인 후)
 
 ## Next Task
 `/review` 수행:
