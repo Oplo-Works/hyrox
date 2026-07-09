@@ -15,7 +15,7 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative hero-bg min-h-[100svh] flex items-center overflow-hidden pt-20 md:pt-24"
+      className="relative hero-bg hero-race-surface min-h-[100svh] flex items-center overflow-hidden pt-20 md:pt-24"
       aria-label="Hero"
     >
       {/* 그리드 라인 배경 */}
@@ -49,8 +49,11 @@ export default function Hero() {
         >
           {/* 디스크립터 */}
           <div className="flex items-center gap-2 mb-4 md:mb-6">
-            <span className="h-px w-8 bg-orange" aria-hidden="true" />
-            <span className="text-xs md:text-sm font-bold uppercase tracking-widest text-orange">
+            <span
+              className="h-px w-8 bg-[var(--color-race-yellow)]"
+              aria-hidden="true"
+            />
+            <span className="text-xs md:text-sm font-bold uppercase tracking-widest text-[var(--color-race-yellow)]">
               {siteConfig.descriptor}
             </span>
           </div>
@@ -59,7 +62,7 @@ export default function Hero() {
           <h1 className="font-heading text-4xl xs:text-5xl md:text-7xl lg:text-8xl font-bold uppercase text-text leading-[0.95] mb-3 md:mb-4">
             NY/NJ Hybrid
             <br />
-            <span className="text-orange">Race Club</span>
+            <span className="text-[var(--color-race-yellow)]">Race Club</span>
           </h1>
 
           {/* 한국어 클럽명 */}
@@ -105,6 +108,13 @@ export default function Hero() {
             </CTAButton>
           </div>
         </motion.div>
+      </div>
+
+      <div className="hero-lane-markers" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+        <span />
       </div>
 
       {/* 하단 그라데이션 페이드 */}

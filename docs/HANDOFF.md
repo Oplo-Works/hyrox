@@ -4,6 +4,10 @@
 Codex
 
 ## Completed Work
+- 모바일 스크롤 에너지 디자인 적용: `ScrollEnergy`가 스크롤 방향/속도에 따라 진행선, 양측 레인, 스피드 라인을 갱신하고 섹션 진입 reveal을 처리
+- 참고 이미지의 네온 옐로 포인트를 CTA, 섹션 구분, Hero 레이스 라인에 적용. 공식 HYROX 로고/이미지/레이아웃은 사용하지 않음
+- CTA 키보드 포커스 링을 네온 옐로로 보강
+- 390px 모바일 스크롤 검증: down/up 반응, 가로 overflow 없음, 콘솔 warnings/errors 0
 - Codex 리뷰 수행: `npm run build`, `npm run lint`, `npm audit --omit=dev`, 320px/375px/390px 모바일 렌더링, 콘솔 오류, 가로 overflow, OG 이미지 404, 접근성 포커스 상태 확인
 - Header 클럽명 폰트 크기 2배 확대 (EN: text-base→text-2xl / text-lg→text-3xl, KO: text-[10px]→text-sm / text-xs→text-base), 헤더 높이 및 Hero pt 동기화
 - 프로젝트 문서 파일 8개 생성 (BLUEPRINT, SCOPE, WORKFLOW, DEV_LOG, HANDOFF, README, CLAUDE.md, AGENTS.md)
@@ -18,7 +22,7 @@ Codex
 - `npm run build` 2회 통과 (최종: 경고 0, 에러 0, 정적 4페이지, 46.6kB/134kB)
 
 ## Current Stage
-/build Slice 1~7 완료 → /test (빌드 통과) → /review (Codex 완료) → polish/보안 패치 대기 → Netlify 배포 확인 필요
+/build Slice 1~7 완료 → /test (빌드 통과) → /review (Codex 완료) → 모바일 에너지 디자인 적용 및 검증 완료 → polish/보안 패치 대기 → Netlify 배포 확인 필요
 
 ## Deployment
 - Platform: Netlify (GitHub repo 자동 연결)
@@ -36,7 +40,6 @@ Codex 또는 GLM — 리뷰에서 발견된 polish/보안/자산 이슈 수정
 - Next.js 보안 패치 버전 업그레이드 및 재빌드 검증
 - `/images/og-placeholder.png` 실제 파일 추가 또는 metadata 이미지 경로 제거
 - 모바일 Sticky CTA 숨김 상태에서 focusable link가 tab order에 남지 않도록 수정
-- CTA 버튼 focus ring이 키보드 사용자에게 명확히 보이도록 수정
 - 320px Hero CTA 문구/간격 polish
 
 ## Reason For Handoff
@@ -60,7 +63,7 @@ High
 - (운영자) public/images/ — QR, hero, OG 이미지 추가
 
 ## Context Summary
-NY/NJ Hybrid Race Club 모바일 우선 이중언어 랜딩 페이지 MVP 완성. Next.js 14 App Router + TypeScript + Tailwind + Framer Motion(최소). 주요 전환 = Kakao OpenChat (CTA 7곳). HYROX는 훈련 카테고리로만 사용, 공식 사이트처럼 보이지 않음. 미확정값은 전부 TODO placeholder. 빌드 통과(경고 0). 남은 작업 = 운영자 TODO 채우기 + 이미지 제작 + Claude 리뷰 + 수동 모바일 테스트 + Vercel 배포.
+NY/NJ Hybrid Race Club 모바일 우선 이중언어 랜딩 페이지 MVP 완성. Next.js 14 App Router + TypeScript + Tailwind + Framer Motion(최소). 모바일 스크롤에 반응하는 진행선/레인/섹션 reveal과 네온 옐로 포인트가 추가됨. 주요 전환 = Kakao OpenChat (CTA 7곳). HYROX는 훈련 카테고리로만 사용하며 공식 로고·이미지·레이아웃은 사용하지 않음. 미확정값은 전부 TODO placeholder. 빌드/lint 통과 및 390px 스크롤 검증 완료.
 
 ## Known Issues
 - Kakao OpenChat URL은 적용됨 (`https://open.kakao.com/o/gjuedrvi`)
@@ -71,7 +74,7 @@ NY/NJ Hybrid Race Club 모바일 우선 이중언어 랜딩 페이지 MVP 완성
 - next 14.2.15 보안 취약점 (`npm audit --omit=dev`: next critical + bundled postcss moderate)
 - 320px/375px/390px 모바일 확인 완료: 가로 overflow/콘솔 오류 없음, Hero CTA wrapping polish 필요
 - 숨겨진 모바일 Sticky CTA 내부 링크가 focusable 상태로 남음
-- CTA 버튼 focus outline이 투명/약하게 계산되어 키보드 focus 표시 개선 필요
+- CTA 버튼 focus ring은 네온 옐로로 개선 완료
 
 ## Escalation Rules
 - 리뷰 중 아키텍처/보안/HYROX 규칙 문제 발견 → Claude가 직접 수정 판단

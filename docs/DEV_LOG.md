@@ -6,11 +6,11 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 
 ## Current Status
 
-- Current Feature: MVP 랜딩 페이지 완성 + Codex 리뷰 완료
+- Current Feature: MVP 랜딩 페이지 + 모바일 스크롤 에너지 디자인 적용
 - Current Phase: MVP
 - Current Slice: Slice 7 완료 — 모든 slice 완료
 - Completed Slices: Slice 1~7 전체
-- Remaining Work: 운영자 TODO 값 채우기, 실제 이미지/QR/OG 이미지 추가, 접근성/모바일 polish 수정, Next 보안 패치, Netlify 배포 확인
+- Remaining Work: 운영자 TODO 값 채우기, 실제 이미지/QR/OG 이미지 추가, Sticky CTA 접근성 polish, Next 보안 패치, Netlify 배포 확인
 - Active Branch: main
 - Build Status: Passing (경고/에러 0)
 - Test Status: Build/lint 통과, 320px/375px/390px 모바일 렌더링 점검 완료, Netlify 자동 배포 확인 필요
@@ -39,6 +39,8 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 | 2026-07-09 | package name = nynj-hybrid-race-club | URL-friendly, 소문자, 하이픈 |
 | 2026-07-09 | CTAButton에서 TODO 링크는 비활성 span 처리 | 깨진 링크 클릭 방지 |
 | 2026-07-09 | metadataBase placeholder URL 설정 | OG 이미지 경로 해석 경고 제거 |
+| 2026-07-09 | 네온 옐로 레이스 포인트 적용 | 참고 이미지의 블랙/화이트/옐로 대비를 사용하되, 공식 HYROX 로고·이미지·레이아웃은 사용하지 않음 |
+| 2026-07-09 | 스크롤 기반 모션을 CSS + DOM 관찰로 구현 | React 재렌더링 없이 모바일 스크롤 방향·속도에 반응하도록 구성 |
 
 ## Completed Work
 
@@ -61,6 +63,7 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 | 2026-07-09 | netlify.toml 추가 + commit 2da7cb5 + push | Netlify 자동 배포 트리거 |
 | 2026-07-09 | Header 클럽명 폰트 크기 2배 확대 | text-base→text-2xl, text-lg→text-3xl (EN); text-[10px]→text-sm, text-xs→text-base (KO); 헤더 높이 h-16→h-20, h-20→h-24; Hero pt-16→pt-20, pt-20→pt-24 |
 | 2026-07-09 | Codex 리뷰 수행 | build/lint 통과, npm audit 취약점 확인, OG 이미지 404 확인, 모바일 320/375/390 렌더링 및 접근성 이슈 확인 |
+| 2026-07-09 | 모바일 스크롤 에너지 디자인 | `ScrollEnergy` 진행선/레인/스피드 라인, 섹션 reveal, Hero 대각선 레이스 라인, 옐로 CTA 및 포커스 링 추가 |
 
 ## Open Issues
 
@@ -77,7 +80,7 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 | #009 | next 14.2.15 보안 취약점 (patched 버전 업그레이드 권장) | Medium | Open |
 | #010 | `/images/og-placeholder.png`가 실제 파일 없음 (로컬 요청 404) | Medium | Open |
 | #011 | 숨겨진 모바일 Sticky CTA 안의 링크가 tab order에 남음 (`aria-hidden=true` 내부 focusable link) | Medium | Open |
-| #012 | CTA 버튼 포커스 outline이 투명/약하게 계산되어 키보드 focus 표시가 충분하지 않음 | Medium | Open |
+| #012 | CTA 버튼 포커스 outline이 투명/약하게 계산되어 키보드 focus 표시가 충분하지 않음 | Medium | Resolved (옐로 focus ring) |
 | #013 | 320px 모바일 첫 화면에서 Hero CTA가 아래로 밀리고, CTA 문구가 2줄로 갈라져 보임 | Low | Open |
 
 ## Build / Test Log
@@ -91,6 +94,9 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 | 2026-07-09 | npm run lint | Passed | ESLint warnings/errors 0 |
 | 2026-07-09 | npm audit --omit=dev | Failed | next critical + bundled postcss moderate 취약점 |
 | 2026-07-09 | Mobile render check 320/375/390 | Passed with notes | 가로 overflow 없음, 콘솔 오류 없음, CTA wrapping/accessibility polish 필요 |
+| 2026-07-09 | npm run lint | Passed | 모바일 스크롤 에너지 디자인 적용 후 ESLint warnings/errors 0 |
+| 2026-07-09 | npm run build | Passed | 정적 4페이지, `/` First Load JS 134kB |
+| 2026-07-09 | 390px scroll interaction check | Passed | down/up 방향 반응, 가로 overflow 없음, 콘솔 warnings/errors 0 |
 
 ## Risks / Follow-Ups
 
@@ -109,7 +115,7 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 2. 운영자: 실제 QR 이미지, hero 이미지, OG 이미지 1200x630 제작
 3. Dev: Next.js 보안 패치 버전으로 업그레이드 (`npm audit fix --force`는 breaking upgrade라 수동 검증 필요)
 4. Dev: OG 이미지 파일 추가 또는 metadata 이미지 경로 제거
-5. Dev: Sticky CTA 숨김 상태 focus 처리 및 CTA focus ring 수정
+5. Dev: Sticky CTA 숨김 상태 focus 처리
 6. Dev: 320px Hero CTA 문구/간격 polish
 7. Claude: 필요 시 `/review` 실행 (브랜드/법적 판단 중심)
 8. Netlify 배포 확인

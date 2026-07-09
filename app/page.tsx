@@ -8,6 +8,7 @@ import JoinOpenChat from "@/components/JoinOpenChat";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 import StickyCTA from "@/components/StickyCTA";
+import ScrollEnergy from "@/components/ScrollEnergy";
 
 /**
  * NY/NJ Hybrid Race Club — 메인 랜딩 페이지
@@ -17,6 +18,7 @@ export default function Home() {
   return (
     <>
       <Header />
+      <ScrollEnergy />
       <main>
         {/* 10.2 Hero */}
         <Hero />

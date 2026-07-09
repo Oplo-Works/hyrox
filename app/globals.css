@@ -13,6 +13,9 @@
   --color-lime: #c8ff3d;
   --color-red-orange: #ff3d1f;
   --color-line: rgba(255, 255, 255, 0.12);
+  --color-race-yellow: #fff200;
+  --scroll-progress: 0;
+  --scroll-intensity: 0;
 }
 
 * {
@@ -32,6 +35,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
+  background-image: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 242, 0, 0.025) 42%,
+    transparent 62%
+  );
 }
 
 /* 한국어 본문 폰트 적용 */
@@ -60,7 +69,7 @@ body {
   background:
     radial-gradient(
       ellipse 80% 60% at 50% 0%,
-      rgba(255, 106, 42, 0.15) 0%,
+      rgba(255, 242, 0, 0.16) 0%,
       transparent 60%
     ),
     radial-gradient(
@@ -68,7 +77,7 @@ body {
       rgba(200, 255, 61, 0.08) 0%,
       transparent 50%
     ),
-    linear-gradient(180deg, #080a0f 0%, #10141c 100%);
+    linear-gradient(180deg, #030303 0%, #10141c 100%);
 }
 
 .grid-lines {
@@ -85,7 +94,7 @@ body {
   background: linear-gradient(
     90deg,
     transparent,
-    var(--color-orange),
+    var(--color-race-yellow),
     transparent
   );
   opacity: 0.6;
@@ -94,15 +103,15 @@ body {
 /* CTA 버튼 글로우 */
 .cta-glow {
   box-shadow:
-    0 0 0 0 rgba(255, 106, 42, 0.4),
-    0 4px 20px rgba(255, 106, 42, 0.3);
+    0 0 0 0 rgba(255, 242, 0, 0.3),
+    0 4px 20px rgba(255, 242, 0, 0.25);
   transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
 .cta-glow:hover {
   box-shadow:
-    0 0 30px 4px rgba(255, 106, 42, 0.5),
-    0 6px 30px rgba(255, 106, 42, 0.4);
+    0 0 26px 3px rgba(255, 242, 0, 0.45),
+    0 6px 30px rgba(255, 242, 0, 0.32);
   transform: translateY(-1px);
 }
 
@@ -140,4 +149,143 @@ button:focus-visible {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Scroll-driven race treatment. Decorative only: no extra controls or content. */
+.scroll-energy {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.scroll-energy__progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(var(--scroll-progress) * 100%);
+  height: 3px;
+  background: var(--color-race-yellow);
+  box-shadow: 0 0 16px rgba(255, 242, 0, 0.9);
+  transition: width 90ms linear;
+}
+
+.scroll-energy__lane {
+  position: absolute;
+  top: 16%;
+  bottom: 12%;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 242, 0, 0.75),
+    transparent
+  );
+  opacity: 0.26;
+  transform: scaleY(0.38);
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.scroll-energy__lane--left {
+  left: 10px;
+  transform-origin: top;
+}
+
+.scroll-energy__lane--right {
+  right: 10px;
+  transform-origin: bottom;
+}
+
+.scroll-energy__flash {
+  position: absolute;
+  top: 30%;
+  left: -18%;
+  width: 44%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-race-yellow), transparent);
+  opacity: var(--scroll-intensity);
+  transform: rotate(-17deg) translateX(calc(var(--scroll-progress) * 170%));
+  transition: opacity 120ms ease, transform 120ms linear;
+}
+
+body[data-scrolling="true"] .scroll-energy__lane {
+  opacity: 0.8;
+  transform: scaleY(1);
+}
+
+body[data-scroll-direction="up"] .scroll-energy__lane--left {
+  transform-origin: bottom;
+}
+
+body[data-scroll-direction="up"] .scroll-energy__lane--right {
+  transform-origin: top;
+}
+
+main > section {
+  isolation: isolate;
+}
+
+main > section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    112deg,
+    transparent 0%,
+    transparent 44%,
+    rgba(255, 242, 0, 0.055) 48%,
+    transparent 53%
+  );
+  opacity: 0.55;
+  transform: translateX(calc(var(--scroll-progress) * 8%));
+  transition: transform 140ms linear, opacity 180ms ease;
+}
+
+body[data-scrolling="true"] main > section::before {
+  opacity: 1;
+}
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0) scale(0.985);
+  transition: opacity 560ms ease-out, transform 560ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.hero-race-surface::before {
+  content: "";
+  position: absolute;
+  inset: -24% -20%;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    118deg,
+    transparent 0 42px,
+    rgba(255, 242, 0, 0.08) 43px 44px,
+    transparent 45px 88px
+  );
+  transform: translateX(calc(var(--scroll-progress) * -12%));
+  transition: transform 120ms linear;
+}
+
+.hero-lane-markers {
+  position: absolute;
+  right: 1rem;
+  bottom: 5.5rem;
+  display: grid;
+  gap: 0.45rem;
+  width: 2.5rem;
+  transform: skewY(-18deg);
+}
+
+.hero-lane-markers span {
+  height: 3px;
+  background: var(--color-race-yellow);
+  box-shadow: 0 0 10px rgba(255, 242, 0, 0.45);
 }
