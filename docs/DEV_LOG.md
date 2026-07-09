@@ -64,7 +64,7 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 
 | ID | Issue | Priority | Status |
 |---|---|---|---|
-| #001 | Kakao OpenChat URL 미확정 (TODO) | High | Open |
+| #001 | Kakao OpenChat URL 적용 완료 (https://open.kakao.com/o/gjuedrvi) | High | Resolved |
 | #002 | Kakao QR 이미지 미확정 (kakaoQrAvailable=false) | Medium | Open |
 | #003 | 정확한 모임 요일/시간/장소 미확정 (TODO) | High | Open |
 | #004 | 참가비 미확정 (TODO) | Medium | Open |
