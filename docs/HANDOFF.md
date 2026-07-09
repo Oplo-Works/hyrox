@@ -1,7 +1,14 @@
 # Handoff
 
 ## Current Owner
-Codex
+Ready for next agent
+
+## Start Here (Next Agent)
+1. `git pull origin main` 후 `npm install` 실행
+2. 작업 전 반드시 다음 문서를 순서대로 읽기: `docs/HANDOFF.md` → `docs/AGENT_WORKFLOW.md` → `docs/DEV_LOG.md`의 Current Status → `docs/nynj-hybrid-race-club-build-brief.md`
+3. 기본 검증: `npm run lint` → `npm run build`
+4. 화면 확인이 필요하면 `npm run dev -- -p 3011` 후 320px, 375px, 390px에서 가로 overflow·CTA·Sticky CTA·스크롤 모션을 확인
+5. 작업 종료 전 `docs/DEV_LOG.md`, `docs/HANDOFF.md`를 갱신하고 관련 변경을 커밋·푸시
 
 ## Completed Work
 - 모바일 스크롤 에너지 디자인 적용: `ScrollEnergy`가 스크롤 방향/속도에 따라 진행선, 양측 레인, 스피드 라인을 갱신하고 섹션 진입 reveal을 처리
@@ -29,18 +36,19 @@ Codex
 - Repo: github.com:Oplo-Works/hyrox.git
 - Branch: main (자동 배포 트리거)
 - Config: netlify.toml (빌드 명령 npm run build, publish .next, Node 20)
-- Latest Commit: 2da7cb5
-- 상태: Netlify 대시보드에서 배포 진행 상황 확인 필요
+- Latest Feature Commit: `41ec5a5` (`feat: add mobile scroll energy`)
+- 상태: `main` 푸시가 Netlify 자동 배포를 트리거함. Netlify 대시보드에서 해당 커밋의 배포 완료 여부 확인 필요
 
 ## Next Owner
 Codex 또는 GLM — 리뷰에서 발견된 polish/보안/자산 이슈 수정
 
 ## Next Task
-리뷰 후 수정 권장:
-- Next.js 보안 패치 버전 업그레이드 및 재빌드 검증
-- `/images/og-placeholder.png` 실제 파일 추가 또는 metadata 이미지 경로 제거
-- 모바일 Sticky CTA 숨김 상태에서 focusable link가 tab order에 남지 않도록 수정
-- 320px Hero CTA 문구/간격 polish
+권장 작업 순서:
+1. Next.js 보안 패치 버전 업그레이드 및 재빌드 검증
+2. `/images/og-placeholder.png` 실제 파일 추가 또는 metadata 이미지 경로 제거
+3. 모바일 Sticky CTA 숨김 상태에서 focusable link가 tab order에 남지 않도록 수정
+4. 320px Hero CTA 문구/간격 polish
+5. Netlify 배포 결과 및 OG 이미지 404 재확인
 
 ## Reason For Handoff
 GLM 구현 후 Codex가 런타임/프레임워크/접근성 중심 리뷰를 수행함. 남은 작업은 작은 수정과 보안 패치 검증.
@@ -58,7 +66,11 @@ High
 - components/Header.tsx, Hero.tsx, NextMeetup.tsx, TrainingTypes.tsx, UpcomingEvents.tsx, AllLevelsWelcome.tsx, JoinOpenChat.tsx, FAQ.tsx, Footer.tsx, StickyCTA.tsx
 
 ## Files To Touch Next
-- (리뷰 후 수정 필요 시) components/*.tsx, data/site.ts
+- `components/ScrollEnergy.tsx` — 스크롤 방향/속도, IntersectionObserver 기반 section reveal. React state를 갱신하지 않아 스크롤 성능을 보존함
+- `app/globals.css` — `--scroll-progress`, `--scroll-intensity`, 네온 옐로 토큰, 레인/스피드 라인/reveal 스타일. reduced motion 규칙을 유지할 것
+- `components/StickyCTA.tsx`, `components/CTAButton.tsx` — 다음 접근성 polish 대상
+- `app/layout.tsx` — 실제 OG 이미지 추가 또는 경로 제거 시 수정
+- `data/site.ts` — 운영자가 TODO 모임 정보와 이벤트 정보를 채우는 단일 데이터 소스
 - (운영자) data/site.ts — TODO 값 채우기
 - (운영자) public/images/ — QR, hero, OG 이미지 추가
 
@@ -75,6 +87,13 @@ NY/NJ Hybrid Race Club 모바일 우선 이중언어 랜딩 페이지 MVP 완성
 - 320px/375px/390px 모바일 확인 완료: 가로 overflow/콘솔 오류 없음, Hero CTA wrapping polish 필요
 - 숨겨진 모바일 Sticky CTA 내부 링크가 focusable 상태로 남음
 - CTA 버튼 focus ring은 네온 옐로로 개선 완료
+
+## Verification Snapshot
+- `npm run lint`: 통과, warnings/errors 0
+- `npm run build`: 통과, 정적 4페이지, `/` First Load JS 134kB
+- 390px 모바일: 스크롤 down/up 시 진행선·레인·섹션 reveal 동작, 가로 overflow 없음, 콘솔 warnings/errors 0
+- 320px/375px: 이전 점검에서 가로 overflow/콘솔 오류 없음. Hero CTA의 문구 wrapping은 다음 polish 대상으로 유지
+- 개발 서버는 실행 중이지 않음
 
 ## Escalation Rules
 - 리뷰 중 아키텍처/보안/HYROX 규칙 문제 발견 → Claude가 직접 수정 판단

@@ -15,7 +15,7 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 - Build Status: Passing (경고/에러 0)
 - Test Status: Build/lint 통과, 320px/375px/390px 모바일 렌더링 점검 완료, Netlify 자동 배포 확인 필요
 - Git Remote: github.com:Oplo-Works/hyrox.git
-- Latest Commit: 2da7cb5 (netlify.toml 추가)
+- Latest Feature Commit: 41ec5a5 (`feat: add mobile scroll energy`)
 - Deployment: Netlify (GitHub repo 연결, 자동 배포)
 
 ## Current MVP Scope
@@ -64,6 +64,7 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 | 2026-07-09 | Header 클럽명 폰트 크기 2배 확대 | text-base→text-2xl, text-lg→text-3xl (EN); text-[10px]→text-sm, text-xs→text-base (KO); 헤더 높이 h-16→h-20, h-20→h-24; Hero pt-16→pt-20, pt-20→pt-24 |
 | 2026-07-09 | Codex 리뷰 수행 | build/lint 통과, npm audit 취약점 확인, OG 이미지 404 확인, 모바일 320/375/390 렌더링 및 접근성 이슈 확인 |
 | 2026-07-09 | 모바일 스크롤 에너지 디자인 | `ScrollEnergy` 진행선/레인/스피드 라인, 섹션 reveal, Hero 대각선 레이스 라인, 옐로 CTA 및 포커스 링 추가 |
+| 2026-07-09 | 인수인계 문서 정리 | 다른 PC/에이전트가 `main`에서 재개할 수 있도록 재현 절차, 파일 맵, 우선 작업을 `HANDOFF.md`에 갱신 |
 
 ## Open Issues
 
