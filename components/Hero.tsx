@@ -15,7 +15,7 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative hero-bg min-h-[100svh] flex items-center overflow-hidden pt-16 md:pt-20"
+      className="relative hero-bg min-h-[100svh] flex items-center overflow-hidden pt-20 md:pt-24"
       aria-label="Hero"
     >
       {/* 그리드 라인 배경 */}

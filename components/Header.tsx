@@ -31,16 +31,16 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto max-w-6xl px-4 md:px-6">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-between h-20 md:h-24">
           <a
             href="#top"
             className="flex flex-col leading-none"
             aria-label="NY/NJ Hybrid Race Club home"
           >
-            <span className="font-heading text-base md:text-lg font-bold uppercase text-text tracking-wide">
+            <span className="font-heading text-2xl md:text-3xl font-bold uppercase text-text tracking-wide">
               NY/NJ Hybrid Race Club
             </span>
-            <span className="ko-text text-[10px] md:text-xs text-muted mt-0.5">
+            <span className="ko-text text-sm md:text-base text-muted mt-1">
               뉴욕/뉴저지 하이브리드 레이스 클럽
             </span>
           </a>

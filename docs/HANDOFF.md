@@ -4,6 +4,7 @@
 z.ai 모델 (Cline)
 
 ## Completed Work
+- Header 클럽명 폰트 크기 2배 확대 (EN: text-base→text-2xl / text-lg→text-3xl, KO: text-[10px]→text-sm / text-xs→text-base), 헤더 높이 및 Hero pt 동기화
 - 프로젝트 문서 파일 8개 생성 (BLUEPRINT, SCOPE, WORKFLOW, DEV_LOG, HANDOFF, README, CLAUDE.md, AGENTS.md)
 - Next.js 프로젝트 수동 초기화 (package.json, tsconfig, next.config, tailwind.config, postcss, eslint, gitignore)
 - `data/site.ts` 데이터 설정 파일 (모든 TODO 포함)
