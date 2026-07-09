@@ -11,8 +11,8 @@ export const siteConfig = {
   clubNameKo: "뉴욕/뉴저지 하이브리드 레이스 클럽",
   descriptor: "HYROX · Mini HYROX · 5K · Half Marathon",
 
-  // TODO: 운영자가 실제 카카오 오픈채팅 링크로 교체
-  kakaoOpenChatUrl: "TODO_ADD_KAKAO_OPENCHAT_URL",
+  // 카카오 오픈채팅 링크 (운영자 제공)
+  kakaoOpenChatUrl: "https://open.kakao.com/o/gjuedrvi",
   // TODO: QR 이미지가 준비되면 경로 교체. 현재는 placeholder.
   kakaoQrImage: "/images/openchat-qr-placeholder.png",
   kakaoQrAvailable: false,
