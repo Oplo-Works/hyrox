@@ -25,12 +25,12 @@ export default function CTAButton({
   ariaLabel,
 }: CTAButtonProps) {
   const baseClasses =
-    "inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-base font-bold min-h-[44px] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-race-yellow)] focus-visible:ring-offset-2 focus-visible:ring-offset-bg";
+    "inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-base font-bold min-h-[44px] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green focus-visible:ring-offset-2 focus-visible:ring-offset-bg";
 
   const variantClasses =
     variant === "primary"
-      ? "bg-[var(--color-race-yellow)] text-bg cta-glow hover:bg-[#dfe000]"
-      : "bg-transparent text-text border border-line hover:border-[var(--color-race-yellow)] hover:text-[var(--color-race-yellow)]";
+      ? "bg-[image:var(--gradient-nitro)] text-bg cta-glow hover:brightness-110"
+      : "bg-transparent text-text border border-white/30 hover:border-purple hover:text-purple";
 
   const isExternal =
     href.startsWith("http") || href.startsWith("TODO") || href === "#";

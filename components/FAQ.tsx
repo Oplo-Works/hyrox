@@ -32,7 +32,7 @@ export default function FAQ() {
               >
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : i)}
-                  className="w-full text-left p-4 md:p-5 flex items-start justify-between gap-4 focus:outline-none"
+                  className="w-full text-left p-4 md:p-5 flex items-start justify-between gap-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-green"
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${i}`}
                 >

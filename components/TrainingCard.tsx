@@ -19,7 +19,7 @@ export default function TrainingCard({
     <article className="bg-card border border-card-border rounded-2xl p-5 md:p-6 h-full transition-all hover:border-orange/40 hover:translate-y-[-2px]">
       <div className="flex items-start gap-3 mb-3">
         <span
-          className="mt-1 h-2 w-2 rounded-full bg-lime shrink-0"
+          className="mt-1 h-2 w-2 rounded-full bg-green shrink-0"
           aria-hidden="true"
         />
         <div>

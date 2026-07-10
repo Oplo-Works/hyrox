@@ -9,15 +9,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg: "#080A0F",
-        "bg-soft": "#10141C",
-        card: "#151A23",
+        bg: "#0A090D",
+        "bg-soft": "#12101A",
+        card: "#171420",
         "card-border": "rgba(255,255,255,0.10)",
-        text: "#F8FAFC",
-        muted: "#AAB2C0",
-        orange: "#FF6A2A",
-        lime: "#C8FF3D",
-        "red-orange": "#FF3D1F",
+        text: "#F2F1EC",
+        muted: "#A8A3B3",
+        orange: "#FF8B1E",
+        magenta: "#ED5FA4",
+        purple: "#A45CEB",
+        green: "#35B586",
         line: "rgba(255,255,255,0.12)",
       },
       fontFamily: {
@@ -35,8 +36,8 @@ const config: Config = {
       },
       keyframes: {
         pulseGlow: {
-          "0%, 100%": { boxShadow: "0 0 0 0 rgba(255,106,42,0.4)" },
-          "50%": { boxShadow: "0 0 20px 4px rgba(255,106,42,0.6)" },
+          "0%, 100%": { boxShadow: "0 0 0 0 rgba(255,139,30,0.4)" },
+          "50%": { boxShadow: "0 0 20px 4px rgba(255,139,30,0.6)" },
         },
         lineMove: {
           "0%": { transform: "translateX(-100%)" },

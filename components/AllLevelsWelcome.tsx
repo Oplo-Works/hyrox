@@ -26,7 +26,9 @@ export default function AllLevelsWelcome() {
           <p className="font-heading text-2xl md:text-4xl font-bold text-text uppercase leading-tight mb-3">
             New to HYROX or running?
             <br />
-            <span className="text-lime">You are welcome here.</span>
+            <span className="bg-[image:var(--gradient-nitro)] bg-clip-text text-transparent">
+              You are welcome here.
+            </span>
           </p>
           <div className="space-y-1 text-base md:text-lg text-muted">
             <p>You do not need to be fast.</p>
@@ -49,7 +51,7 @@ export default function AllLevelsWelcome() {
             >
               <div className="flex items-center gap-3 mb-4">
                 <span
-                  className="font-heading text-3xl font-bold text-orange/30"
+                  className="font-heading text-3xl font-bold text-orange/50"
                   aria-hidden="true"
                 >
                   0{i + 1}

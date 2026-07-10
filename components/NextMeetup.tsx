@@ -31,6 +31,10 @@ export default function NextMeetup() {
             className="absolute top-0 right-0 w-40 h-40 bg-orange/5 rounded-full blur-3xl"
             aria-hidden="true"
           />
+          <div
+            className="absolute bottom-0 left-0 w-40 h-40 bg-purple/5 rounded-full blur-3xl"
+            aria-hidden="true"
+          />
 
           <div className="relative grid md:grid-cols-2 gap-6 md:gap-10">
             {/* 왼쪽: 날짜/시간/장소 */}

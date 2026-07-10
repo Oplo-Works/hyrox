@@ -50,10 +50,10 @@ export default function Hero() {
           {/* 디스크립터 */}
           <div className="flex items-center gap-2 mb-4 md:mb-6">
             <span
-              className="h-px w-8 bg-[var(--color-race-yellow)]"
+              className="h-px w-8 bg-gradient-to-r from-orange via-magenta to-purple"
               aria-hidden="true"
             />
-            <span className="text-xs md:text-sm font-bold uppercase tracking-widest text-[var(--color-race-yellow)]">
+            <span className="text-xs md:text-sm font-bold uppercase tracking-widest text-orange">
               {siteConfig.descriptor}
             </span>
           </div>
@@ -62,7 +62,9 @@ export default function Hero() {
           <h1 className="font-heading text-4xl xs:text-5xl md:text-7xl lg:text-8xl font-bold uppercase text-text leading-[0.95] mb-3 md:mb-4">
             NY/NJ Hybrid
             <br />
-            <span className="text-[var(--color-race-yellow)]">Race Club</span>
+            <span className="bg-[image:var(--gradient-nitro)] bg-clip-text text-transparent">
+              Race Club
+            </span>
           </h1>
 
           {/* 한국어 클럽명 */}
@@ -75,7 +77,7 @@ export default function Hero() {
             <p className="font-heading text-2xl md:text-4xl font-bold text-text uppercase leading-tight">
               Train together. Race together.
             </p>
-            <p className="font-heading text-xl md:text-3xl font-bold text-lime uppercase leading-tight">
+            <p className="font-heading text-xl md:text-3xl font-bold text-purple uppercase leading-tight">
               All levels welcome.
             </p>
             <p className="ko-text text-base md:text-xl text-muted mt-2">

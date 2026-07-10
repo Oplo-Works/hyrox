@@ -444,7 +444,7 @@ Visual ideas:
 - Dark gradient background
 - Diagonal grid lines
 - Thin animated racing lines
-- Subtle orange/lime glow
+- Subtle orange/magenta/purple glow
 - Optional hero video loop if owner provides video
 - If no video, use abstract motion background instead
 
@@ -861,19 +861,21 @@ The UI should feel intense, dynamic, and motivating. Think:
 
 Use a custom palette that does not copy HYROX official branding too closely.
 
-Suggested tokens:
+Current tokens ("Nitro" palette — 러닝화 미드솔 컬러웨이 기반: 블랙 어퍼 + 본화이트 + 오렌지→마젠타→퍼플 그라데이션 + 이리데슨트 그린 악센트):
 
 ```css
---color-bg: #080A0F;
---color-bg-soft: #10141C;
---color-card: #151A23;
+--color-bg: #0A090D;
+--color-bg-soft: #12101A;
+--color-card: #171420;
 --color-card-border: rgba(255,255,255,0.10);
---color-text: #F8FAFC;
---color-muted: #AAB2C0;
---color-orange: #FF6A2A;
---color-lime: #C8FF3D;
---color-red-orange: #FF3D1F;
+--color-text: #F2F1EC;
+--color-muted: #A8A3B3;
+--color-orange: #FF8B1E; /* 리드 악센트 (포어풋 오렌지) */
+--color-magenta: #ED5FA4; /* 그라데이션 내부 전용 — 단독 사용 금지 */
+--color-purple: #A45CEB; /* 세컨더리 악센트 (힐 퍼플) */
+--color-green: #35B586; /* 희소 악센트: 불릿 도트, 포커스 아웃라인 전용 */
 --color-line: rgba(255,255,255,0.12);
+--gradient-nitro: linear-gradient(90deg, #FF8B1E 0%, #ED5FA4 55%, #A45CEB 100%);
 ```
 
 ### 12.2 Typography

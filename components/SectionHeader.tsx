@@ -21,7 +21,7 @@ export default function SectionHeader({
     <div className="mb-8 md:mb-12" id={id}>
       <div className="flex items-center gap-3 mb-3">
         <span
-          className="h-6 w-1 bg-[var(--color-race-yellow)] rounded-full"
+          className="h-6 w-1 bg-gradient-to-b from-orange via-magenta to-purple rounded-full"
           aria-hidden="true"
         />
         <h2 className="font-heading text-3xl md:text-5xl font-bold uppercase text-text leading-tight">

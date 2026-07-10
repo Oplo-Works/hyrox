@@ -55,7 +55,7 @@ export default function Footer() {
 
         {/* 하단 카피라이트 */}
         <div className="mt-10 md:mt-14 pt-6 border-t border-line">
-          <p className="text-xs text-muted/60 text-center">
+          <p className="text-xs text-muted/80 text-center">
             © {new Date().getFullYear()} {siteConfig.clubNameEn}. Community
             training group.
           </p>

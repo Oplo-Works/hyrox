@@ -76,14 +76,14 @@ export default function EventCard({
             href={link}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-orange hover:text-lime transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-orange hover:text-purple transition-colors"
           >
             View details
             <span className="ko-text ml-1">/ 자세히 보기</span>
             <span aria-hidden="true">→</span>
           </a>
         ) : (
-          <span className="inline-flex items-center gap-1.5 text-sm text-muted/60">
+          <span className="inline-flex items-center gap-1.5 text-sm text-muted/80">
             <span className="ko-text">공식 일정 확인 중</span>
           </span>
         )}
