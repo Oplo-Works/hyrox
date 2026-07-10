@@ -14,7 +14,7 @@ export const siteConfig = {
   // Manager edit password (6-digit)
   // NOTE: This is a client-side gate only — not a true security measure.
   // Change this to your own 6-digit code before deploying.
-  managerPassword: "258080",
+  managerPassword: "450815",
 
   // 카카오 오픈채팅 링크 (운영자 제공)
   kakaoOpenChatUrl: "https://open.kakao.com/o/gjuedrvi",
