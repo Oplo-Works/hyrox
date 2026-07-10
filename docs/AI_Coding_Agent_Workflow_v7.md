@@ -1,14 +1,14 @@
-# AI Coding Agent Workflow Manual — Claude × Codex × z.ai Edition
+# AI Coding Agent Workflow Manual — Claude × Codex × GLM (z.ai) Edition
 
-이 문서는 범용 워크플로우 매뉴얼을 **세 모델 — Claude Code 최신 모델, Codex 최신 모델, z.ai 최신 모델 — 을 함께** 쓰는 환경에 맞게 정리한 버전입니다. **항상 각 제공사의 최신 모델을 쓰는 것이 기본값(default)입니다** — 더 최신 모델이 나오면 당연히 그쪽을 씁니다. 그래서 본문에는 특정 버전 숫자를 박지 않고, 역할 호칭만 사용합니다.
+이 문서는 범용 워크플로우 매뉴얼을 **세 모델 — Claude Code 최신 모델, Codex 최신 모델, z.ai의 최신 GLM 모델 — 을 함께** 쓰는 환경에 맞게 정리한 버전입니다. **항상 각 제공사의 최신 모델을 쓰는 것이 기본값(default)입니다** — 더 최신 모델이 나오면 당연히 그쪽을 씁니다. 그래서 본문에는 특정 버전 숫자를 박지 않고, 역할 호칭만 사용합니다.
 
 - **Claude** = Claude Code의 최신 모델 (Pro 플랜 = 사용량 한도가 빡빡한 **희소 자원**)
 - **Codex** = OpenAI Codex의 최신 모델 (실제로 도는 코드·라이브러리 관용구 전문)
-- **z.ai 모델** = z.ai의 최신 모델, Cline의 ClinePass 구독으로 사용 (저가 정액 + 넉넉한 쿼터, GLM 계열이 아니어도 z.ai 최신이면 포함)
+- **GLM 모델** = z.ai의 최신 GLM 모델, z.ai에서 직접 구독해 사용 (저가 정액 + 넉넉한 쿼터)
 
 지금 이 호칭들이 구체적으로 어떤 모델을 가리키는지는 바로 아래 [모델 핀] 표 한 곳에만 적어 둡니다.
 
-목표는 세 모델이 무작정 코딩하지 않고 **제품 정의 → 기획 → 설계 → 구현 → 테스트 → 리뷰 → 기록** 순서로, 그리고 **각 단계에서 어느 모델이 무엇을 맡을지**가 분명한 상태로 일하게 만드는 것입니다. 핵심 역할 분담은 **z.ai = 생산, Codex = 실행 정확성, Claude = 판단·검증**이며, 자세한 원칙은 아래 0장에 있습니다.
+목표는 세 모델이 무작정 코딩하지 않고 **제품 정의 → 기획 → 설계 → 구현 → 테스트 → 리뷰 → 기록** 순서로, 그리고 **각 단계에서 어느 모델이 무엇을 맡을지**가 분명한 상태로 일하게 만드는 것입니다. 핵심 역할 분담은 **GLM = 생산, Codex = 실행 정확성, Claude = 판단·검증**이며, 자세한 원칙은 아래 0장에 있습니다.
 
 이 문서는 프로젝트마다 복사해서 사용할 수 있습니다.
 
@@ -16,19 +16,19 @@
 
 ## 모델 핀 (Model Pin) — 모델이 바뀌면 여기만 고치세요
 
-문서 본문은 버전 숫자 대신 **역할 호칭("Claude" / "Codex" / "z.ai 모델")**으로만 쓰여 있습니다. 새 모델이 나오면 아래 표의 "현재 사용 모델" 칸만 갱신하면, 본문 전체가 자동으로 최신 모델을 가리킵니다. 본문은 손댈 필요가 없습니다.
+문서 본문은 버전 숫자 대신 **역할 호칭("Claude" / "Codex" / "GLM 모델")**으로만 쓰여 있습니다. 새 모델이 나오면 아래 표의 "현재 사용 모델" 칸만 갱신하면, 본문 전체가 자동으로 최신 모델을 가리킵니다. 본문은 손댈 필요가 없습니다.
 
 | 역할 호칭 | 의미 (고정) | 요금제 | 현재 사용 모델 (갱신 대상) |
 |---|---|---|---|
 | **Claude** | Claude Code의 **최신** 모델 | Pro $20 (한도 빡빡) | Opus 4.8 |
 | **Codex** | OpenAI Codex의 **최신** 모델 | $20 | Codex GPT-5.5 |
-| **z.ai 모델** | z.ai의 **최신** 모델 (GLM 계열 등), Cline ClinePass로 사용 | ClinePass 구독 ($9.99/월, 첫 달 $4.99) | GLM 5.2 |
+| **GLM 모델** | z.ai의 **최신** GLM 모델, z.ai 직접 구독으로 사용 | z.ai 정액 구독 (저가 + 넉넉한 쿼터) | GLM 5.2 |
 
-> **운영 원칙:** 새 프로젝트를 시작할 때마다 세 제공사의 최신 모델을 확인하고, 위 표의 오른쪽 칸을 그날의 최신 모델로 갱신한다. 역할·요금제(왼쪽 칸)와 단계별 배정은 그대로 둔다.
+> **운영 원칙:** 새 프로젝트를 시작할 때마다(장기 프로젝트라면 월 1회 점검도 권장) 세 제공사의 최신 모델을 확인하고, 위 표의 오른쪽 칸을 그날의 최신 모델로 갱신한다. 역할·요금제(왼쪽 칸)와 단계별 배정은 그대로 둔다.
 
 ---
 
-## 0. 모델 역할 분담 (Claude × Codex × z.ai)
+## 0. 모델 역할 분담 (Claude × Codex × GLM)
 
 세 모델을 쓰되, **요금제 구조가 배분을 결정**합니다.
 
@@ -36,7 +36,7 @@
 |---|---|---|---|
 | **Claude** (Pro) | $20 고정 · **사용량 한도 빡빡** | 가장 비싼 판단력, **희소 자원** | 판단 · 설계 · 검증 |
 | **Codex** | $20 고정 · 한도 중간 | 실제로 도는 코드 · 라이브러리 관용구 | 실행 정확성 · 프레임워크 |
-| **z.ai 모델** | ClinePass 구독 · **저가 정액 + 넉넉한 쿼터** | 고정비, 양으로 밀어붙이기 | 생산 · 대량 구현 |
+| **GLM 모델** | z.ai 직접 구독 · **저가 정액 + 넉넉한 쿼터** | 고정비, 양으로 밀어붙이기 | 생산 · 대량 구현 |
 
 (각 호칭이 가리키는 실제 모델은 맨 위 [모델 핀] 표 참고. 셋 다 항상 최신 모델.)
 
@@ -44,26 +44,26 @@
 
 예전 $100 Max 플랜과 달리 **Claude Pro($20)는 사용량 한도가 빡빡**합니다. 그래서 이 워크플로우의 제1원칙은 **"Claude를 아껴 쓴다"**입니다. 어떤 작업을 Claude에 맡기기 전에 항상 이렇게 묻습니다.
 
-> 이걸 z.ai 모델(대량·저렴)이나 Codex(실행·관용구)가 할 수 있나? 그들이 못 하는, 깊은 판단이 필요한 일만 Claude로.
+> 이걸 GLM 모델(대량·저렴)이나 Codex(실행·관용구)가 할 수 있나? 그들이 못 하는, 깊은 판단이 필요한 일만 Claude로.
 
 ### 3단 에스컬레이션 사다리 (Claude 절약형)
 
-1. **기본 = z.ai 모델.** 대량 구현, 보일러플레이트, 표준 CRUD/API, 테스트·문서. Cline의 ClinePass 구독으로 정액에 넉넉한 쿼터를 쓰니, 양으로 밀어붙여도 부담이 적어 1차 시도는 항상 여기서 합니다.
-2. **안 도는 코드·라이브러리 관용구·프레임워크 버그 = Codex.** "논리는 맞는데 실제로 안 도는 코드"와 특정 라이브러리/프레임워크의 실사례 지식은 Codex의 강점입니다. z.ai가 막히면 **Claude가 아니라 Codex로** 먼저 올립니다 — 이게 Claude 예산을 지키는 핵심입니다.
+1. **기본 = GLM 모델.** 대량 구현, 보일러플레이트, 표준 CRUD/API, 테스트·문서. z.ai 직접 구독으로 정액에 넉넉한 쿼터를 쓰니, 양으로 밀어붙여도 부담이 적어 1차 시도는 항상 여기서 합니다.
+2. **안 도는 코드·라이브러리 관용구·프레임워크 버그 = Codex.** "논리는 맞는데 실제로 안 도는 코드"와 특정 라이브러리/프레임워크의 실사례 지식은 Codex의 강점입니다. GLM이 막히면 **Claude가 아니라 Codex로** 먼저 올립니다 — 이게 Claude 예산을 지키는 핵심입니다.
 3. **깊은 판단 = Claude.** 비즈니스 규칙 충돌, 아키텍처 결정, 권한·보안 설계, 코드베이스 전체 일관성, 재현 어려운 로직 버그. Codex·z.ai가 해결 못 하는 일에만 Claude를 씁니다.
 
 ### 각 모델의 강점을 살리는 법
 
-- **z.ai (생산):** 볼륨으로 승부합니다. 같은 패턴 반복(CRUD, 엔드포인트, 마이그레이션, 테스트 케이스, 문서)은 전부 여기로. 비용이 거의 안 드므로 초안을 넉넉히 뽑게 합니다.
-- **Codex (실행 정확성):** z.ai 초안이 안 돌 때, 또는 처음부터 "이 라이브러리 최신 사용법으로 즉시 도는 스니펫"이 필요할 때 씁니다. 프레임워크 특화 버그도 Codex. 실제 에러를 그대로 붙여넣어 고치게 하는 방식이 빠릅니다.
+- **GLM (생산):** 볼륨으로 승부합니다. 같은 패턴 반복(CRUD, 엔드포인트, 마이그레이션, 테스트 케이스, 문서)은 전부 여기로. 비용이 거의 안 드므로 초안을 넉넉히 뽑게 합니다.
+- **Codex (실행 정확성):** GLM 초안이 안 돌 때, 또는 처음부터 "이 라이브러리 최신 사용법으로 즉시 도는 스니펫"이 필요할 때 씁니다. 프레임워크 특화 버그도 Codex. 실제 에러를 그대로 붙여넣어 고치게 하는 방식이 빠릅니다.
 - **Claude (판단·검증):** 무엇을 만들지(설계)와 잘 만들었는지(리뷰)를 책임집니다. 장기 컨텍스트로 전체를 보는 일, 한 번의 실수가 비싼 보안·권한·데이터 모델 결정에 집중합니다. 양으로 하는 일은 절대 Claude에 주지 않습니다.
 
 ### 품질 안전망: 두 겹
 
 2-모델 때와 달리 안전망이 두 겹입니다.
 
-- **1차(실행) = Codex / 테스트:** "도느냐"는 Codex와 z.ai 테스트가 잡습니다.
-- **2차(정확성) = Claude 리뷰:** "돌긴 도는데 비즈니스 규칙·보안·일관성이 틀렸는가"는 Claude `/review`가 잡습니다.
+- **실행 안전망 = Codex / 테스트:** "도느냐"는 Codex와 GLM 테스트가 잡습니다.
+- **정확성 안전망 = Claude 리뷰:** "돌긴 도는데 비즈니스 규칙·보안·일관성이 틀렸는가"는 Claude `/review`가 잡습니다.
 
 Codex가 실행 검증을 분담하므로, Claude는 더더욱 '깊은 정확성'에만 집중할 수 있습니다.
 
@@ -72,19 +72,19 @@ Codex가 실행 검증을 분담하므로, Claude는 더더욱 '깊은 정확성
 | 단계 | 담당 | 비고 |
 |---|---|---|
 | `/blueprint` | **Claude** | 제품 방향·리스크. 한도 아껴 한 번에 |
-| `/spec` | **Claude**(복잡) · z.ai(단순) | 권한·보안 얽히면 Claude |
+| `/spec` | **Claude**(복잡) · GLM(단순) | 권한·보안 얽히면 Claude |
 | `/prd` | **Claude** | 한 번의 집중 패스 |
-| `/ux` | **Claude**(흐름) · z.ai(문서화) | |
-| `/backend` | **Claude**(설계·보안) · z.ai(DDL) · Codex(연동 코드) | |
-| `/design-system` | **z.ai** · Claude 검토 | |
+| `/ux` | **Claude**(흐름) · GLM(문서화) | |
+| `/backend` | **Claude**(설계·보안) · GLM(DDL) · Codex(연동 코드) | |
+| `/design-system` | **GLM** · Claude 검토 | |
 | `/plan` | **Claude** | slice 분해 판단 |
-| `/build` | **z.ai**(대량) · Codex(도는 코드·관용구) | Claude는 깊은 로직만 |
-| 디버깅 | **증상별** | 로직난해 = Claude, 스택트레이스/핫픽스 = z.ai, 프레임워크 버그 = Codex |
-| `/test` | **z.ai**(대량) · Codex(관용구) | 통합 시나리오 설계 = Claude |
+| `/build` | **GLM**(대량) · Codex(도는 코드·관용구) | Claude는 깊은 로직만 |
+| 디버깅 | **증상별** | 로직난해 = Claude, 스택트레이스/핫픽스 = GLM, 프레임워크 버그 = Codex |
+| `/test` | **GLM**(대량) · Codex(관용구) | 통합 시나리오 설계 = Claude |
 | `/review` | **Claude** | 정확성·보안·일관성 (실행은 Codex가 분담) |
-| `/log` | **z.ai** | 저비용 문서화 |
+| `/log` | **GLM** | 저비용 문서화 |
 
-> **한 줄 원칙: z.ai로 만들고, Codex로 돌게 만들고, Claude로 판단·검증한다. Claude(Pro)는 희소 자원이니 깊은 판단에만 쓰고, 안 도는 코드는 Codex로 올린다.**
+> **한 줄 원칙: GLM으로 만들고, Codex로 돌게 만들고, Claude로 판단·검증한다. Claude(Pro)는 희소 자원이니 깊은 판단에만 쓰고, 안 도는 코드는 Codex로 올린다.**
 
 ---
 
@@ -193,7 +193,7 @@ Claude Code가 세션 시작 시 자동으로 읽는 표준 파일입니다. 규
 
 ### AGENTS.md (프로젝트 루트)
 
-Codex가 자동으로 읽는 표준 컨벤션 파일입니다(여러 코딩 에이전트 도구가 채택하는 공통 파일명). GLM처럼 자동 로딩 컨벤션이 없는 도구를 위한 공용 포인터로도 씁니다. 마찬가지로 docs/AGENT_WORKFLOW.md와 docs/HANDOFF.md로 연결하고, Codex/GLM 각각의 역할만 짧게 적습니다. 템플릿은 19장 참고.
+Codex를 비롯해 여러 코딩 에이전트 도구가 자동으로 읽는 표준 컨벤션 파일입니다. GLM을 돌리는 도구가 AGENTS.md를 자동으로 읽으면 그대로 적용되고, 자동으로 읽지 않는 도구라면 세션 시작 시 이 파일부터 읽게 하는 공용 포인터로 씁니다. 마찬가지로 docs/AGENT_WORKFLOW.md와 docs/HANDOFF.md로 연결하고, Codex/GLM 각각의 역할만 짧게 적습니다. 템플릿은 19장 참고.
 
 ### docs/PRODUCT_BLUEPRINT.md
 
@@ -224,6 +224,8 @@ AI coding agent가 지켜야 할 작업 규칙입니다. 이 매뉴얼의 핵심
 ```text
 /blueprint → /spec → /plan → /build → /test → /review → /log
 ```
+
+큰 프로젝트라면 /blueprint 뒤에 필요에 따라 /prd → /ux → /backend → /design-system을 끼워 넣고, 그다음 기능별로 /spec부터 진행합니다(/prd는 /spec보다 먼저 또는 함께 — /prd 장 참고).
 
 간단한 기능 수정은 아래 핵심 흐름만 적용해도 됩니다.
 
@@ -294,7 +296,7 @@ Do not write code yet.
 
 # /spec
 
-> **담당 모델: Claude 주도.** 단, 단순하고 표준적인 기능의 명세는 z.ai 모델로도 충분합니다. 비즈니스 규칙이 얽히거나 권한·보안 이슈가 있으면 Claude가 맡습니다.
+> **담당 모델: Claude 주도.** 단, 단순하고 표준적인 기능의 명세는 GLM 모델로도 충분합니다. 비즈니스 규칙이 얽히거나 권한·보안 이슈가 있으면 Claude가 맡습니다.
 
 ## 목적
 
@@ -394,7 +396,7 @@ Do not write code yet.
 
 # /ux
 
-> **담당 모델: Claude 주도 · z.ai 모델 보조.** 사용자 흐름의 논리·일관성은 Claude가 잡고, 화면별 항목(상태·CTA·microcopy 등)을 문서로 정리하는 반복 작업은 z.ai 모델에 넘깁니다.
+> **담당 모델: Claude 주도 · GLM 모델 보조.** 사용자 흐름의 논리·일관성은 Claude가 잡고, 화면별 항목(상태·CTA·microcopy 등)을 문서로 정리하는 반복 작업은 GLM 모델에 넘깁니다.
 
 ## 목적
 
@@ -444,7 +446,7 @@ Do not write code yet.
 
 # /backend
 
-> **담당 모델: Claude 주도 · z.ai 모델 · Codex 보조.** 서비스 경계·인증/권한·보안 리스크 등 고수준 결정은 Claude가, 확정된 스키마의 DDL·마이그레이션 초안은 z.ai 모델이 변환하고, 특정 SDK/외부 API를 실제로 붙이는 연동 코드는 Codex가 맡습니다.
+> **담당 모델: Claude 주도 · GLM 모델 · Codex 보조.** 서비스 경계·인증/권한·보안 리스크 등 고수준 결정은 Claude가, 확정된 스키마의 DDL·마이그레이션 초안은 GLM 모델이 변환하고, 특정 SDK/외부 API를 실제로 붙이는 연동 코드는 Codex가 맡습니다.
 
 ## 목적
 
@@ -499,7 +501,7 @@ Do not implement yet.
 
 # /design-system
 
-> **담당 모델: z.ai 모델 주도 · Claude 검토.** 색·타이포·간격·컴포넌트 같은 반복적 토큰 정의는 z.ai 모델이 비용 효율적입니다. 전체 일관성과 접근성 규칙은 Claude가 검토합니다.
+> **담당 모델: GLM 모델 주도 · Claude 검토.** 색·타이포·간격·컴포넌트 같은 반복적 토큰 정의는 GLM 모델이 비용 효율적입니다. 전체 일관성과 접근성 규칙은 Claude가 검토합니다.
 
 ## 목적
 
@@ -555,7 +557,7 @@ Do not write code yet.
 
 # /plan
 
-> **담당 모델: Claude 주도.** 기능을 어떻게 vertical slice로 쪼갤지, 무엇을 먼저 할지의 판단은 Claude가 맡습니다. 잘 쪼갠 plan이 이후 z.ai 모델 구현의 품질을 좌우합니다.
+> **담당 모델: Claude 주도.** 기능을 어떻게 vertical slice로 쪼갤지, 무엇을 먼저 할지의 판단은 Claude가 맡습니다. 잘 쪼갠 plan이 이후 GLM 모델 구현의 품질을 좌우합니다.
 
 ## 목적
 
@@ -626,7 +628,7 @@ Do not implement yet.
 
 # /build
 
-> **담당 모델: z.ai 모델 주도 · Codex 보조.** 볼륨 큰 구현은 z.ai가 담당합니다. "논리는 맞는데 안 도는 코드"나 특정 라이브러리 관용구가 필요하면 **Codex**로 올리고(아래 "막히는 코드 처리" 3단 참고), 설계·로직 차원의 문제일 때만 Claude로 승격합니다.
+> **담당 모델: GLM 모델 주도 · Codex 보조.** 볼륨 큰 구현은 GLM이 담당합니다. "논리는 맞는데 안 도는 코드"나 특정 라이브러리 관용구가 필요하면 **Codex**로 올리고(아래 "막히는 코드 처리" 3단 참고), 설계·로직 차원의 문제일 때만 Claude로 승격합니다.
 
 ## 목적
 
@@ -643,15 +645,15 @@ Do not implement yet.
 - AI가 생성한 starter code를 production-ready라고 주장하지 않기
 - 보안/결제/회계/개인정보 관련 기능은 추가 review 전 자동화하지 않기
 
-## 막히는 코드 처리: z.ai → Codex → Claude (3단)
+## 막히는 코드 처리: GLM → Codex → Claude (3단)
 
 코드가 "논리는 맞는데 실제로 안 도는" 상황을 처리하는 순서입니다. **핵심은 Claude(희소 자원)를 마지막에, 정말 필요할 때만 부르는 것**입니다.
 
-1. **z.ai 자가수정 (1차, 가장 저렴).** z.ai가 만든 코드를 빌드/테스트하고, 실패하면 실제 에러·스택 트레이스·실패한 테스트를 그대로 z.ai에 되먹여 1~2회 고치게 합니다. ClinePass 쿼터 안이라 추가 시도 비용이 사실상 들지 않습니다.
-2. **Codex 승격 (2차, 실행 전문).** z.ai가 1~2회로 못 고치거나, 특정 라이브러리/프레임워크의 최신 관용구가 필요하면 **Codex로** 올립니다 (Claude가 아닙니다). 같은 에러를 붙여넣어 고치게 하거나, 처음부터 "즉시 도는 스니펫"을 Codex에 맡깁니다.
-3. **Claude 승격 (3차, 깊은 판단만).** 문제가 단순 실행이 아니라 설계·로직·아키텍처 차원이면 그때 Claude로 올립니다. 승격 시 "z.ai/Codex가 시도한 내용 + 현재 에러 + 관련 파일"을 함께 전달합니다.
+1. **GLM 자가수정 (1차, 가장 저렴).** GLM이 만든 코드를 빌드/테스트하고, 실패하면 실제 에러·스택 트레이스·실패한 테스트를 그대로 GLM에 되먹여 1~2회 고치게 합니다. z.ai 구독 쿼터 안이라 추가 시도 비용이 사실상 들지 않습니다.
+2. **Codex 승격 (2차, 실행 전문).** GLM이 1~2회로 못 고치거나, 특정 라이브러리/프레임워크의 최신 관용구가 필요하면 **Codex로** 올립니다 (Claude가 아닙니다). 같은 에러를 붙여넣어 고치게 하거나, 처음부터 "즉시 도는 스니펫"을 Codex에 맡깁니다.
+3. **Claude 승격 (3차, 깊은 판단만).** 문제가 단순 실행이 아니라 설계·로직·아키텍처 차원이면 그때 Claude로 올립니다. 승격 시 "GLM/Codex가 시도한 내용 + 현재 에러 + 관련 파일"을 함께 전달합니다. Claude는 방향과 수정안을 결정하는 데까지만 쓰고, 결정이 나오면 실제 구현·대량 수정은 다시 GLM(또는 Codex)으로 내려보냅니다.
 
-### 1차 — z.ai 자가수정 요청 예시
+### 1차 — GLM 자가수정 요청 예시
 
 ```text
 The previous build failed. Here is the actual result:
@@ -698,7 +700,7 @@ Rules:
 
 # /test
 
-> **담당 모델: z.ai 모델 주도 · Codex 보조.** 유닛 테스트·기본 동작 확인의 대량 생성은 z.ai가 가장 저렴합니다. 프레임워크 특화 테스트 관용구가 필요하면 Codex. 복잡한 통합 테스트 시나리오 *설계*만 Claude에 맡깁니다. 실행 오류는 Codex와 테스트가 1차로 잡되, 커버리지는 넉넉하게 가져갑니다.
+> **담당 모델: GLM 모델 주도 · Codex 보조.** 유닛 테스트·기본 동작 확인의 대량 생성은 GLM이 가장 저렴합니다. 프레임워크 특화 테스트 관용구가 필요하면 Codex. 복잡한 통합 테스트 시나리오 *설계*만 Claude에 맡깁니다. 실행 오류는 실행 안전망(Codex·테스트)이 잡아 주되, 커버리지는 넉넉하게 가져갑니다.
 
 ## 목적
 
@@ -750,7 +752,7 @@ Required:
 
 # /review
 
-> **담당 모델: Claude. 품질의 최종(2차) 안전망.** Codex와 테스트가 "도느냐"(실행)를 1차로 잡아 주므로, Claude는 "돌긴 도는데 비즈니스 규칙·보안·경계 조건·코드베이스 일관성이 틀렸는가"라는 깊은 정확성에 집중합니다. Claude(Pro)는 희소 자원이니 리뷰는 의미 있는 변경 단위로 묶어 한 번에 돌립니다.
+> **담당 모델: Claude. 품질의 최종 안전망(정확성).** 실행 안전망(Codex·테스트)이 "도느냐"를 잡아 주므로, Claude는 "돌긴 도는데 비즈니스 규칙·보안·경계 조건·코드베이스 일관성이 틀렸는가"라는 깊은 정확성에 집중합니다. Claude(Pro)는 희소 자원이니 리뷰는 의미 있는 변경 단위로 묶어 한 번에 돌립니다.
 
 ## 목적
 
@@ -798,7 +800,7 @@ Return:
 
 # /log
 
-> **담당 모델: z.ai 모델 주도.** 변경 기록·로그 작성은 저비용 작업이므로 z.ai 모델이 처리합니다.
+> **담당 모델: GLM 모델 주도.** 변경 기록·로그 작성은 저비용 작업이므로 GLM 모델이 처리합니다.
 
 ## 목적
 
@@ -855,12 +857,15 @@ Include:
 18. Separate MVP, v1, and later phases clearly.
 19. Include loading, empty, and error states for user-facing features.
 20. Include data visibility rules for customer, admin, driver, and internal views when relevant.
-21. Three-model setup: "Claude" (Claude Code's latest, scarce on Pro $20) owns judgment/design/review; "Codex" ($20) owns runnable code, library idioms, and framework-specific bugs; "the z.ai model" (run via Cline's ClinePass subscription — low flat cost, generous quota) owns volume implementation/tests/docs. Always use each provider's latest model.
-22. Claude is the binding cost constraint. Before assigning a task to Claude, check whether the z.ai model (volume) or Codex (runnability/idioms) can do it; reserve Claude for deep judgment only.
-23. Default first attempt goes to the z.ai model. If code does not run after 1-2 self-correction passes, escalate to Codex — not Claude.
+21. Three-model setup: "Claude" (Claude Code's latest, scarce on Pro $20) owns judgment/design/review; "Codex" ($20) owns runnable code, library idioms, and framework-specific bugs; "GLM" (z.ai's latest model, subscribed directly on z.ai — low flat cost, generous quota) owns volume implementation/tests/docs. Always use each provider's latest model.
+22. Claude is the binding cost constraint. Before assigning a task to Claude, check whether GLM (volume) or Codex (runnability/idioms) can do it; reserve Claude for deep judgment only.
+23. Default first attempt goes to GLM (if the goal itself is a current library idiom, starting at Codex is fine). If code does not run after 1-2 self-correction passes, escalate to Codex — not Claude.
 24. Use Codex for "logic is right but it does not run," current library/framework idioms, and framework-specific bugs.
-25. Escalate to Claude only for design/logic/architecture/security problems that Codex and the z.ai model cannot resolve.
+25. Escalate to Claude only for design/logic/architecture/security problems that Codex and GLM cannot resolve.
 26. Two safety nets: Codex/tests catch "does it run"; Claude review catches "runs but is subtly wrong" (business rules, security, consistency).
+27. After a Claude escalation, Claude only decides the direction/fix; the actual implementation goes back down to GLM (or Codex). Claude does not type volume changes.
+28. End every session with a commit: run build/test, commit (and push if possible), and record the commit hash in docs/HANDOFF.md. Never hand off a dirty working tree.
+29. Never commit secrets, API keys, or tokens. Use environment variables with a .gitignored .env file, and provide .env.example placeholders.
 ```
 
 ---
@@ -869,7 +874,7 @@ Include:
 
 새 프로젝트마다 아래 섹션을 복사해서 채우세요.
 
-```markdown
+````markdown
 # Project-Specific Agent Rules
 
 ## Project Name
@@ -943,13 +948,15 @@ Use:
 - [예: Vercel demo]
 - [예: staging only]
 - [예: no real customer data]
-```
+````
 
 ---
 
 ## 7. New Project Setup Prompt
 
 새 프로젝트를 시작할 때 AI coding agent에게 아래 prompt를 줄 수 있습니다.
+
+> **이 프롬프트는 GLM에게 줍니다** (문서 생성은 저비용 작업).
 
 ```text
 Create project documentation for AI coding agent workflow.
@@ -959,9 +966,12 @@ Tasks:
 2. Create docs/AGENT_WORKFLOW.md.
 3. Create docs/DEV_LOG.md.
 4. Create docs/PROJECT_SCOPE.md.
-5. Add workflow:
+5. Create docs/HANDOFF.md and the docs/handoff_history/ folder.
+6. Create CLAUDE.md and AGENTS.md in the project root as short pointer files
+   to docs/AGENT_WORKFLOW.md and docs/HANDOFF.md.
+7. Add workflow:
    /blueprint → /spec → /plan → /build → /test → /review → /log
-6. Include rules:
+8. Include rules:
    - no major coding without spec
    - product blueprint before large builds
    - small vertical slices
@@ -971,8 +981,9 @@ Tasks:
    - no real user/customer data in demo
    - mark later-phase features clearly
    - treat AI output as draft until tested
-7. Do not implement app features yet.
-8. Only add documentation.
+   - commit before ending the session
+9. Do not implement app features yet.
+10. Only add documentation.
 ```
 
 ---
@@ -980,6 +991,8 @@ Tasks:
 ## 8. Feature Development Prompt Template
 
 새 기능을 개발할 때 사용하세요.
+
+> **이 프롬프트는 Claude에게 줍니다** (/spec·/plan은 Claude 담당 — 단순·표준 기능의 /spec은 GLM도 가능).
 
 ```text
 Follow docs/AGENT_WORKFLOW.md.
@@ -1023,6 +1036,8 @@ The plan must:
 
 새 앱의 starter code를 만들 때 사용하세요.
 
+> **이 프롬프트는 GLM에게 줍니다** (대량 starter code 생성).
+
 ```text
 Act as a senior [SwiftUI/Kotlin/Flutter/React Native/Next.js] engineer.
 
@@ -1045,6 +1060,8 @@ Rules:
 
 spec과 plan을 확인한 후 구현할 때 사용하세요.
 
+> **이 프롬프트는 GLM에게 줍니다** (막히면 0장 3단 사다리대로 Codex → Claude 순으로 승격).
+
 ```text
 Proceed with /build for Slice [번호] only.
 
@@ -1065,6 +1082,8 @@ Rules:
 ## 11. Review Prompt Template
 
 작업 후 검토할 때 사용하세요.
+
+> **이 프롬프트는 Claude에게 줍니다** (최종 정확성 안전망).
 
 ```text
 Run /review for the last change.
@@ -1125,9 +1144,9 @@ Return:
 
 ## Completed Work
 
-| Date | Work | Notes |
-|---|---|---|
-| YYYY-MM-DD | [작업] | [메모] |
+| Date | Model | Work | Notes |
+|---|---|---|---|
+| YYYY-MM-DD | [Claude/Codex/GLM] | [작업] | [메모] |
 
 ## Open Issues
 
@@ -1137,9 +1156,9 @@ Return:
 
 ## Build / Test Log
 
-| Date | Command | Result | Notes |
-|---|---|---|---|
-| YYYY-MM-DD | npm run build | Passed/Failed | [메모] |
+| Date | Model | Command | Result | Notes |
+|---|---|---|---|---|
+| YYYY-MM-DD | [모델] | npm run build | Passed/Failed | [메모] |
 
 ## Risks / Follow-Ups
 
@@ -1228,7 +1247,7 @@ Step 6. DEV_LOG 작성
 Step 7. CLAUDE.md / AGENTS.md / HANDOFF.md 작성 (17~19장 템플릿 사용)
 Step 8. MVP 기능만 구현
 Step 9. 기능마다 /spec → /plan → /build → /test → /review 적용
-Step 10. 작업 후 DEV_LOG·HANDOFF 업데이트
+Step 10. 작업 후 커밋 → DEV_LOG·HANDOFF 업데이트
 Step 11. 데모 또는 배포 전 build/test 확인
 Step 12. 나중 기능은 Phase로 분리
 ```
@@ -1258,6 +1277,9 @@ AI에게 바로 코딩을 시키지 말고,
 
 ```text
 Blueprint first, spec before build, small slices only, build must pass, log every meaningful change.
+
+Three models: GLM builds, Codex makes it run, Claude judges and verifies.
+Claude is scarce — escalate non-running code to Codex, not Claude.
 ```
 
 한국어로는:
@@ -1265,7 +1287,7 @@ Blueprint first, spec before build, small slices only, build must pass, log ever
 ```text
 먼저 제품 방향을 잡고, 명세 후 구현하고, 작게 만들고, 빌드를 통과시키고, 의미 있는 변경은 기록한다.
 
-3-모델: z.ai로 만들고, Codex로 돌게 만들고, Claude로 판단·검증한다. Claude(Pro)는 희소 자원이니 깊은 판단에만 쓰고, 안 도는 코드는 Claude가 아니라 Codex로 올린다.
+3-모델: GLM으로 만들고, Codex로 돌게 만들고, Claude로 판단·검증한다. Claude(Pro)는 희소 자원이니 깊은 판단에만 쓰고, 안 도는 코드는 Claude가 아니라 Codex로 올린다.
 ```
 
 
@@ -1285,15 +1307,16 @@ Blueprint first, spec before build, small slices only, build must pass, log ever
 
 ### 세션 종료 시 (FINISH)
 
-1. `docs/DEV_LOG.md`의 Current Status와 Build/Test Log를 갱신한다.
-2. `docs/HANDOFF.md`를 다음 모델 기준으로 새로 쓴다 (이전 버전은 `docs/handoff_history/`로 옮긴다).
-3. 18장의 "Universal Output Block" 형식으로 다음 모델·다음 작업·이유를 채팅 응답 끝에도 남긴다.
+1. build/test를 돌리고 변경을 커밋한다(가능하면 push). 커밋하지 않은 변경을 남기고 인계하지 않는다.
+2. `docs/DEV_LOG.md`의 Current Status와 Build/Test Log를 갱신한다.
+3. `docs/HANDOFF.md`를 다음 모델 기준으로 새로 쓴다 — 마지막 커밋 해시 포함 (이전 버전은 `docs/handoff_history/`로 옮긴다).
+4. 18장의 "Universal Output Block" 형식으로 다음 모델·다음 작업·이유를 채팅 응답 끝에도 남긴다.
 
 작업은 인계(ownership transfer)가 끝나기 전까지 완료된 것으로 보지 않습니다.
 
 ### Build/Test 에스컬레이션 — 0장 3단 사다리 빠른 참조
 
-> 아래는 0장 "막히는 코드 처리: z.ai → Codex → Claude (3단)"의 요약표입니다. **`/build`·`/test`에서 코드가 안 도는 상황에만** 적용됩니다. `/blueprint`, `/spec`, `/prd`, `/plan`, `/review`처럼 처음부터 Claude가 담당하는 단계는 이 사다리와 무관하며, 0장의 "워크플로우 단계별 담당 모델" 표를 그대로 따릅니다.
+> 아래는 0장 "3단 에스컬레이션 사다리"(상세는 /build 장 "막히는 코드 처리: GLM → Codex → Claude")의 요약표입니다. **`/build`·`/test`에서 코드가 안 도는 상황에만** 적용됩니다. `/blueprint`, `/spec`, `/prd`, `/plan`, `/review`처럼 처음부터 Claude가 담당하는 단계는 이 사다리와 무관하며, 0장의 "워크플로우 단계별 담당 모델" 표를 그대로 따릅니다.
 
 | 단계 | 담당 | 조건 |
 |---|---|---|
@@ -1311,7 +1334,7 @@ Blueprint first, spec before build, small slices only, build must pass, log ever
 
 ### Human-in-the-loop (현재는 90/10)
 
-Claude Code, Codex, GLM(VS Code 확장 또는 z.ai 엔드포인트로 돌리는 Claude Code)은 서로 다른 제품이라, 한쪽이 다른 쪽을 자동으로 호출하지 못합니다. 지금 단계에서 사람(운영자)의 역할은 다음과 같습니다.
+Claude Code, Codex, GLM(z.ai 직접 구독을 지원하는 별도 CLI/에이전트 도구로 실행)은 서로 다른 제품이라, 한쪽이 다른 쪽을 자동으로 호출하지 못합니다. 지금 단계에서 사람(운영자)의 역할은 다음과 같습니다.
 
 1. `docs/HANDOFF.md`에 적힌 다음 모델을 확인하고 해당 도구를 연다.
 2. 새 세션이 `docs/HANDOFF.md`를 읽게 한다 — CLAUDE.md/AGENTS.md를 통해 자동으로 읽히거나, 직접 내용을 붙여넣는다.
@@ -1321,7 +1344,7 @@ Claude Code, Codex, GLM(VS Code 확장 또는 z.ai 엔드포인트로 돌리는 
 
 ### 향후 CLI 자동화 (선택)
 
-세 도구 모두 스크립트로 호출 가능한 인터페이스를 제공합니다 — Claude Code의 `claude -p`(headless), Codex의 `codex exec`, 그리고 GLM은 Cline의 공식 CLI(`cline "프롬프트"` 또는 `cline --json "프롬프트"`, ClinePass 구독으로 인증)로 headless 실행이 가능합니다. 이를 이용해 오케스트레이터 스크립트를 만들 수도 있지만, 이 경우에도 문서 구조는 바뀌지 않습니다.
+세 도구 모두 스크립트로 호출 가능한 인터페이스를 제공합니다 — Claude Code의 `claude -p`(headless), Codex의 `codex exec`, 그리고 GLM은 사용 중인 도구의 headless/비대화형 실행 모드(z.ai 구독으로 인증)를 씁니다. 이를 이용해 오케스트레이터 스크립트를 만들 수도 있지만, 이 경우에도 문서 구조는 바뀌지 않습니다.
 
 1. `docs/HANDOFF.md`를 읽는다
 2. 다음 담당 모델을 판별한다
@@ -1363,6 +1386,9 @@ Claude Code, Codex, GLM(VS Code 확장 또는 z.ai 엔드포인트로 돌리는 
 - [파일1]
 - [파일2]
 
+## Last Commit
+[커밋 해시 / 브랜치 — 커밋 없이 인계 금지]
+
 ## Files To Touch Next
 - [파일1]
 
@@ -1386,6 +1412,7 @@ NEXT OWNER: [Claude | Codex | GLM]
 NEXT TASK: [구체적 작업]
 WHY: [이유]
 FILES: [변경/예정 파일]
+COMMIT: [마지막 커밋 해시]
 RISKS: [리스크]
 ```
 
@@ -1409,10 +1436,10 @@ Your role: judgment, architecture, planning, security, deep logic bugs, final re
 Never perform large-volume repetitive implementation — that belongs to GLM.
 If code simply doesn't run, that's Codex's job, not yours, unless it's a design/logic/architecture issue.
 
-At the end of every session, update docs/HANDOFF.md and docs/DEV_LOG.md before finishing.
+At the end of every session, commit your changes, then update docs/HANDOFF.md (with the commit hash) and docs/DEV_LOG.md before finishing.
 ```
 
-### AGENTS.md (Codex와 Cline이 자동으로 읽는 표준 컨벤션)
+### AGENTS.md (Codex 등 이 컨벤션을 따르는 도구가 자동으로 읽음)
 
 ```markdown
 # Agent Instructions (Codex / GLM)
@@ -1426,16 +1453,16 @@ Before doing anything, read in this order:
 Produce runnable code. Fix framework/library issues and compile errors.
 Keep changes minimal. Never redesign architecture — escalate that to Claude.
 
-## If you are GLM (z.ai, via Cline)
+## If you are GLM (z.ai)
 Produce high-volume implementation, tests, and documentation.
 Retry self-fixing build/test failures up to 2 times.
 If still failing and it is a runnability/idiom issue, escalate to Codex.
 If it is an architecture/security/business-rule issue, escalate to Claude.
 
-At the end of every session, update docs/HANDOFF.md and docs/DEV_LOG.md before finishing.
+At the end of every session, commit your changes, then update docs/HANDOFF.md (with the commit hash) and docs/DEV_LOG.md before finishing.
 ```
 
-> **참고:** GLM 5.2는 Cline(VS Code 확장 · CLI · JetBrains 플러그인)에서 ClinePass 구독으로 돌립니다. Cline은 프로젝트 루트의 AGENTS.md를 별도 설정 없이 자동으로 인식하므로(`.clinerules`와 함께 Rules 패널에 표시됨), 위 AGENTS.md 파일 하나로 Codex와 GLM(Cline) 양쪽 모두에 자동 적용됩니다. 추가로 `.clinerules/`에 Cline 전용 규칙(예: 파일 경로별 조건부 규칙)을 더 두어도 되지만, 핵심 작업 규칙은 중복 없이 docs/AGENT_WORKFLOW.md 하나에만 유지합니다.
+> **참고:** GLM 모델은 z.ai에서 직접 구독해, z.ai가 지원하는 CLI/에이전트 도구로 돌립니다. 사용하는 GLM 도구가 AGENTS.md 컨벤션을 자동으로 읽으면 위 파일 하나로 Codex와 GLM 양쪽에 자동 적용되고, 자동으로 읽지 않는 도구라면 세션 시작 시 "AGENTS.md를 먼저 읽어라" 한 줄만 직접 지시합니다. 만약 GLM을 Claude Code(z.ai 엔드포인트)로 돌리게 된다면 그 세션은 CLAUDE.md를 읽으므로, CLAUDE.md에 "docs/HANDOFF.md의 Next Owner가 GLM이면 AGENTS.md의 GLM 역할을 따르라"는 분기 한 줄을 추가해야 합니다. 어떤 경우든 핵심 작업 규칙은 중복 없이 docs/AGENT_WORKFLOW.md 하나에만 유지합니다.
 
 ---
 

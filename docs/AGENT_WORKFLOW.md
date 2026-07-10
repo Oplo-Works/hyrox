@@ -1,6 +1,16 @@
 # Agent Workflow — NY/NJ Hybrid Race Club Website
 
-이 문서는 본 프로젝트의 AI coding agent 작업 규칙 원본(source of truth)입니다. 모든 모델은 작업 전에 반드시 이 문서를 읽어야 합니다. 상세한 워크플로우 매뉴얼은 `docs/AI_Coding_Agent_Workflow_v6.md`를 참고하세요.
+이 문서는 본 프로젝트의 AI coding agent 작업 규칙 원본(source of truth)입니다. 모든 모델은 작업 전에 반드시 이 문서를 읽어야 합니다. 상세한 워크플로우 매뉴얼은 `docs/AI_Coding_Agent_Workflow_v7.md`(Claude × Codex × GLM 3-모델 에디션)를 참고하세요.
+
+## 3-모델 역할 분담 (요약 — 상세는 v7 매뉴얼 0장)
+
+| 모델 | 핵심 역할 | 비고 |
+|---|---|---|
+| **GLM** (z.ai) | 생산 · 대량 구현 · 테스트 · 문서 | 기본 1차 시도. 저가 정액 + 넉넉한 쿼터 |
+| **Codex** | 실행 정확성 · 라이브러리/프레임워크 관용구 · 버그 | 코드가 안 돌면 Claude가 아니라 여기로 승격 |
+| **Claude** | 판단 · 설계 · 보안 · 일관성 · 최종 리뷰 | Pro 한도가 빡빡한 **희소 자원**. 깊은 판단에만 |
+
+에스컬레이션 사다리: **GLM(자가수정 1~2회) → Codex(실행/관용구) → Claude(설계/로직/보안)**. 안 도는 코드는 Codex로, 설계·아키텍처·보안 문제만 Claude로 올립니다.
 
 ## Workflow
 
@@ -86,7 +96,9 @@ npm run dev
 9. 결제/보안/개인정보 기능은 추가 review 전 자동화 금지
 10. 빌드 종료 전 `npm run build` 실행
 11. 의미 있는 변경 후 `docs/DEV_LOG.md` 갱신
-12. 세션 종료 전 `docs/HANDOFF.md` 갱신
+12. 세션 종료 전 `docs/HANDOFF.md` 갱신 (마지막 커밋 해시 포함)
+13. **세션 종료 전 반드시 커밋** — build/test 통과 후 커밋(가능하면 push), dirty working tree로 인계 금지 (v7 규칙 28)
+14. **시크릿/API 키/토큰 커밋 금지** — `.gitignore`된 `.env` + `.env.example` placeholder 사용 (v7 규칙 29)
 
 ## HYROX Usage Rules (Critical)
 

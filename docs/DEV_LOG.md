@@ -6,17 +6,17 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 
 ## Current Status
 
-- Current Feature: MVP 랜딩 페이지 + 모바일 스크롤 에너지 디자인 적용
-- Current Phase: MVP
-- Current Slice: Slice 7 완료 — 모든 slice 완료
+- Current Feature: Nitro 컬러웨이(러닝화 미드솔) 리테마 + v7 3-모델 워크플로우 문서 정렬
+- Current Phase: MVP (polish)
+- Current Slice: Slice 7 완료 — 모든 slice 완료, 컬러 리테마 적용
 - Completed Slices: Slice 1~7 전체
-- Remaining Work: 운영자 TODO 값 채우기, 실제 이미지/QR/OG 이미지 추가, Sticky CTA 접근성 polish, Next 보안 패치, Netlify 배포 확인
+- Remaining Work: 운영자 TODO 값 채우기, 실제 이미지/QR/OG 이미지 추가, Sticky CTA 접근성 polish, Next 보안 패치, 배포 결과 확인
 - Active Branch: main
 - Build Status: Passing (경고/에러 0)
-- Test Status: Build/lint 통과, 320px/375px/390px 모바일 렌더링 점검 완료, Netlify 자동 배포 확인 필요
-- Git Remote: github.com:Oplo-Works/hyrox.git
-- Latest Feature Commit: 41ec5a5 (`feat: add mobile scroll energy`)
-- Deployment: Netlify (GitHub repo 연결, 자동 배포)
+- Test Status: Build 통과, 라이브 DOM 컬러 검증 완료 (dev server), 4-렌즈 검증 워크플로우 통과
+- Git Remote: github.com/Oplo-Works/hyrox.git
+- Latest Feature Commit: fc05aeb (`feat: apply Nitro shoe colorway`)
+- Deployment: Netlify (GitHub repo 연결, main push 시 자동 배포)
 
 ## Current MVP Scope
 
@@ -41,6 +41,8 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 | 2026-07-09 | metadataBase placeholder URL 설정 | OG 이미지 경로 해석 경고 제거 |
 | 2026-07-09 | 네온 옐로 레이스 포인트 적용 | 참고 이미지의 블랙/화이트/옐로 대비를 사용하되, 공식 HYROX 로고·이미지·레이아웃은 사용하지 않음 |
 | 2026-07-09 | 스크롤 기반 모션을 CSS + DOM 관찰로 구현 | React 재렌더링 없이 모바일 스크롤 방향·속도에 반응하도록 구성 |
+| 2026-07-09 | 네온 옐로/라임 → Nitro 컬러웨이(오렌지→마젠타→퍼플)로 교체 | 운영자가 제시한 러닝화 미드솔 컬러 믹스 반영. magenta는 그라데이션 내부 전용, green은 희소 악센트로 위계 고정 |
+| 2026-07-09 | 워크플로우 매뉴얼 v6 → v7 (Claude×Codex×GLM) 정렬 | z.ai→GLM 명칭 통일, Model Pin 개념, 커밋/시크릿 규칙(28·29) 반영 |
 
 ## Completed Work
 
@@ -65,6 +67,8 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 | 2026-07-09 | Codex 리뷰 수행 | build/lint 통과, npm audit 취약점 확인, OG 이미지 404 확인, 모바일 320/375/390 렌더링 및 접근성 이슈 확인 |
 | 2026-07-09 | 모바일 스크롤 에너지 디자인 | `ScrollEnergy` 진행선/레인/스피드 라인, 섹션 reveal, Hero 대각선 레이스 라인, 옐로 CTA 및 포커스 링 추가 |
 | 2026-07-09 | 인수인계 문서 정리 | 다른 PC/에이전트가 `main`에서 재개할 수 있도록 재현 절차, 파일 맵, 우선 작업을 `HANDOFF.md`에 갱신 |
+| 2026-07-09 | Nitro 컬러웨이 리테마 (commit fc05aeb) | globals.css/tailwind.config 팔레트 교체, --gradient-nitro 도입, 9개 컴포넌트 갱신, FAQ 포커스 블로커 수정, WCAG AA 대비 보정. 4-렌즈 검증 워크플로우로 leftover 색상·대비·일관성·기술 회귀 점검 |
+| 2026-07-09 | v7 워크플로우 문서 정렬 | v6→v7 매뉴얼 교체, CLAUDE.md/AGENTS.md/AGENT_WORKFLOW.md에 GLM 명칭·커밋·시크릿 규칙 반영, docs/handoff_history/ 생성 |
 
 ## Open Issues
 
@@ -83,6 +87,8 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 | #011 | 숨겨진 모바일 Sticky CTA 안의 링크가 tab order에 남음 (`aria-hidden=true` 내부 focusable link) | Medium | Open |
 | #012 | CTA 버튼 포커스 outline이 투명/약하게 계산되어 키보드 focus 표시가 충분하지 않음 | Medium | Resolved (옐로 focus ring) |
 | #013 | 320px 모바일 첫 화면에서 Hero CTA가 아래로 밀리고, CTA 문구가 2줄로 갈라져 보임 | Low | Open |
+| #014 | FAQ 아코디언 버튼 `focus:outline-none`이 전역 포커스 아웃라인을 덮어 키보드 포커스 표시 0 (WCAG 2.4.7) | High | Resolved (green ring-inset, commit fc05aeb) |
+| #015 | 컬러 리테마 후 도메인 미확정 상태 유지, OG/QR 이미지 여전히 미제작 | Medium | Open |
 
 ## Build / Test Log
 
@@ -98,6 +104,8 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 | 2026-07-09 | npm run lint | Passed | 모바일 스크롤 에너지 디자인 적용 후 ESLint warnings/errors 0 |
 | 2026-07-09 | npm run build | Passed | 정적 4페이지, `/` First Load JS 134kB |
 | 2026-07-09 | 390px scroll interaction check | Passed | down/up 방향 반응, 가로 overflow 없음, 콘솔 warnings/errors 0 |
+| 2026-07-09 | npm run build (Nitro 리테마 후) | Passed | 경고 0, 에러 0, 정적 4페이지, `/` 47.3kB/134kB |
+| 2026-07-09 | 라이브 DOM 컬러 검증 (dev server) | Passed | CTA 그라데이션·포커스 링·글로우·본문 색상 computed style 확인 |
 
 ## Risks / Follow-Ups
 

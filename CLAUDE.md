@@ -7,8 +7,9 @@ Before doing anything, read in this order:
 4. docs/nynj-hybrid-race-club-build-brief.md
 
 Your role: judgment, architecture, planning, security, deep logic bugs, final review.
-Never perform large-volume repetitive implementation — that belongs to the z.ai model.
+Never perform large-volume repetitive implementation — that belongs to GLM.
 If code simply doesn't run, that's Codex's job, not yours, unless it's a design/logic/architecture issue.
+(Three-model workflow: GLM builds, Codex makes it run, Claude judges. Claude Pro is scarce — escalate non-running code to Codex, not Claude. Full rules: docs/AI_Coding_Agent_Workflow_v7.md.)
 
 ## Project-Specific Notes
 
@@ -18,4 +19,4 @@ If code simply doesn't run, that's Codex's job, not yours, unless it's a design/
 - Do not build payment/login/RSVP in MVP.
 - Unknown values must stay as TODO placeholders — do not fill them with fake data.
 
-At the end of every session, update docs/HANDOFF.md and docs/DEV_LOG.md before finishing.
+At the end of every session, commit your changes (run build/test first), then update docs/HANDOFF.md (with the commit hash) and docs/DEV_LOG.md before finishing. Never hand off a dirty working tree; never commit secrets.
