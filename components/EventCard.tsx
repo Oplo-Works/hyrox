@@ -130,29 +130,27 @@ export default function EventCard({
     /* ============ EDIT MODE ============ */
     return (
       <article className="bg-card border border-orange/40 rounded-2xl p-5 md:p-6 flex flex-col h-full relative">
-        <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5">
-          {/* 삭제 버튼 (edit mode에서만 노출) */}
-          <button
-            onClick={handleDeleteClick}
-            className="w-9 h-9 flex items-center justify-center rounded-lg border bg-red-500/10 border-red-500/40 text-red-400 hover:bg-red-500/20 transition-all"
-            aria-label="Delete this schedule"
-            title="스케쥴 삭제"
-          >
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <path
-                d="M5 5l10 10M15 5L5 15"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </button>
-          <ManagerEditButton
-            editId={editId}
-            isThisEditing={isThisEditing}
-            onCancelEdit={handleCancel}
-          />
-        </div>
+        {/* 삭제 버튼 (edit mode에서만 노출) — ManagerEditButton(check) 왼쪽에 배치 */}
+        <button
+          onClick={handleDeleteClick}
+          className="absolute top-3 right-14 z-20 w-9 h-9 flex items-center justify-center rounded-lg border bg-red-500/10 border-red-500/40 text-red-400 hover:bg-red-500/20 transition-all"
+          aria-label="Delete this schedule"
+          title="스케쥴 삭제"
+        >
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path
+              d="M5 5l10 10M15 5L5 15"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+        </button>
+        <ManagerEditButton
+          editId={editId}
+          isThisEditing={isThisEditing}
+          onCancelEdit={handleCancel}
+        />
 
         <div className="flex items-center gap-2 text-xs text-orange mb-3">
           <span className="w-1.5 h-1.5 rounded-full bg-orange animate-pulse" />
