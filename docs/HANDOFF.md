@@ -23,6 +23,9 @@ Claude (방금까지 작업) → Ready for next agent
   - `app/page.tsx`에 `EditableDataProvider` 래핑
   - `data/site.ts`에 `managerPassword` 필드 추가 (기본값 "258080", 배포 전 변경 권장)
   - 검증: `npm run build` 통과 (52.2kB/139kB, 경고 0, 에러 0)
+- **EventCard edit button 겹침 수정**: Upcoming Goals(EventCard) view mode에서 우측 상단 status 텍스트가 ManagerEditButton(연필 아이콘)과 겹치는 문제 수정
+  - `components/EventCard.tsx`의 type/status 행에 `pr-11` 추가하여 edit button 영역 확보
+  - 검증: `npm run build` 통과 (52.2kB/139kB, 경고 0, 에러 0)
 
 ## Current Stage
 /build Slice 1~7 완료 → 컬러 리테마 적용 → Manager 인라인 수정 기능 추가 → polish/보안 패치 대기

@@ -209,7 +209,7 @@ export default function EventCard({
         onCancelEdit={handleCancel}
       />
 
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-3 pr-11">
         <span className="inline-block text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-orange/15 text-orange border border-orange/30">
           {type}
         </span>

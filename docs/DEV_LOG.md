@@ -6,16 +6,16 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 
 ## Current Status
 
-- Current Feature: Manager 인라인 수정 기능 (homepage edit with 6-digit password gate)
-- Current Phase: MVP (feature addition)
-- Current Slice: Slice 7 완료 — Manager edit 기능 추가
-- Completed Slices: Slice 1~7 전체 + Manager edit 기능
+- Current Feature: Manager 인라인 수정 기능 (homepage edit with 6-digit password gate) + UI polish
+- Current Phase: MVP (feature addition + polish)
+- Current Slice: Slice 7 완료 — Manager edit 기능 추가 + EventCard edit button 겹침 수정
+- Completed Slices: Slice 1~7 전체 + Manager edit 기능 + UI polish
 - Remaining Work: 운영자 TODO 값 채우기, 실제 이미지/QR/OG 이미지 추가, Sticky CTA 접근성 polish, Next 보안 패치, 배포 결과 확인
 - Active Branch: main
 - Build Status: Passing (경고/에러 0)
 - Test Status: Build 통과 (52.2kB/139kB)
 - Git Remote: github.com/Oplo-Works/hyrox.git
-- Latest Feature Commit: e3c06b0 (`feat: add manager inline edit feature with 6-digit password gate`)
+- Latest Feature Commit: (pending) (`fix: EventCard status text overlap with manager edit button`)
 - Deployment: Netlify (GitHub repo 연결, main push 시 자동 배포)
 
 ## Current MVP Scope
@@ -71,6 +71,7 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 | 2026-07-09 | Nitro 컬러웨이 리테마 (commit fc05aeb) | globals.css/tailwind.config 팔레트 교체, --gradient-nitro 도입, 9개 컴포넌트 갱신, FAQ 포커스 블로커 수정, WCAG AA 대비 보정. 4-렌즈 검증 워크플로우로 leftover 색상·대비·일관성·기술 회귀 점검 |
 | 2026-07-09 | v7 워크플로우 문서 정렬 | v6→v7 매뉴얼 교체, CLAUDE.md/AGENTS.md/AGENT_WORKFLOW.md에 GLM 명칭·커밋·시크릿 규칙 반영, docs/handoff_history/ 생성 |
 | 2026-07-10 | Manager 인라인 수정 기능 추가 | homepage에서 NextMeetup/UpcomingEvents 카드 우측 상단 연필 아이콘 → 6자리 비밀번호 모달 → 인라인 edit → 저장/취소. localStorage 기반 클라이언트 사이드 저장. EditableDataProvider/PasswordModal/ManagerEditButton 신규 컴포넌트, NextMeetup/EventCard/UpcomingEvents 클라이언트 컴포넌트로 전환 |
+| 2026-07-10 | EventCard edit button 겹침 수정 | Upcoming Goals(EventCard) view mode에서 우측 상단 status 텍스트가 ManagerEditButton(연필 아이콘)과 겹치는 문제 수정. type/status 행에 `pr-11` 추가하여 edit button 영역 확보 |
 
 ## Open Issues
 
@@ -109,6 +110,7 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 | 2026-07-09 | npm run build (Nitro 리테마 후) | Passed | 경고 0, 에러 0, 정적 4페이지, `/` 47.3kB/134kB |
 | 2026-07-09 | 라이브 DOM 컬러 검증 (dev server) | Passed | CTA 그라데이션·포커스 링·글로우·본문 색상 computed style 확인 |
 | 2026-07-10 | npm run build (Manager edit 기능 추가 후) | Passed | 경고 0, 에러 0, 정적 4페이지, `/` 52.2kB/139kB |
+| 2026-07-10 | npm run build (EventCard 겹침 수정 후) | Passed | 경고 0, 에러 0, 정적 4페이지, `/` 52.2kB/139kB |
 
 ## Risks / Follow-Ups
 
