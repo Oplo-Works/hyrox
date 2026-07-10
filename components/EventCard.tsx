@@ -27,6 +27,12 @@ type EventCardProps = {
   link?: string;
   noteEn?: string;
   noteKo?: string;
+  /** 새 스케줄 추가 모드: 데이터에 아직 없는 카드, 저장 시 addUpcomingEvent 호출 */
+  isNew?: boolean;
+  /** 새 카드 저장 완료 시 호출 (부모가 adding 상태 해제) */
+  onAddComplete?: () => void;
+  /** 새 카드 취소 시 호출 (부모가 adding 상태 해제 + editingId 초기화) */
+  onAddCancel?: () => void;
 };
 
 export default function EventCard({
@@ -41,17 +47,23 @@ export default function EventCard({
   link,
   noteEn,
   noteKo,
+  isNew = false,
+  onAddComplete,
+  onAddCancel,
 }: EventCardProps) {
   const {
     editingId,
     setEditingId,
     updateUpcomingEvents,
+    addUpcomingEvent,
     deleteUpcomingEvent,
     data,
   } = useEditableData();
 
-  const editId = `event-${index}`;
-  const isThisEditing = editingId === editId;
+  // 새 카드는 'event-new' ID 사용, 기존 카드는 'event-{index}'
+  const editId = isNew ? "event-new" : `event-${index}`;
+  // 새 카드는 항상 edit mode로 렌더
+  const isThisEditing = isNew ? true : editingId === editId;
 
   const [editData, setEditData] = useState({
     type,
@@ -92,6 +104,13 @@ export default function EventCard({
   };
 
   const handleSave = () => {
+    if (isNew) {
+      // 새 카드: 데이터에 추가
+      addUpcomingEvent(editData);
+      onAddComplete?.();
+      setEditingId(null);
+      return;
+    }
     const updated = [...data.upcomingEvents];
     updated[index] = editData;
     updateUpcomingEvents(updated);
@@ -99,6 +118,11 @@ export default function EventCard({
   };
 
   const handleCancel = () => {
+    if (isNew) {
+      // 새 카드 취소: 데이터에 추가하지 않고 adding 상태만 해제
+      onAddCancel?.();
+      return;
+    }
     setEditData({
       type,
       nameEn,
@@ -132,22 +156,24 @@ export default function EventCard({
       <article className="bg-card border border-orange/40 rounded-2xl p-5 md:p-6 flex flex-col h-full relative">
         {/* edit mode: 삭제(X) + 완료(check) 버튼을 한 줄로 배치 (겹침 방지) */}
         <div className="absolute top-3 right-3 z-20 flex items-center gap-2">
-          {/* 삭제 버튼 */}
-          <button
-            onClick={handleDeleteClick}
-            className="w-9 h-9 flex items-center justify-center rounded-lg border bg-red-500/10 border-red-500/40 text-red-400 hover:bg-red-500/20 transition-all"
-            aria-label="Delete this schedule"
-            title="스케쥴 삭제"
-          >
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <path
-                d="M5 5l10 10M15 5L5 15"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </button>
+          {/* 삭제 버튼 — 새 카드 추가 모드에서는 숨김 (취소로 폼만 닫으면 됨) */}
+          {!isNew && (
+            <button
+              onClick={handleDeleteClick}
+              className="w-9 h-9 flex items-center justify-center rounded-lg border bg-red-500/10 border-red-500/40 text-red-400 hover:bg-red-500/20 transition-all"
+              aria-label="Delete this schedule"
+              title="스케쥴 삭제"
+            >
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path
+                  d="M5 5l10 10M15 5L5 15"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+          )}
           {/* 완료/취소 버튼 (ManagerEditButton 대신 인라인) */}
           <button
             onClick={handleCancel}

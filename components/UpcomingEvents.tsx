@@ -22,43 +22,33 @@ export default function UpcomingEvents() {
     editingId,
     isManagerAuthed,
     authenticate,
-    addUpcomingEvent,
     setEditingId,
   } = useEditableData();
   const [showPassword, setShowPassword] = useState(false);
+  // "새 스케줄 추가" 모드: 데이터에 아직 추가하지 않고 편집 폼만 노출.
+  // 저장 시에만 addUpcomingEvent 호출, 취소 시 아무것도 추가하지 않음.
+  const [isAddingNew, setIsAddingNew] = useState(false);
+
+  const NEW_EVENT_EDIT_ID = "event-new";
 
   const handleAddClick = () => {
     if (isManagerAuthed) {
-      addNewEventAndEdit();
+      startAddingNew();
       return;
     }
     setShowPassword(true);
   };
 
-  const addNewEventAndEdit = () => {
-    const newEvent = {
-      type: "TODO",
-      nameEn: "TODO: New Goal",
-      nameKo: "TODO: 새 목표",
-      date: "TBD",
-      location: "TBD",
-      statusEn: "Planning",
-      statusKo: "준비 중",
-      link: "",
-      noteEn: "",
-      noteKo: "",
-    };
-    addUpcomingEvent(newEvent);
-    // 새로 추가된 카드(마지막 인덱스)를 edit mode로 진입
-    const newIndex = data.upcomingEvents.length; // 추가 후 인덱스
-    setEditingId(`event-${newIndex}`);
+  const startAddingNew = () => {
+    setIsAddingNew(true);
+    setEditingId(NEW_EVENT_EDIT_ID);
   };
 
   const handlePasswordSubmit = (password: string) => {
     const success = authenticate(password);
     if (success) {
       setShowPassword(false);
-      addNewEventAndEdit();
+      startAddingNew();
     }
     return success;
   };
@@ -113,6 +103,32 @@ export default function UpcomingEvents() {
               noteKo={event.noteKo}
             />
           ))}
+
+          {/* 새 스케줄 추가 폼 (저장 전까지 데이터에 추가하지 않음) */}
+          {isAddingNew && (
+            <EventCard
+              key="new-event"
+              index={-1}
+              type="TODO"
+              nameEn="TODO: New Goal"
+              nameKo="TODO: 새 목표"
+              date="TBD"
+              location="TBD"
+              statusEn="Planning"
+              statusKo="준비 중"
+              link=""
+              noteEn=""
+              noteKo=""
+              isNew
+              onAddComplete={() => {
+                setIsAddingNew(false);
+              }}
+              onAddCancel={() => {
+                setIsAddingNew(false);
+                setEditingId(null);
+              }}
+            />
+          )}
         </div>
 
         {/* 섹션 하단 CTA (edit mode에서는 숨김) */}
