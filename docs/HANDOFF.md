@@ -12,16 +12,20 @@ Claude (방금까지 작업) → Ready for next agent
 6. 작업 종료 전 build/test → 커밋(+push) → `docs/DEV_LOG.md`·`docs/HANDOFF.md` 갱신(커밋 해시 포함), 이전 HANDOFF는 `docs/handoff_history/`로 이동
 
 ## Completed Work (이번 세션)
-- **Nitro 컬러웨이 리테마** (commit `fc05aeb`): 운영자 제시 러닝화 미드솔 컬러 믹스(블랙 어퍼 + 본화이트 + 오렌지→마젠타→퍼플 그라데이션 + 이리데슨트 그린)를 사이트 전체에 적용
-  - 팔레트 교체: race-yellow/lime 완전 제거 → orange `#FF8B1E`(리드), magenta `#ED5FA4`(그라데이션 전용), purple `#A45CEB`(세컨더리), green `#35B586`(희소 악센트), 바이올렛톤 블랙
-  - `--gradient-nitro` 도입: CTA 배경, Hero "Race Club" 텍스트, AllLevels "You are welcome here.", 섹션 헤더 바, 스크롤 진행선, 모션 라인
-  - 히어로 글로우/레인 마커로 미드솔 앞(오렌지)→뒤(퍼플) 공간 배치 재현
-  - **접근성**: FAQ 아코디언 키보드 포커스 블로커 수정(#014), WCAG AA 대비 보정(footer/event-card 텍스트, secondary CTA 테두리, 포커스 링 → green)
-  - 검증: `npm run build` 통과, 라이브 DOM computed-style 확인, 4-렌즈 검증 워크플로우(leftover 색상·대비·일관성·기술 회귀) 통과
-- **v7 워크플로우 문서 정렬**: 매뉴얼 v6 → `docs/AI_Coding_Agent_Workflow_v7.md`(Claude×Codex×GLM), CLAUDE.md/AGENTS.md/AGENT_WORKFLOW.md에 z.ai→GLM 명칭·커밋 규칙(28)·시크릿 규칙(29) 반영, `docs/handoff_history/` 생성
+- **Manager 인라인 수정 기능 추가**: admin 페이지 없이 homepage에서 바로 스케쥴 수정 가능
+  - NextMeetup 카드와 UpcomingEvents 각 EventCard 우측 상단에 연필 아이콘 버튼 추가
+  - 버튼 클릭 시 6자리 비밀번호 모달(PIN 입력 UI) 오픈
+  - 비밀번호 인증 성공 시 인라인 edit mode 진입 (모든 필드 EN/KO 편집 가능: when, where, format, level, fee, 준비물, event type/name/date/location/status/link/note)
+  - 저장 시 localStorage에 저장, 취소 시 원복
+  - `EditableDataProvider` (React Context)로 데이터 관리, `sessionStorage`로 인증 상태 유지
+  - 신규 컴포넌트: `EditableDataProvider.tsx`, `PasswordModal.tsx`, `ManagerEditButton.tsx`
+  - 기존 컴포넌트 클라이언트 전환: `NextMeetup.tsx`, `EventCard.tsx`, `UpcomingEvents.tsx`
+  - `app/page.tsx`에 `EditableDataProvider` 래핑
+  - `data/site.ts`에 `managerPassword` 필드 추가 (기본값 "258080", 배포 전 변경 권장)
+  - 검증: `npm run build` 통과 (52.2kB/139kB, 경고 0, 에러 0)
 
 ## Current Stage
-/build Slice 1~7 완료 → 컬러 리테마 적용·검증 완료 → 배포(Netlify auto-deploy) → polish/보안 패치 대기
+/build Slice 1~7 완료 → 컬러 리테마 적용 → Manager 인라인 수정 기능 추가 → polish/보안 패치 대기
 
 ## Next Owner
 GLM 또는 Codex — 아래 polish/보안 이슈. 컬러/브랜드/법적 판단이 필요하면 Claude.
@@ -33,37 +37,43 @@ GLM 또는 Codex — 아래 polish/보안 이슈. 컬러/브랜드/법적 판단
 3. `/images/og-placeholder.png` 실제 파일 추가 또는 metadata 이미지 경로 제거 (#007, #010)
 4. 모바일 Sticky CTA 숨김 상태에서 내부 link가 tab order에 남지 않도록 수정 (#011)
 5. 320px Hero CTA 문구/간격 polish (#013)
+6. Manager edit 기능 모바일 테스트 (320/375/390px에서 PIN 입력 및 edit mode 동작 확인)
+7. (선택) Manager edit 데이터를 서버에 영구 저장하는 기능 (현재는 localStorage로 브라우저별 저장)
 
 ## Reason For Handoff
-컬러 리테마·검증·문서 정렬은 판단/검증 작업이라 Claude가 수행함. 남은 작업은 대부분 표준 구현·보안 패치라 GLM/Codex가 담당 (v7 0장 역할 분담).
+Manager edit 기능 구현 완료. 남은 작업은 보안 패치·이미지 자산·접근성 polish로 GLM/Codex가 담당.
 
 ## Priority
-Medium (MVP 기능·컬러 완료, 남은 것은 polish·보안·자산)
+Medium (MVP 기능·컬러·Manager edit 완료, 남은 것은 polish·보안·자산)
 
 ## Files Changed (이번 세션)
-- app/globals.css, app/layout.tsx, tailwind.config.ts
-- components/CTAButton, Hero, SectionHeader, EventCard, TrainingCard, AllLevelsWelcome, NextMeetup, FAQ, Footer (.tsx)
-- docs/nynj-hybrid-race-club-build-brief.md (팔레트 섹션)
-- CLAUDE.md, AGENTS.md, docs/AGENT_WORKFLOW.md
-- docs/AI_Coding_Agent_Workflow_v7.md (신규), docs/AI_Coding_Agent_Workflow_v6.md (삭제)
-- docs/DEV_LOG.md, docs/HANDOFF.md, docs/handoff_history/ (신규)
-- .claude/launch.json (dev server 설정)
+- data/site.ts (managerPassword 필드 추가)
+- components/EditableDataProvider.tsx (신규)
+- components/PasswordModal.tsx (신규)
+- components/ManagerEditButton.tsx (신규)
+- components/NextMeetup.tsx (클라이언트 전환 + edit mode)
+- components/EventCard.tsx (클라이언트 전환 + edit mode)
+- components/UpcomingEvents.tsx (클라이언트 전환 + editable data 사용)
+- app/page.tsx (EditableDataProvider 래핑)
+- docs/DEV_LOG.md, docs/HANDOFF.md
 
 ## Last Commit
-- `fc05aeb` — feat: apply Nitro shoe colorway (컬러 리테마, 이번 세션의 기능 커밋)
-- 뒤이어 v7 문서 정렬 커밋이 따름 (아래 Context 참고). 브랜치: `main`
+- TBD — feat: add manager inline edit feature with 6-digit password gate
+- 이전: `fc05aeb` — feat: apply Nitro shoe colorway. 브랜치: `main`
 
 ## Files To Touch Next
+- `data/site.ts` — `managerPassword` 값을 운영자가 자신의 6자리 코드로 변경
 - `app/layout.tsx` — 실제 OG 이미지 추가 또는 경로 제거 시
 - `components/StickyCTA.tsx` — 숨김 상태 focus 처리
-- `data/site.ts` — 운영자가 TODO 모임/이벤트 값을 채우는 단일 데이터 소스
 - `package.json` — Next.js 보안 패치 업그레이드
-- `app/globals.css` / `tailwind.config.ts` — 컬러 토큰 조정 시 (팔레트는 `--gradient-nitro` 및 orange/magenta/purple/green 토큰으로 중앙 관리)
+- `app/globals.css` / `tailwind.config.ts` — 컬러 토큰 조정 시
 
 ## Context Summary
-NY/NJ Hybrid Race Club 모바일 우선 이중언어 랜딩 MVP. Next.js 14 App Router + TypeScript + Tailwind + Framer Motion(최소). 이번 세션에 팔레트를 운영자 제시 러닝화 컬러웨이(오렌지→마젠타→퍼플 Nitro 그라데이션 + 그린 악센트, 바이올렛톤 블랙)로 리테마했고, 위계는 **오렌지=리드 · 퍼플=세컨더리 · 마젠타=그라데이션 전용 · 그린=희소 악센트**로 고정. 컬러 토큰은 `app/globals.css`(:root)와 `tailwind.config.ts`에서 중앙 관리. 워크플로우 문서는 v7(Claude×Codex×GLM)로 정렬됨 — 규칙 원본은 `docs/AGENT_WORKFLOW.md`, 상세 매뉴얼은 `docs/AI_Coding_Agent_Workflow_v7.md`. 주요 전환 = Kakao OpenChat. HYROX는 훈련 카테고리로만 사용. 미확정값은 전부 TODO.
+NY/NJ Hybrid Race Club 모바일 우선 이중언어 랜딩 MVP. Next.js 14 App Router + TypeScript + Tailwind + Framer Motion(최소). 이번 세션에 Manager 인라인 수정 기능을 추가: homepage의 NextMeetup/UpcomingEvents 카드 우측 상단 연필 아이콘 → 6자리 비밀번호 모달 → 인라인 edit → 저장(localStorage). 비밀번호는 `data/site.ts`의 `managerPassword`에서 관리(기본값 "258080"). 컬러는 Nitro 팔레트(오렌지→마젠타→퍼플). 주요 전환 = Kakao OpenChat. HYROX는 훈련 카테고리로만 사용. 미확정값은 전부 TODO.
 
 ## Known Issues
+- Manager edit 비밀번호가 client-side에 노출됨 (보안 목적 아님, casual gate only)
+- Manager edit 데이터가 localStorage에 저장되어 브라우저별로만 적용됨 (영구 반영은 data/site.ts 직접 수정 필요)
 - 정확한 모임 요일/시간/장소/참가비 미확정 (TODO 표시)
 - Kakao QR 이미지 미확정 (kakaoQrAvailable=false로 숨김)
 - OG 이미지 미제작 (og-placeholder.png 경로, 실제 파일 없음 — 배포 전 제작 필요)

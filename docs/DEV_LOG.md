@@ -6,16 +6,16 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 
 ## Current Status
 
-- Current Feature: Nitro 컬러웨이(러닝화 미드솔) 리테마 + v7 3-모델 워크플로우 문서 정렬
-- Current Phase: MVP (polish)
-- Current Slice: Slice 7 완료 — 모든 slice 완료, 컬러 리테마 적용
-- Completed Slices: Slice 1~7 전체
+- Current Feature: Manager 인라인 수정 기능 (homepage edit with 6-digit password gate)
+- Current Phase: MVP (feature addition)
+- Current Slice: Slice 7 완료 — Manager edit 기능 추가
+- Completed Slices: Slice 1~7 전체 + Manager edit 기능
 - Remaining Work: 운영자 TODO 값 채우기, 실제 이미지/QR/OG 이미지 추가, Sticky CTA 접근성 polish, Next 보안 패치, 배포 결과 확인
 - Active Branch: main
 - Build Status: Passing (경고/에러 0)
-- Test Status: Build 통과, 라이브 DOM 컬러 검증 완료 (dev server), 4-렌즈 검증 워크플로우 통과
+- Test Status: Build 통과 (52.2kB/139kB)
 - Git Remote: github.com/Oplo-Works/hyrox.git
-- Latest Feature Commit: fc05aeb (`feat: apply Nitro shoe colorway`)
+- Latest Feature Commit: TBD (manager edit feature)
 - Deployment: Netlify (GitHub repo 연결, main push 시 자동 배포)
 
 ## Current MVP Scope
@@ -43,6 +43,7 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 | 2026-07-09 | 스크롤 기반 모션을 CSS + DOM 관찰로 구현 | React 재렌더링 없이 모바일 스크롤 방향·속도에 반응하도록 구성 |
 | 2026-07-09 | 네온 옐로/라임 → Nitro 컬러웨이(오렌지→마젠타→퍼플)로 교체 | 운영자가 제시한 러닝화 미드솔 컬러 믹스 반영. magenta는 그라데이션 내부 전용, green은 희소 악센트로 위계 고정 |
 | 2026-07-09 | 워크플로우 매뉴얼 v6 → v7 (Claude×Codex×GLM) 정렬 | z.ai→GLM 명칭 통일, Model Pin 개념, 커밋/시크릿 규칙(28·29) 반영 |
+| 2026-07-10 | Manager 인라인 수정 기능: 6-digit client-side password gate + localStorage | admin 페이지 없이 homepage에서 바로 수정. 비밀번호는 client-side gate(보안 목적 아님), 데이터는 localStorage에 저장(브라우저별). 영구 반영은 data/site.ts 직접 수정 필요 |
 
 ## Completed Work
 
@@ -69,6 +70,7 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 | 2026-07-09 | 인수인계 문서 정리 | 다른 PC/에이전트가 `main`에서 재개할 수 있도록 재현 절차, 파일 맵, 우선 작업을 `HANDOFF.md`에 갱신 |
 | 2026-07-09 | Nitro 컬러웨이 리테마 (commit fc05aeb) | globals.css/tailwind.config 팔레트 교체, --gradient-nitro 도입, 9개 컴포넌트 갱신, FAQ 포커스 블로커 수정, WCAG AA 대비 보정. 4-렌즈 검증 워크플로우로 leftover 색상·대비·일관성·기술 회귀 점검 |
 | 2026-07-09 | v7 워크플로우 문서 정렬 | v6→v7 매뉴얼 교체, CLAUDE.md/AGENTS.md/AGENT_WORKFLOW.md에 GLM 명칭·커밋·시크릿 규칙 반영, docs/handoff_history/ 생성 |
+| 2026-07-10 | Manager 인라인 수정 기능 추가 | homepage에서 NextMeetup/UpcomingEvents 카드 우측 상단 연필 아이콘 → 6자리 비밀번호 모달 → 인라인 edit → 저장/취소. localStorage 기반 클라이언트 사이드 저장. EditableDataProvider/PasswordModal/ManagerEditButton 신규 컴포넌트, NextMeetup/EventCard/UpcomingEvents 클라이언트 컴포넌트로 전환 |
 
 ## Open Issues
 
@@ -106,6 +108,7 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 | 2026-07-09 | 390px scroll interaction check | Passed | down/up 방향 반응, 가로 overflow 없음, 콘솔 warnings/errors 0 |
 | 2026-07-09 | npm run build (Nitro 리테마 후) | Passed | 경고 0, 에러 0, 정적 4페이지, `/` 47.3kB/134kB |
 | 2026-07-09 | 라이브 DOM 컬러 검증 (dev server) | Passed | CTA 그라데이션·포커스 링·글로우·본문 색상 computed style 확인 |
+| 2026-07-10 | npm run build (Manager edit 기능 추가 후) | Passed | 경고 0, 에러 0, 정적 4페이지, `/` 52.2kB/139kB |
 
 ## Risks / Follow-Ups
 

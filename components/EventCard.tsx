@@ -1,4 +1,20 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useEditableData } from "./EditableDataProvider";
+import ManagerEditButton from "./ManagerEditButton";
+
+/**
+ * EventCard — 빌드 브리프 21.1
+ * - link가 있으면 "View details / 자세히 보기" 표시
+ * - 외부 링크는 새 탭에서 열기
+ * - link가 없으면 버튼 숨김
+ * - TBD를 깨진 내용이 아닌 깔끔하게 표시
+ * - Manager edit mode: 인라인 수정 가능
+ */
+
 type EventCardProps = {
+  index: number;
   type: string;
   nameEn: string;
   nameKo: string;
@@ -11,14 +27,8 @@ type EventCardProps = {
   noteKo?: string;
 };
 
-/**
- * EventCard — 빌드 브리프 21.1
- * - link가 있으면 "View details / 자세히 보기" 표시
- * - 외부 링크는 새 탭에서 열기
- * - link가 없으면 버튼 숨김
- * - TBD를 깨진 내용이 아닌 깔끔하게 표시
- */
 export default function EventCard({
+  index,
   type,
   nameEn,
   nameKo,
@@ -30,10 +40,175 @@ export default function EventCard({
   noteEn,
   noteKo,
 }: EventCardProps) {
+  const { isEditing, setIsEditing, updateUpcomingEvents, data } = useEditableData();
+  const [isThisEditing, setIsThisEditing] = useState(false);
+  const [editData, setEditData] = useState({
+    type,
+    nameEn,
+    nameKo,
+    date,
+    location,
+    statusEn,
+    statusKo,
+    link: link ?? "",
+    noteEn: noteEn ?? "",
+    noteKo: noteKo ?? "",
+  });
+
+  // edit mode 진입/종료 동기화
+  useEffect(() => {
+    if (isEditing && !isThisEditing) {
+      setEditData({
+        type,
+        nameEn,
+        nameKo,
+        date,
+        location,
+        statusEn,
+        statusKo,
+        link: link ?? "",
+        noteEn: noteEn ?? "",
+        noteKo: noteKo ?? "",
+      });
+      setIsThisEditing(true);
+    }
+    if (!isEditing && isThisEditing) {
+      setIsThisEditing(false);
+    }
+  }, [isEditing, isThisEditing]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const updateField = (field: keyof typeof editData, value: string) => {
+    setEditData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSave = () => {
+    const updated = [...data.upcomingEvents];
+    updated[index] = editData;
+    updateUpcomingEvents(updated);
+    setIsEditing(false);
+    setIsThisEditing(false);
+  };
+
+  const handleCancel = () => {
+    setEditData({
+      type,
+      nameEn,
+      nameKo,
+      date,
+      location,
+      statusEn,
+      statusKo,
+      link: link ?? "",
+      noteEn: noteEn ?? "",
+      noteKo: noteKo ?? "",
+    });
+    setIsEditing(false);
+    setIsThisEditing(false);
+  };
+
   const hasLink = link && link.length > 0 && !link.startsWith("TODO");
 
+  if (isThisEditing) {
+    /* ============ EDIT MODE ============ */
+    return (
+      <article className="bg-card border border-orange/40 rounded-2xl p-5 md:p-6 flex flex-col h-full relative">
+        <ManagerEditButton
+          isThisEditing={isThisEditing}
+          onCancelEdit={handleCancel}
+        />
+
+        <div className="flex items-center gap-2 text-xs text-orange mb-3">
+          <span className="w-1.5 h-1.5 rounded-full bg-orange animate-pulse" />
+          <span>Edit</span>
+        </div>
+
+        <div className="space-y-3">
+          <EditInput
+            label="Type"
+            value={editData.type}
+            onChange={(v) => updateField("type", v)}
+            placeholder="HYROX, 5K, etc."
+          />
+          <EditInput
+            label="Name (EN)"
+            value={editData.nameEn}
+            onChange={(v) => updateField("nameEn", v)}
+          />
+          <EditInput
+            label="Name (KO)"
+            value={editData.nameKo}
+            onChange={(v) => updateField("nameKo", v)}
+            ko
+          />
+          <EditInput
+            label="Date"
+            value={editData.date}
+            onChange={(v) => updateField("date", v)}
+            placeholder="TBD or date"
+          />
+          <EditInput
+            label="Location"
+            value={editData.location}
+            onChange={(v) => updateField("location", v)}
+          />
+          <EditInput
+            label="Status (EN)"
+            value={editData.statusEn}
+            onChange={(v) => updateField("statusEn", v)}
+          />
+          <EditInput
+            label="Status (KO)"
+            value={editData.statusKo}
+            onChange={(v) => updateField("statusKo", v)}
+            ko
+          />
+          <EditInput
+            label="Link (optional)"
+            value={editData.link}
+            onChange={(v) => updateField("link", v)}
+            placeholder="https://..."
+          />
+          <EditInput
+            label="Note (EN)"
+            value={editData.noteEn}
+            onChange={(v) => updateField("noteEn", v)}
+            textarea
+          />
+          <EditInput
+            label="Note (KO)"
+            value={editData.noteKo}
+            onChange={(v) => updateField("noteKo", v)}
+            ko
+            textarea
+          />
+        </div>
+
+        <div className="flex gap-2 mt-4 pt-4 border-t border-line">
+          <button
+            onClick={handleSave}
+            className="flex-1 py-2.5 px-4 rounded-lg bg-orange text-bg font-bold text-xs hover:bg-orange/90 transition-colors"
+          >
+            ✓ Save
+          </button>
+          <button
+            onClick={handleCancel}
+            className="flex-1 py-2.5 px-4 rounded-lg border border-line text-muted font-bold text-xs hover:text-text transition-colors"
+          >
+            Cancel
+          </button>
+        </div>
+      </article>
+    );
+  }
+
+  /* ============ VIEW MODE ============ */
   return (
-    <article className="bg-card border border-card-border rounded-2xl p-5 md:p-6 flex flex-col h-full transition-colors hover:border-orange/40">
+    <article className="bg-card border border-card-border rounded-2xl p-5 md:p-6 flex flex-col h-full transition-colors hover:border-orange/40 relative">
+      <ManagerEditButton
+        isThisEditing={isThisEditing}
+        onCancelEdit={handleCancel}
+      />
+
       <div className="flex items-center justify-between mb-3">
         <span className="inline-block text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-orange/15 text-orange border border-orange/30">
           {type}
@@ -89,5 +264,51 @@ export default function EventCard({
         )}
       </div>
     </article>
+  );
+}
+
+/* ============ Edit Input Helper ============ */
+function EditInput({
+  label,
+  value,
+  onChange,
+  placeholder,
+  ko = false,
+  textarea = false,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  ko?: boolean;
+  textarea?: boolean;
+}) {
+  return (
+    <div>
+      <label className="block text-[10px] uppercase tracking-widest text-muted mb-1">
+        {label}
+      </label>
+      {textarea ? (
+        <textarea
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          rows={2}
+          className={`w-full px-2.5 py-2 rounded-lg bg-bg/60 border border-line text-text text-xs font-medium focus:border-orange focus:outline-none transition-colors placeholder:text-muted/40 resize-none ${
+            ko ? "ko-text" : ""
+          }`}
+        />
+      ) : (
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          className={`w-full px-2.5 py-2 rounded-lg bg-bg/60 border border-line text-text text-xs font-medium focus:border-orange focus:outline-none transition-colors placeholder:text-muted/40 ${
+            ko ? "ko-text" : ""
+          }`}
+        />
+      )}
+    </div>
   );
 }
