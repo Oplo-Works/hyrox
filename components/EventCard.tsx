@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useEditableData } from "./EditableDataProvider";
 import ManagerEditButton from "./ManagerEditButton";
+import ConfirmModal from "./ConfirmModal";
 
 /**
  * EventCard — 빌드 브리프 21.1
@@ -10,7 +11,8 @@ import ManagerEditButton from "./ManagerEditButton";
  * - 외부 링크는 새 탭에서 열기
  * - link가 없으면 버튼 숨김
  * - TBD를 깨진 내용이 아닌 깔끔하게 표시
- * - Manager edit mode: 인라인 수정 가능
+ * - Manager edit mode: 인라인 수정 가능 (이 카드만)
+ * - Manager delete: 삭제 버튼 + 확인 모달
  */
 
 type EventCardProps = {
@@ -40,8 +42,17 @@ export default function EventCard({
   noteEn,
   noteKo,
 }: EventCardProps) {
-  const { isEditing, setIsEditing, updateUpcomingEvents, data } = useEditableData();
-  const [isThisEditing, setIsThisEditing] = useState(false);
+  const {
+    editingId,
+    setEditingId,
+    updateUpcomingEvents,
+    deleteUpcomingEvent,
+    data,
+  } = useEditableData();
+
+  const editId = `event-${index}`;
+  const isThisEditing = editingId === editId;
+
   const [editData, setEditData] = useState({
     type,
     nameEn,
@@ -55,9 +66,9 @@ export default function EventCard({
     noteKo: noteKo ?? "",
   });
 
-  // edit mode 진입/종료 동기화
+  // edit mode 진입 시 현재 데이터로 초기화
   useEffect(() => {
-    if (isEditing && !isThisEditing) {
+    if (isThisEditing) {
       setEditData({
         type,
         nameEn,
@@ -70,12 +81,11 @@ export default function EventCard({
         noteEn: noteEn ?? "",
         noteKo: noteKo ?? "",
       });
-      setIsThisEditing(true);
     }
-    if (!isEditing && isThisEditing) {
-      setIsThisEditing(false);
-    }
-  }, [isEditing, isThisEditing]); // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isThisEditing]);
+
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const updateField = (field: keyof typeof editData, value: string) => {
     setEditData((prev) => ({ ...prev, [field]: value }));
@@ -85,8 +95,7 @@ export default function EventCard({
     const updated = [...data.upcomingEvents];
     updated[index] = editData;
     updateUpcomingEvents(updated);
-    setIsEditing(false);
-    setIsThisEditing(false);
+    setEditingId(null);
   };
 
   const handleCancel = () => {
@@ -102,8 +111,17 @@ export default function EventCard({
       noteEn: noteEn ?? "",
       noteKo: noteKo ?? "",
     });
-    setIsEditing(false);
-    setIsThisEditing(false);
+    setEditingId(null);
+  };
+
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    setShowDeleteConfirm(false);
+    deleteUpcomingEvent(index);
+    setEditingId(null);
   };
 
   const hasLink = link && link.length > 0 && !link.startsWith("TODO");
@@ -112,10 +130,29 @@ export default function EventCard({
     /* ============ EDIT MODE ============ */
     return (
       <article className="bg-card border border-orange/40 rounded-2xl p-5 md:p-6 flex flex-col h-full relative">
-        <ManagerEditButton
-          isThisEditing={isThisEditing}
-          onCancelEdit={handleCancel}
-        />
+        <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5">
+          {/* 삭제 버튼 (edit mode에서만 노출) */}
+          <button
+            onClick={handleDeleteClick}
+            className="w-9 h-9 flex items-center justify-center rounded-lg border bg-red-500/10 border-red-500/40 text-red-400 hover:bg-red-500/20 transition-all"
+            aria-label="Delete this schedule"
+            title="스케쥴 삭제"
+          >
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path
+                d="M5 5l10 10M15 5L5 15"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+          <ManagerEditButton
+            editId={editId}
+            isThisEditing={isThisEditing}
+            onCancelEdit={handleCancel}
+          />
+        </div>
 
         <div className="flex items-center gap-2 text-xs text-orange mb-3">
           <span className="w-1.5 h-1.5 rounded-full bg-orange animate-pulse" />
@@ -197,6 +234,12 @@ export default function EventCard({
             Cancel
           </button>
         </div>
+
+        <ConfirmModal
+          open={showDeleteConfirm}
+          onConfirm={handleDeleteConfirm}
+          onClose={() => setShowDeleteConfirm(false)}
+        />
       </article>
     );
   }
@@ -205,6 +248,7 @@ export default function EventCard({
   return (
     <article className="bg-card border border-card-border rounded-2xl p-5 md:p-6 flex flex-col h-full transition-colors hover:border-orange/40 relative">
       <ManagerEditButton
+        editId={editId}
         isThisEditing={isThisEditing}
         onCancelEdit={handleCancel}
       />

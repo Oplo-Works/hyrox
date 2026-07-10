@@ -39,12 +39,15 @@ type EditableData = {
 type EditableDataContextValue = {
   data: EditableData;
   isManagerAuthed: boolean;
-  isEditing: boolean;
-  setIsEditing: (v: boolean) => void;
+  /** 현재 편집 중인 타겟 ID. null = 편집 아님, 'meetup' = NextMeetup, 'event-{i}' = 해당 EventCard */
+  editingId: string | null;
+  setEditingId: (id: string | null) => void;
   authenticate: (password: string) => boolean;
   logout: () => void;
   updateNextMeetup: (nextMeetup: NextMeetupData) => void;
   updateUpcomingEvents: (events: UpcomingEventsData) => void;
+  addUpcomingEvent: (event: UpcomingEventData) => void;
+  deleteUpcomingEvent: (index: number) => void;
   resetToDefaults: () => void;
 };
 
@@ -64,7 +67,7 @@ export function EditableDataProvider({ children }: { children: ReactNode }) {
     upcomingEvents: siteConfig.upcomingEvents,
   });
   const [isManagerAuthed, setIsManagerAuthed] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [hydrated, setHydrated] = useState(false);
 
   // 초기 로드: localStorage에서 데이터 복원
@@ -114,6 +117,34 @@ export function EditableDataProvider({ children }: { children: ReactNode }) {
     [persistData]
   );
 
+  const addUpcomingEvent = useCallback(
+    (event: UpcomingEventData) => {
+      setData((prev) => {
+        const updated = {
+          ...prev,
+          upcomingEvents: [...prev.upcomingEvents, event],
+        };
+        persistData(updated);
+        return updated;
+      });
+    },
+    [persistData]
+  );
+
+  const deleteUpcomingEvent = useCallback(
+    (index: number) => {
+      setData((prev) => {
+        const updated = {
+          ...prev,
+          upcomingEvents: prev.upcomingEvents.filter((_, i) => i !== index),
+        };
+        persistData(updated);
+        return updated;
+      });
+    },
+    [persistData]
+  );
+
   const resetToDefaults = useCallback(() => {
     const defaults: EditableData = {
       nextMeetup: siteConfig.nextMeetup,
@@ -138,7 +169,7 @@ export function EditableDataProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     setIsManagerAuthed(false);
-    setIsEditing(false);
+    setEditingId(null);
     try {
       sessionStorage.removeItem(AUTH_KEY);
     } catch {
@@ -150,12 +181,14 @@ export function EditableDataProvider({ children }: { children: ReactNode }) {
   const value: EditableDataContextValue = {
     data: hydrated ? data : { nextMeetup: siteConfig.nextMeetup, upcomingEvents: siteConfig.upcomingEvents },
     isManagerAuthed: hydrated && isManagerAuthed,
-    isEditing,
-    setIsEditing,
+    editingId,
+    setEditingId,
     authenticate,
     logout,
     updateNextMeetup,
     updateUpcomingEvents,
+    addUpcomingEvent,
+    deleteUpcomingEvent,
     resetToDefaults,
   };
 

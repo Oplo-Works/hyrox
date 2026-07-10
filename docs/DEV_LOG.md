@@ -6,16 +6,16 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 
 ## Current Status
 
-- Current Feature: Manager 인라인 수정 기능 (homepage edit with 6-digit password gate) + UI polish
+- Current Feature: Manager 개별 스케줄 edit/delete/add 기능 (per-card edit, delete with confirm, add with password)
 - Current Phase: MVP (feature addition + polish)
-- Current Slice: Slice 7 완료 — Manager edit 기능 추가 + EventCard edit button 겹침 수정
-- Completed Slices: Slice 1~7 전체 + Manager edit 기능 + UI polish
+- Current Slice: Slice 7 완료 — Manager edit 기능 + 개별 edit/delete/add + EventCard edit button 겹침 수정
+- Completed Slices: Slice 1~7 전체 + Manager edit 기능 + 개별 edit/delete/add + UI polish
 - Remaining Work: 운영자 TODO 값 채우기, 실제 이미지/QR/OG 이미지 추가, Sticky CTA 접근성 polish, Next 보안 패치, 배포 결과 확인
 - Active Branch: main
 - Build Status: Passing (경고/에러 0)
-- Test Status: Build 통과 (52.2kB/139kB)
+- Test Status: Build 통과 (52.9kB/140kB)
 - Git Remote: github.com/Oplo-Works/hyrox.git
-- Latest Feature Commit: ac6cd6d (`fix: EventCard status text overlap with manager edit button`)
+- Latest Feature Commit: (이번 세션 커밋 예정)
 - Deployment: Netlify (GitHub repo 연결, main push 시 자동 배포)
 
 ## Current MVP Scope
@@ -72,6 +72,7 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 | 2026-07-09 | v7 워크플로우 문서 정렬 | v6→v7 매뉴얼 교체, CLAUDE.md/AGENTS.md/AGENT_WORKFLOW.md에 GLM 명칭·커밋·시크릿 규칙 반영, docs/handoff_history/ 생성 |
 | 2026-07-10 | Manager 인라인 수정 기능 추가 | homepage에서 NextMeetup/UpcomingEvents 카드 우측 상단 연필 아이콘 → 6자리 비밀번호 모달 → 인라인 edit → 저장/취소. localStorage 기반 클라이언트 사이드 저장. EditableDataProvider/PasswordModal/ManagerEditButton 신규 컴포넌트, NextMeetup/EventCard/UpcomingEvents 클라이언트 컴포넌트로 전환 |
 | 2026-07-10 | EventCard edit button 겹침 수정 | Upcoming Goals(EventCard) view mode에서 우측 상단 status 텍스트가 ManagerEditButton(연필 아이콘)과 겹치는 문제 수정. type/status 행에 `pr-11` 추가하여 edit button 영역 확보 |
+| 2026-07-10 | Manager 개별 edit/delete/add 기능 추가 | (1) edit 버튼 하나 누르면 4개 스케줄이 한번에 edit 되던 문제 수정: 전역 `isEditing` boolean → per-target `editingId`('meetup'/'event-{i}')로 교체, 각 카드는 자기 editId만 edit. (2) EventCard edit mode에 삭제(X) 버튼 추가, 삭제 시 ConfirmModal로 한번 더 확인 후 삭제. (3) UpcomingEvents 섹션 우측 상단에 "+" 추가 버튼 추가, Manager 비밀번호 인증 후 새 스케줄 추가 및 edit mode 진입. EditableDataProvider에 addUpcomingEvent/deleteUpcomingEvent 추가. 신규 컴포넌트 ConfirmModal. ManagerEditButton/EventCard/NextMeetup/UpcomingEvents editingId 기반으로 리팩터 |
 
 ## Open Issues
 
@@ -111,6 +112,7 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 | 2026-07-09 | 라이브 DOM 컬러 검증 (dev server) | Passed | CTA 그라데이션·포커스 링·글로우·본문 색상 computed style 확인 |
 | 2026-07-10 | npm run build (Manager edit 기능 추가 후) | Passed | 경고 0, 에러 0, 정적 4페이지, `/` 52.2kB/139kB |
 | 2026-07-10 | npm run build (EventCard 겹침 수정 후) | Passed | 경고 0, 에러 0, 정적 4페이지, `/` 52.2kB/139kB |
+| 2026-07-10 | npm run build (개별 edit/delete/add 기능 추가 후) | Passed | 경고 0, 에러 0, 정적 4페이지, `/` 52.9kB/140kB |
 
 ## Risks / Follow-Ups
 

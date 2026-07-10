@@ -15,34 +15,30 @@ import CTAButton from "./CTAButton";
  * - Manager edit mode: 비밀번호 인증 후 인라인 수정 가능
  */
 export default function NextMeetup() {
-  const { data, isEditing, setIsEditing, updateNextMeetup } = useEditableData();
+  const { data, editingId, setEditingId, updateNextMeetup } = useEditableData();
   const m = data.nextMeetup;
+
+  const editId = "meetup";
+  const isThisEditing = editingId === editId;
 
   // 로컬 편집 상태
   const [editData, setEditData] = useState(m);
-  const [isThisEditing, setIsThisEditing] = useState(false);
 
   // edit mode 진입 시 현재 데이터로 초기화
   useEffect(() => {
-    if (isEditing && !isThisEditing) {
+    if (isThisEditing) {
       setEditData(m);
-      setIsThisEditing(true);
     }
-    if (!isEditing && isThisEditing) {
-      setIsThisEditing(false);
-    }
-  }, [isEditing, isThisEditing, m]);
+  }, [isThisEditing, m]);
 
   const handleSave = () => {
     updateNextMeetup(editData);
-    setIsEditing(false);
-    setIsThisEditing(false);
+    setEditingId(null);
   };
 
   const handleCancel = () => {
     setEditData(m);
-    setIsEditing(false);
-    setIsThisEditing(false);
+    setEditingId(null);
   };
 
   const updateField = (field: keyof typeof editData, value: string | boolean | string[]) => {
@@ -66,6 +62,7 @@ export default function NextMeetup() {
         <div className="bg-card border border-card-border rounded-3xl p-6 md:p-10 relative overflow-hidden">
           {/* Manager Edit Button */}
           <ManagerEditButton
+            editId={editId}
             isThisEditing={isThisEditing}
             onCancelEdit={handleCancel}
           />

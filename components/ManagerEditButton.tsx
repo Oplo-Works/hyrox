@@ -9,40 +9,41 @@ import PasswordModal from "./PasswordModal";
  *
  * - 연필 아이콘으로 누가 봐도 수정 버튼임을 표시
  * - 클릭 시 비밀번호 모달 오픈
- * - 인증 성공 시 edit mode 토글
+ * - 인증 성공 시 이 버튼이 담당하는 타겟(editId)만 edit mode 진입
  * - 이미 인증된 경우 바로 edit mode 진입
  * - edit mode 중에는 "완료" 버튼으로 전환
+ *
+ * 핵심: editId로 자기 자신만 토글 → 다른 카드가 함께 edit 되는 문제 방지
  */
 
 type ManagerEditButtonProps = {
-  /** edit mode 토글 시 호출 (저장은 각 컴포넌트에서 처리) */
-  onToggleEdit?: () => void;
-  /** 현재 edit mode 상태 (저장/취소 버튼 표시용) */
+  /** 이 버튼이 담당하는 편집 타겟 ID ('meetup' | 'event-0' | ...) */
+  editId: string;
+  /** 현재 이 타겟이 편집 중인지 여부 (부모가 editingId === editId 로 계산해서 전달) */
   isThisEditing?: boolean;
-  /** edit mode에서 취소 시 호출 */
+  /** edit mode에서 취소/완료 시 호출 */
   onCancelEdit?: () => void;
 };
 
 export default function ManagerEditButton({
-  onToggleEdit,
+  editId,
   isThisEditing = false,
   onCancelEdit,
 }: ManagerEditButtonProps) {
-  const { isManagerAuthed, isEditing, setIsEditing, authenticate } = useEditableData();
+  const { isManagerAuthed, editingId, setEditingId, authenticate } = useEditableData();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClick = () => {
     if (isThisEditing) {
       // 현재 edit mode → 취소
       onCancelEdit?.();
-      setIsEditing(false);
+      setEditingId(null);
       return;
     }
 
     if (isManagerAuthed) {
-      // 이미 인증됨 → edit mode 진입
-      setIsEditing(!isEditing);
-      onToggleEdit?.();
+      // 이미 인증됨 → 이 타겟만 edit mode 진입
+      setEditingId(editId);
       return;
     }
 
@@ -54,8 +55,7 @@ export default function ManagerEditButton({
     const success = authenticate(password);
     if (success) {
       setShowPassword(false);
-      setIsEditing(true);
-      onToggleEdit?.();
+      setEditingId(editId);
     }
     return success;
   };
