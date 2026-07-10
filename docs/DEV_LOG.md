@@ -15,7 +15,7 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 - Build Status: Passing (경고/에러 0)
 - Test Status: Build 통과 (52.2kB/139kB)
 - Git Remote: github.com/Oplo-Works/hyrox.git
-- Latest Feature Commit: TBD (manager edit feature)
+- Latest Feature Commit: e3c06b0 (`feat: add manager inline edit feature with 6-digit password gate`)
 - Deployment: Netlify (GitHub repo 연결, main push 시 자동 배포)
 
 ## Current MVP Scope
