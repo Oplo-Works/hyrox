@@ -56,7 +56,7 @@ Medium (MVP 기능·컬러·Manager edit·개별 edit/delete/add 완료, 남은 
 - docs/DEV_LOG.md, docs/HANDOFF.md
 
 ## Last Commit
-- (이번 세션 커밋 예정)
+- `297f35a` — feat: per-card edit/delete/add for upcoming goals. 브랜치: `main` (push 완료)
 - 이전: `ac6cd6d` — fix: EventCard status text overlap with manager edit button
 - 이전: `e3c06b0` — feat: add manager inline edit feature with 6-digit password gate. 브랜치: `main`
 
