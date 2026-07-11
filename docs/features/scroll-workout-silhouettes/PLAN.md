@@ -5,7 +5,7 @@
 - Bundle ID: scroll-workout-silhouettes-R1
 - PLAN Revision: 1
 - SPEC: docs/features/scroll-workout-silhouettes/SPEC.md (rev 1, APPROVED)
-- Status: IN_PROGRESS
+- Status: DONE
 - Base Branch/Commit: feat/scroll-workout-silhouettes @ bdaae284e5ae75a4679baf07e5a7c7f9164a9ccd (branched from main)
 
 ## Baseline

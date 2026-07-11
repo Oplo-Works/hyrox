@@ -63,14 +63,14 @@
 
 | ID | Observable criterion | Verification | Status |
 |---|---|---|---|
-| AC-1 | 스크롤 진행도 0→1에 따라 남녀 실루엣 한 쌍이 HYROX 레이스 순서 8종목을 차례로 수행하며, 위로 스크롤하면 역순으로 되돌아간다 | manual (browser, 375px) | Pending |
-| AC-2 | 종목 구간 전환부에 러닝 실루엣 브릿지가 잠깐 표시된다 | manual (browser) | Pending |
-| AC-3 | 실루엣 유효 불투명도는 스크롤 중 ≤ 0.12, 정지 시 ≤ 0.06 수준으로 본문 텍스트 가독성을 해치지 않는다 (320/375/768/desktop에서 확인) | manual (browser + CSS 검사) | Pending |
-| AC-4 | 스크롤 중에는 종목 동작 애니메이션이 역동적으로 재생되고, 멈추면 옅어진 채 느린 루프를 유지한다 | manual (browser) | Pending |
-| AC-5 | `prefers-reduced-motion: reduce`에서 실루엣 레이어가 표시되지 않는다 | manual (emulation) | Pending |
-| AC-6 | 레이어는 `aria-hidden`·`pointer-events: none`이며 layout shift, 스크롤 성능 저하(jank), 콘솔 에러가 없다 | manual (browser + console) | Pending |
-| AC-7 | HYROX 공식 로고/이미지/워딩 미사용, 신규 dependency 없음, `npm run build` PASS | build + diff review | Pending |
-| AC-8 | 색상은 Nitro 위계 준수: 오렌지 주도 + 퍼플 보조 틴트, 마젠타는 그라데이션 내부에서만 사용 | diff review + browser | Pending |
+| AC-1 | 스크롤 진행도 0→1에 따라 남녀 실루엣 한 쌍이 HYROX 레이스 순서 8종목을 차례로 수행하며, 위로 스크롤하면 역순으로 되돌아간다 | manual (browser, 375px) | PASS |
+| AC-2 | 종목 구간 전환부에 러닝 실루엣 브릿지가 잠깐 표시된다 | manual (browser) | PASS |
+| AC-3 | 실루엣 유효 불투명도는 스크롤 중 ≤ 0.12, 정지 시 ≤ 0.06 수준으로 본문 텍스트 가독성을 해치지 않는다 (320/375/768/desktop에서 확인) | manual (browser + CSS 검사) | PASS |
+| AC-4 | 스크롤 중에는 종목 동작 애니메이션이 역동적으로 재생되고, 멈추면 옅어진 채 느린 루프를 유지한다 | manual (browser) | PASS |
+| AC-5 | `prefers-reduced-motion: reduce`에서 실루엣 레이어가 표시되지 않는다 | manual (emulation) | PASS |
+| AC-6 | 레이어는 `aria-hidden`·`pointer-events: none`이며 layout shift, 스크롤 성능 저하(jank), 콘솔 에러가 없다 | manual (browser + console) | PASS |
+| AC-7 | HYROX 공식 로고/이미지/워딩 미사용, 신규 dependency 없음, `npm run build` PASS | build + diff review | PASS |
+| AC-8 | 색상은 Nitro 위계 준수: 오렌지 주도 + 퍼플 보조 틴트, 마젠타는 그라데이션 내부에서만 사용 | diff review + browser | PASS |
 
 ## Approval
 

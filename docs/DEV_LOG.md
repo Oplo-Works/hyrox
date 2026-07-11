@@ -155,3 +155,14 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 - Publish Intent/Target: AUTO_AT_CLOSE → origin/chore/adopt-workflow-v8.1.1 (protected main NOT pushed)
 - Decisions / Risks / Follow-ups: MODEL_RUNTIME_PIN all CANDIDATE; PROJECT_SCOPE READY_FOR_APPROVAL. Human to approve PIN/SCOPE, set paid-use caps, confirm repo=Public, and decide on main-merge (deploy). P3 MANIFEST CRLF-hash note added.
 - Next: DONE (adoption task) + Human owns approvals
+
+## 2026-07-11T18:31:24Z — scroll-workout-silhouettes
+- Stage: WF:CLOSE  - Role/Runtime: Main Driver / claude-deep-fable (observed claude-fable-5)  - Risk: Standard
+- Implementation: bdaae28..f3b01ca (WorkoutSilhouettes.tsx 신규, ScrollEnergy.tsx 확장, globals.css, page.tsx)
+- Review: Independent Reviewer Runtime 미승인(PIN 전항목 CANDIDATE) → Human이 데모 아티팩트로 직접 검토
+- Human Decision: APPROVED (2026-07-11, "좋아. git push origin main" — 리뷰 승인 + main 반영/배포 승인)
+- Summary: 스크롤 진행도(0-1)를 8구간으로 나눠 HYROX 레이스 순서대로 남(오렌지)/여(퍼플) 오리지널 픽토그램 SVG 실루엣이 종목을 수행하는 초저투명 배경 레이어 추가. 구간 앞 16%는 1km Run 브릿지. 2프레임 CSS 크로스페이드, 스크롤 중 0.9s/12% ↔ 정지 3s/5.5%, prefers-reduced-motion 숨김. 새 dependency 없음.
+- Validation: docs/features/scroll-workout-silhouettes/TEST_EVIDENCE.md — build PASS(53.2kB/140kB), 스크롤 핸들러 전구간, 씬 매핑 9종, computed-style, 320/375/768/native 기하, console 0 error. Browser pane 컴포지터 정지로 모션 시각 확인만 데모 아티팩트로 Human이 수행.
+- Publish Intent/Target: AUTO_AT_CLOSE + Human 명시 승인 → origin/main (ff-merge, Netlify prod deploy 유발) + origin/feat/scroll-workout-silhouettes
+- Decisions / Risks / Follow-ups: 체감 속도/진하기는 --ws-swap·opacity CSS 변수로 조정 가능. Netlify 배포 결과 확인 필요.
+- Next: DONE + Human (배포 확인)
