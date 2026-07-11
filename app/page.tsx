@@ -9,14 +9,16 @@ import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 import StickyCTA from "@/components/StickyCTA";
 import ScrollEnergy from "@/components/ScrollEnergy";
+import { EditableDataProvider } from "@/components/EditableDataProvider";
 
 /**
  * NY/NJ Hybrid Race Club — 메인 랜딩 페이지
  * 빌드 브리프 10장 순서대로 섹션 조립
+ * EditableDataProvider: NextMeetup / UpcomingEvents 인라인 수정 기능 제공
  */
 export default function Home() {
   return (
-    <>
+    <EditableDataProvider>
       <Header />
       <ScrollEnergy />
       <main>
@@ -47,6 +49,6 @@ export default function Home() {
 
       {/* 11. Sticky Mobile CTA */}
       <StickyCTA />
-    </>
+    </EditableDataProvider>
   );
 }
