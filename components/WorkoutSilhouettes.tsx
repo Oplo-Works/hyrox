@@ -2,14 +2,17 @@ import type { ReactNode } from "react";
 
 /**
  * WorkoutSilhouettes — 스크롤 진행에 따라 HYROX 8개 스테이션을 레이스 순서대로
- * 수행하는 남녀 실루엣 배경 레이어. 순수 장식(aria-hidden, pointer-events 없음).
+ * 수행하는 단독 실루엣 배경 레이어. 순수 장식(aria-hidden, pointer-events 없음).
  *
  * - 모든 실루엣은 직접 그린 오리지널 픽토그램 스타일 SVG (공식 자산 미사용).
  * - 각 종목은 2개 프레임(A/B)으로 구성되며 CSS가 교차 재생해 동작을 표현한다.
+ * - 씬마다 선수는 한 명이고 종목이 바뀔 때마다 성별이 교대한다 (rev 2):
+ *   짝수 스테이션=남(오렌지), 홀수=여(퍼플). 러닝 브릿지는 다음 종목과 동일 성별
+ *   (run-m/run-f 두 씬을 두고 globals.css가 data-station 짝홀로 선택).
  * - 활성 스테이션은 ScrollEnergy가 body[data-station] / body[data-bridge]로 지정하고,
  *   표시·전환·모션은 전부 globals.css에서 처리한다 (이 컴포넌트는 서버 컴포넌트).
  *
- * 좌표계: 피겨 로컬 0–120 × 0–130, 지면 y=121, 진행 방향 +x(오른쪽).
+ * 좌표계: 뷰박스 "10 2 120 126" = 피겨 로컬 좌표 그대로, 지면 y=122, 진행 방향 +x(오른쪽).
  */
 
 type Pt = readonly [number, number];
@@ -328,19 +331,11 @@ function Frames({ def, female }: { def: SceneDef; female?: boolean }) {
   );
 }
 
-function Scene({ label, def }: { label: string; def: SceneDef }) {
+function Scene({ label, def, female }: { label: string; def: SceneDef; female?: boolean }) {
   return (
     <g className={`ws-scene ws-scene--${label}`}>
-      {/* 남(오렌지, 좌) / 여(퍼플, 우) — 지면 y=232 정렬 */}
-      <g transform="translate(22 96.5) scale(1.12)">
-        <g className="ws-athlete ws-athlete--m">
-          <Frames def={def} />
-        </g>
-      </g>
-      <g transform="translate(206 108.6) scale(1.02)">
-        <g className="ws-athlete ws-athlete--f">
-          <Frames def={def} female />
-        </g>
+      <g className={`ws-athlete ${female ? "ws-athlete--f" : "ws-athlete--m"}`}>
+        <Frames def={def} female={female} />
       </g>
     </g>
   );
@@ -349,7 +344,7 @@ function Scene({ label, def }: { label: string; def: SceneDef }) {
 export default function WorkoutSilhouettes() {
   return (
     <div className="workout-silhouettes" aria-hidden="true">
-      <svg viewBox="0 0 375 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="10 2 120 126" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="ws-nitro" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0" stopColor="#ff8b1e" />
@@ -357,10 +352,11 @@ export default function WorkoutSilhouettes() {
             <stop offset="1" stopColor="#a45ceb" />
           </linearGradient>
         </defs>
-        <path d="M 10 232 H 365" className="ws-ground" />
-        <Scene label="run" def={RUN} />
+        <path d="M 14 122 H 126" className="ws-ground" />
+        <Scene label="run-m" def={RUN} />
+        <Scene label="run-f" def={RUN} female />
         {STATIONS.map((station, index) => (
-          <Scene key={station.id} label={`s${index}`} def={station} />
+          <Scene key={station.id} label={`s${index}`} def={station} female={index % 2 === 1} />
         ))}
       </svg>
     </div>

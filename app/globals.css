@@ -362,13 +362,14 @@ body[data-scrolling="true"] .workout-silhouettes {
   --ws-swap: 0.9s;
 }
 
+/* 화면 세로 중앙, 인물 높이 ≈ 뷰포트의 40~55% (rev 2) */
 .workout-silhouettes svg {
   position: absolute;
   left: 50%;
-  bottom: clamp(64px, 12vh, 140px);
-  transform: translateX(-50%);
-  width: min(640px, 104vw);
-  height: auto;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: min(58vh, 104vw, 520px);
+  width: auto;
 }
 
 /* 지면 라인 — Nitro 그라데이션 (마젠타는 그라데이션 내부에만) */
@@ -442,14 +443,22 @@ body[data-scrolling="true"] .workout-silhouettes {
 }
 
 /* 스테이션 표시: ScrollEnergy가 지정한 body[data-station]만 보임.
-   구간 앞부분(data-bridge)에는 1 km Run 브릿지가 대신 표시된다. */
+   구간 앞부분(data-bridge)에는 1 km Run 브릿지가 대신 표시된다.
+   rev 2: 종목마다 성별 교대(짝수=남, 홀수=여) — 브릿지도 다음 종목과 같은 성별. */
 .ws-scene {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.55s ease, visibility 0.55s ease;
 }
 
-body[data-bridge="true"] .ws-scene--run,
+body[data-bridge="true"][data-station="0"] .ws-scene--run-m,
+body[data-bridge="true"][data-station="2"] .ws-scene--run-m,
+body[data-bridge="true"][data-station="4"] .ws-scene--run-m,
+body[data-bridge="true"][data-station="6"] .ws-scene--run-m,
+body[data-bridge="true"][data-station="1"] .ws-scene--run-f,
+body[data-bridge="true"][data-station="3"] .ws-scene--run-f,
+body[data-bridge="true"][data-station="5"] .ws-scene--run-f,
+body[data-bridge="true"][data-station="7"] .ws-scene--run-f,
 body[data-station="0"]:not([data-bridge="true"]) .ws-scene--s0,
 body[data-station="1"]:not([data-bridge="true"]) .ws-scene--s1,
 body[data-station="2"]:not([data-bridge="true"]) .ws-scene--s2,
@@ -472,10 +481,9 @@ body[data-station="7"]:not([data-bridge="true"]) .ws-scene--s7 {
   animation: ws-swap-b var(--ws-swap, 3s) linear infinite;
 }
 
-/* 여자 피겨는 반 주기 어긋나게 재생해 기계적 동기화를 피한다 */
-.ws-athlete--f .ws-frame--a,
-.ws-athlete--f .ws-frame--b {
-  animation-delay: calc(var(--ws-swap, 3s) * -0.5);
+/* 여자 실루엣은 토르소를 살짝 슬림하게 (rev 2: 한 명만 크게 보이므로 구분 보강) */
+.ws-athlete--f .ws-torso {
+  stroke-width: 8;
 }
 
 @keyframes ws-swap-a {
@@ -509,10 +517,6 @@ body[data-station="7"]:not([data-bridge="true"]) .ws-scene--s7 {
 /* 은은한 전신 바운스 (배치 transform은 부모 g의 속성이라 충돌 없음) */
 .ws-athlete {
   animation: ws-bob 5s ease-in-out infinite;
-}
-
-.ws-athlete--f {
-  animation-delay: -2.5s;
 }
 
 @keyframes ws-bob {
