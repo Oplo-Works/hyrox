@@ -1,11 +1,5 @@
 # Development Log
 
-> **v8.1.1-solo adoption note (2026-07-11):** Current project state is now owned by
-> `docs/HANDOFF.md`. This log is append-only history. Everything below this note is
-> **preserved v7-era history (byte-for-byte)** — the "Current Status" section below is
-> historical and superseded by HANDOFF. New events are appended at the bottom using the
-> v8.1.1 CLOSE event structure (`docs/workflow/CLOSE.md`). Do not rewrite old entries.
-
 ## Project
 
 NY/NJ Hybrid Race Club Website (MVP v0.1)

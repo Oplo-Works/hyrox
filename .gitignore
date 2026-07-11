@@ -32,3 +32,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# AI workflow secret and local-state defaults (v8.1.1) — additive; existing rules above kept
+.env.*
+!.env.example
+*.key
+secrets/
+.local/

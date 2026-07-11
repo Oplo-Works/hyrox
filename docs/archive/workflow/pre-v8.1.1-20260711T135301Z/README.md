@@ -59,15 +59,13 @@ components/
 data/
   site.ts             # 모임/이벤트 정보 (편집 가능)
 docs/
-  AGENT_WORKFLOW_CORE.md   # active workflow (v8.1.1-solo)
-  workflow/                # stage playbooks
-  MODEL_RUNTIME_PIN.md
-  PROJECT_SCOPE.md
-  HANDOFF.md
-  DEV_LOG.md
   PRODUCT_BLUEPRINT.md
+  PROJECT_SCOPE.md
+  AGENT_WORKFLOW.md
+  DEV_LOG.md
+  HANDOFF.md
+  AI_Coding_Agent_Workflow_v6.md
   nynj-hybrid-race-club-build-brief.md
-  archive/workflow/        # superseded v6/v7 workflow (history)
 ```
 
 ## Editing Content
@@ -90,12 +88,11 @@ docs/
 
 ## Documentation
 
-- [Agent Workflow CORE (v8.1.1-solo)](docs/AGENT_WORKFLOW_CORE.md)
-- [Project Scope & Policy](docs/PROJECT_SCOPE.md)
-- [Model & Runtime Pin](docs/MODEL_RUNTIME_PIN.md)
-- [Handoff](docs/HANDOFF.md)
-- [Dev Log](docs/DEV_LOG.md)
 - [Product Blueprint](docs/PRODUCT_BLUEPRINT.md)
+- [Project Scope](docs/PROJECT_SCOPE.md)
+- [Agent Workflow](docs/AGENT_WORKFLOW.md)
+- [Dev Log](docs/DEV_LOG.md)
+- [Handoff](docs/HANDOFF.md)
 - [Build Brief](docs/nynj-hybrid-race-club-build-brief.md)
 
 ## Deployment
