@@ -134,3 +134,17 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 6. Dev: 320px Hero CTA 문구/간격 polish
 7. Claude: 필요 시 `/review` 실행 (브랜드/법적 판단 중심)
 8. Netlify 배포 확인
+
+---
+<!-- Below this line: v8.1.1-solo CLOSE events (append-only). Above is preserved v7-era history. -->
+
+## 2026-07-11T13:53:00Z — workflow-adoption-v8.1.1
+- Stage: WF:CLOSE  - Role/Runtime: Main Driver / claude-main-opus (observed claude-opus-4-8)  - Risk: Standard
+- Implementation: 2663a83..95e9253 (adoption artifact commit) + close metadata commit
+- Review: docs/migration/V8.1.1_ADOPTION_REVIEW.md + PASS (independent subagent, ARTIFACT_READ_ONLY; P0/P1/P2=0, P3=1 addressed)
+- Human Decision: N/A
+- Summary: Adopted AI Coding Agent Workflow v8.1.1-solo from detected LEGACY_V7. Verified 25-file bundle; installed 19 workflow-owned files verbatim; reconciled CLAUDE.md/AGENTS.md/PROJECT_SCOPE/MODEL_RUNTIME_PIN/HANDOFF and preserved DEV_LOG; archived v6/v7 byte-for-byte; removed active v7 manual; SUPERSEDED pointer for docs/AGENT_WORKFLOW.md. No application source/test/dependency/deploy file changed.
+- Validation: build PASS, lint PASS, package/markdown/regression/git-ownership/secret-scan all PASS (adoption report Validation table)
+- Publish Intent/Target: AUTO_AT_CLOSE → origin/chore/adopt-workflow-v8.1.1 (protected main NOT pushed)
+- Decisions / Risks / Follow-ups: MODEL_RUNTIME_PIN all CANDIDATE; PROJECT_SCOPE READY_FOR_APPROVAL. Human to approve PIN/SCOPE, set paid-use caps, confirm repo=Public, and decide on main-merge (deploy). P3 MANIFEST CRLF-hash note added.
+- Next: DONE (adoption task) + Human owns approvals

@@ -9,6 +9,13 @@
   remains the primary history; this archive is an adoption-time snapshot.
 - Note: application source, tests, dependencies, and build config were NOT
   archived and were NOT changed by this task.
+- SHA256 note: the values below are **working-tree (CRLF) hashes** — this repo has
+  `core.autocrlf=true` and no `.gitattributes`, so they will not reproduce via
+  `git show 2663a83:<path> | sha256sum` (which yields LF blob content). Archive
+  integrity is nonetheless proven at the Git blob level: each archived copy was
+  verified byte-identical to its working-tree original at archive time, and the
+  v7 manual moved into this archive as a Git 100%-rename (R100). (Independent
+  review P3, non-blocking.)
 
 | Original path | Archive path | SHA256 (pre-adoption) | Git status before | Detected version | Transformation reason |
 |---|---|---|---|---|---|
