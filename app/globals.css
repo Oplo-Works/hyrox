@@ -344,22 +344,19 @@ body[data-scrolling="true"] main > section::before {
 }
 
 /* ── Workout silhouettes — 스크롤 연동 HYROX 스테이션 배경 ──────────
-   초저투명 장식 오버레이. 스크롤 중 최대 0.12, 정지 시 0.055로
-   본문 가독성을 해치지 않는다 (SPEC AC-3). */
+   rev 3 (선명 모드): screen 블렌드 + 60% 불투명 — 어두운 배경 위에선
+   실루엣이 선명하게 빛나고, 밝은 본문 텍스트는 블렌드 특성상 그대로
+   남아 가독성을 지킨다 (텍스트 대비 ≥ 4.9:1, SPEC AC-11).
+   동작은 항상 역동(0.9s) — 정지/스크롤 구분 없음 (AC-12). */
 .workout-silhouettes {
   position: fixed;
   inset: 0;
   z-index: 30; /* scroll-energy(35)·StickyCTA(40)·Header(50) 아래 */
   pointer-events: none;
   overflow: hidden;
-  opacity: 0.055;
-  transition: opacity 0.7s ease;
-  --ws-swap: 3s; /* 2프레임 동작 교차 주기 (정지 시 느리게) */
-}
-
-body[data-scrolling="true"] .workout-silhouettes {
-  opacity: 0.12;
-  --ws-swap: 0.9s;
+  opacity: 0.6;
+  mix-blend-mode: screen;
+  --ws-swap: 0.9s; /* 2프레임 동작 교차 주기 — 항상 역동 */
 }
 
 /* 화면 세로 중앙, 인물 높이 ≈ 뷰포트의 40~55% (rev 2) */
