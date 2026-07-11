@@ -9,6 +9,7 @@ import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 import StickyCTA from "@/components/StickyCTA";
 import ScrollEnergy from "@/components/ScrollEnergy";
+import WorkoutSilhouettes from "@/components/WorkoutSilhouettes";
 import { EditableDataProvider } from "@/components/EditableDataProvider";
 
 /**
@@ -21,6 +22,7 @@ export default function Home() {
     <EditableDataProvider>
       <Header />
       <ScrollEnergy />
+      <WorkoutSilhouettes />
       <main>
         {/* 10.2 Hero */}
         <Hero />

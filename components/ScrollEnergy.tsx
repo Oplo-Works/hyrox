@@ -5,7 +5,12 @@ import { useEffect } from "react";
 /**
  * ScrollEnergy keeps the decorative race treatment in sync with the reader's pace.
  * It avoids per-frame React rendering so mobile scrolling stays responsive.
+ * Also maps scroll progress to the 8 HYROX stations (race order) for
+ * WorkoutSilhouettes via body[data-station] / body[data-bridge].
  */
+const STATION_COUNT = 8;
+/** 각 구간 앞 16%는 1 km Run 브릿지(러닝 실루엣) 구간 */
+const RUN_BRIDGE_RATIO = 0.16;
 export default function ScrollEnergy() {
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -47,11 +52,20 @@ export default function ScrollEnergy() {
       );
       const delta = currentScrollY - lastScrollY;
       const intensity = Math.min(Math.abs(delta) / 38, 1);
+      const progress = currentScrollY / maximumScroll;
+      const stationSlot = Math.min(
+        Math.floor(progress * STATION_COUNT),
+        STATION_COUNT - 1
+      );
+      const stationProgress = progress * STATION_COUNT - stationSlot;
 
-      root.style.setProperty("--scroll-progress", String(currentScrollY / maximumScroll));
+      root.style.setProperty("--scroll-progress", String(progress));
       root.style.setProperty("--scroll-intensity", String(Math.max(intensity, 0.08)));
       document.body.dataset.scrollDirection = delta < 0 ? "up" : "down";
       document.body.dataset.scrolling = "true";
+      document.body.dataset.station = String(stationSlot);
+      document.body.dataset.bridge =
+        stationProgress < RUN_BRIDGE_RATIO ? "true" : "false";
 
       if (settleTimer) window.clearTimeout(settleTimer);
       settleTimer = window.setTimeout(() => {
@@ -79,6 +93,8 @@ export default function ScrollEnergy() {
       if (settleTimer) window.clearTimeout(settleTimer);
       delete document.body.dataset.scrollDirection;
       delete document.body.dataset.scrolling;
+      delete document.body.dataset.station;
+      delete document.body.dataset.bridge;
     };
   }, []);
 

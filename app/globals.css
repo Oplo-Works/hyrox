@@ -342,3 +342,191 @@ body[data-scrolling="true"] main > section::before {
   background: #a45ceb;
   box-shadow: 0 0 10px rgba(164, 92, 235, 0.5);
 }
+
+/* ── Workout silhouettes — 스크롤 연동 HYROX 스테이션 배경 ──────────
+   초저투명 장식 오버레이. 스크롤 중 최대 0.12, 정지 시 0.055로
+   본문 가독성을 해치지 않는다 (SPEC AC-3). */
+.workout-silhouettes {
+  position: fixed;
+  inset: 0;
+  z-index: 30; /* scroll-energy(35)·StickyCTA(40)·Header(50) 아래 */
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.055;
+  transition: opacity 0.7s ease;
+  --ws-swap: 3s; /* 2프레임 동작 교차 주기 (정지 시 느리게) */
+}
+
+body[data-scrolling="true"] .workout-silhouettes {
+  opacity: 0.12;
+  --ws-swap: 0.9s;
+}
+
+.workout-silhouettes svg {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(64px, 12vh, 140px);
+  transform: translateX(-50%);
+  width: min(640px, 104vw);
+  height: auto;
+}
+
+/* 지면 라인 — Nitro 그라데이션 (마젠타는 그라데이션 내부에만) */
+.ws-ground {
+  stroke: url(#ws-nitro);
+  stroke-width: 1.5;
+  opacity: 0.5;
+}
+
+/* 스틱 피겨 스트로크 */
+.ws-limb {
+  stroke: currentColor;
+  stroke-width: 6.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.ws-back {
+  opacity: 0.5;
+}
+
+.ws-torso {
+  stroke: currentColor;
+  stroke-width: 9;
+  stroke-linecap: round;
+  fill: none;
+}
+
+.ws-head {
+  fill: currentColor;
+}
+
+.ws-hair {
+  stroke: currentColor;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  fill: none;
+}
+
+.ws-gear {
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  opacity: 0.75;
+}
+
+.ws-gear--thin {
+  stroke-width: 1.5;
+}
+
+.ws-fill {
+  fill: currentColor;
+}
+
+.ws-bag {
+  stroke: currentColor;
+  stroke-width: 11;
+  stroke-linecap: round;
+}
+
+/* 남 = 오렌지(주도), 여 = 퍼플(보조) — Nitro 색 위계 */
+.ws-athlete--m {
+  color: var(--color-orange);
+}
+
+.ws-athlete--f {
+  color: var(--color-purple);
+}
+
+/* 스테이션 표시: ScrollEnergy가 지정한 body[data-station]만 보임.
+   구간 앞부분(data-bridge)에는 1 km Run 브릿지가 대신 표시된다. */
+.ws-scene {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.55s ease, visibility 0.55s ease;
+}
+
+body[data-bridge="true"] .ws-scene--run,
+body[data-station="0"]:not([data-bridge="true"]) .ws-scene--s0,
+body[data-station="1"]:not([data-bridge="true"]) .ws-scene--s1,
+body[data-station="2"]:not([data-bridge="true"]) .ws-scene--s2,
+body[data-station="3"]:not([data-bridge="true"]) .ws-scene--s3,
+body[data-station="4"]:not([data-bridge="true"]) .ws-scene--s4,
+body[data-station="5"]:not([data-bridge="true"]) .ws-scene--s5,
+body[data-station="6"]:not([data-bridge="true"]) .ws-scene--s6,
+body[data-station="7"]:not([data-bridge="true"]) .ws-scene--s7 {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 2프레임 동작 교차 — 42~50%/92~100%가 크로스페이드 구간 */
+.ws-frame--a {
+  animation: ws-swap-a var(--ws-swap, 3s) linear infinite;
+}
+
+.ws-frame--b {
+  opacity: 0;
+  animation: ws-swap-b var(--ws-swap, 3s) linear infinite;
+}
+
+/* 여자 피겨는 반 주기 어긋나게 재생해 기계적 동기화를 피한다 */
+.ws-athlete--f .ws-frame--a,
+.ws-athlete--f .ws-frame--b {
+  animation-delay: calc(var(--ws-swap, 3s) * -0.5);
+}
+
+@keyframes ws-swap-a {
+  0%,
+  42% {
+    opacity: 1;
+  }
+  50%,
+  92% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes ws-swap-b {
+  0%,
+  42% {
+    opacity: 0;
+  }
+  50%,
+  92% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* 은은한 전신 바운스 (배치 transform은 부모 g의 속성이라 충돌 없음) */
+.ws-athlete {
+  animation: ws-bob 5s ease-in-out infinite;
+}
+
+.ws-athlete--f {
+  animation-delay: -2.5s;
+}
+
+@keyframes ws-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workout-silhouettes {
+    display: none;
+  }
+}
