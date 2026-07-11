@@ -2,14 +2,18 @@
 
 - Feature ID: scroll-workout-silhouettes
 - Risk: Standard
-- Bundle ID: scroll-workout-silhouettes-R2
-- SPEC Revision: 2
+- Bundle ID: scroll-workout-silhouettes-R3
+- SPEC Revision: 3
 - Status: APPROVED
 - Last Updated: 2026-07-11
 - Revision note (rev 2, 사용자 요청 4건): ① 남녀 한 쌍 → **한 명**으로, ② 크기를 모바일 화면의
   **약 50%** 로 확대, ③ 하단 → **화면 세로 중앙** 배치, ④ 종목이 바뀔 때마다 **성별도 교대**
   (SkiErg=남 시작, 이후 남↔여 교대; 러닝 브릿지는 다음 종목의 선수와 동일 성별).
   색 유지: 남=오렌지, 여=퍼플.
+- Revision note (rev 3, 사용자 요청 "스크롤중 역동 + 선명하게 배포"): 정지/스크롤 상태 구분을
+  없애고 **항상 역동**(0.9s 교차), 표시를 **선명 모드**로 — 단 100% 불투명 오버레이는 본문
+  가독성 요구와 충돌하므로 **screen 블렌드 + 60% 불투명**으로 구현 (어두운 배경에선 선명,
+  밝은 텍스트는 유지, 대비 ≥ 4.9:1). AC-3·AC-4는 rev 3에서 SUPERSEDED → AC-11·AC-12로 대체.
 
 ## Context / User / Goal
 
@@ -75,12 +79,14 @@
 | AC-6 | 레이어는 `aria-hidden`·`pointer-events: none`이며 layout shift, 스크롤 성능 저하(jank), 콘솔 에러가 없다 | manual (browser + console) | PASS |
 | AC-7 | HYROX 공식 로고/이미지/워딩 미사용, 신규 dependency 없음, `npm run build` PASS | build + diff review | PASS |
 | AC-8 | 색상은 Nitro 위계 준수: 오렌지 주도 + 퍼플 보조 틴트, 마젠타는 그라데이션 내부에서만 사용 | diff review + browser | PASS |
-| AC-9 | (rev 2) 씬마다 실루엣은 **한 명**이며, 종목이 바뀔 때마다 성별이 남↔여 교대한다 (SkiErg=남 시작; 브릿지는 다음 종목과 동일 성별) | manual (browser) | Pending |
-| AC-10 | (rev 2) 실루엣이 모바일 화면 세로 **중앙**에 위치하고, 인물 높이가 뷰포트의 **약 40–55%** (목표 ~50%)를 차지한다 | manual (browser, 375px) | Pending |
+| AC-9 | (rev 2) 씬마다 실루엣은 **한 명**이며, 종목이 바뀔 때마다 성별이 남↔여 교대한다 (SkiErg=남 시작; 브릿지는 다음 종목과 동일 성별) | manual (browser) | PASS |
+| AC-10 | (rev 2) 실루엣이 모바일 화면 세로 **중앙**에 위치하고, 인물 높이가 뷰포트의 **약 40–55%** (목표 ~50%)를 차지한다 | manual (browser, 375px) | PASS |
+| AC-11 | (rev 3, AC-3 대체) 레이어는 `mix-blend-mode: screen` + opacity 0.6 — 어두운 배경에서 선명하게 보이되 밝은 본문 텍스트 대비 ≥ 4.5:1 유지 | CSS 검사 + 대비 산술 | Pending |
+| AC-12 | (rev 3, AC-4 대체) 정지/스크롤 구분 없이 항상 역동적으로 재생 (`--ws-swap` 0.9s 고정) | CSS 검사 | Pending |
 
 ## Approval
 
 - Mode: STANDARD_BUNDLE_IN_PLAN
 - Standard ledger: docs/features/scroll-workout-silhouettes/PLAN.md#approval-bundle
 - High decision: N/A
-- User message: 2026-07-11, "승인 — 구현 진행" (rev 1 번들); 2026-07-11, "승인 — 구현 진행" (rev 2 번들, AskUserQuestion 응답)
+- User message: 2026-07-11, "승인 — 구현 진행" (rev 1 번들); 2026-07-11, "승인 — 구현 진행" (rev 2 번들, AskUserQuestion 응답); 2026-07-11, "좋아. 스크롤중 역동 + 선명하게 배포해줘" (rev 3 — 요구+승인+배포 지시 동시)

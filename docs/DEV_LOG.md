@@ -166,3 +166,14 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 - Publish Intent/Target: AUTO_AT_CLOSE + Human 명시 승인 → origin/main (ff-merge, Netlify prod deploy 유발) + origin/feat/scroll-workout-silhouettes
 - Decisions / Risks / Follow-ups: 체감 속도/진하기는 --ws-swap·opacity CSS 변수로 조정 가능. Netlify 배포 결과 확인 필요.
 - Next: DONE + Human (배포 확인)
+
+## 2026-07-11T19:29:27Z — scroll-workout-silhouettes (rev 2 + rev 3)
+- Stage: WF:CLOSE  - Role/Runtime: Main Driver / claude-deep-fable (observed claude-fable-5)  - Risk: Standard
+- Implementation: 13ba737..72e546a (rev 2: 4a62808 단독 실루엣·중앙·확대·성별 교대 / rev 3: 72e546a 선명 모드)
+- Review: Human 직접 검토 — 데모 아티팩트 rev별 갱신 (리뷰어 Runtime 미승인 지속)
+- Human Decision: APPROVED (2026-07-11 "좋아. 스크롤중 역동 + 선명하게 배포해줘" — rev 2 리뷰 승인 + rev 3 요구·승인·배포 지시)
+- Summary: rev 2 — 씬당 1명, viewBox "10 2 120 126" 재구성으로 인물이 모바일 뷰포트 ~43–52% 크기로 세로 중앙에 표시, 종목마다 성별 교대(짝수=남/오렌지, 홀수=여/퍼플, 브릿지는 다음 종목 성별). rev 3 — 정지/스크롤 구분 제거(항상 0.9s 역동), screen 블렌드 + opacity 0.6 선명 모드(100% 불투명은 가독성 요구와 충돌해 블렌드 채택; 밝은 텍스트 대비 ≥4.9:1 유지).
+- Validation: TEST_EVIDENCE rev 2·rev 3 섹션 — build PASS(53.2kB), 씬 전수(1씬·1명, M/F 교대, 브릿지 성별 일치), 중심 오프셋 0/0, blend/opacity/swap computed 검사, console 0 error, 대비 산술 AA 충족
+- Publish Intent/Target: AUTO_AT_CLOSE + Human 명시 승인 → origin/main (ff-merge, Netlify prod deploy 유발) + origin/feat/scroll-workout-silhouettes
+- Decisions / Risks / Follow-ups: 어두운 글자 요소(CTA 버튼 라벨) 위 국소 대비 저하 가능 — 체감 확인 후 필요 시 opacity 조정. Netlify 배포 결과 확인 필요.
+- Next: DONE + Human (배포·체감 확인)

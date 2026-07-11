@@ -6,6 +6,15 @@
 - Verified Target: 각 rev의 implementation commit (commit 직전 working tree 검증, 이후 파일 무변경)
 - Environment: Windows 11 Pro, Node v24.18.0, Next.js 14.2.15 (dev server + production build), Claude Code Browser pane (headless)
 
+## rev 3 (2026-07-11) — 선명 모드 (screen 블렌드) · 항상 역동
+
+| Timestamp UTC | Target | Command | CWD | Exit | Duration | Result | AC IDs | Notes |
+|---|---|---|---|---:|---:|---|---|---|
+| 2026-07-11T19:2xZ | working tree | `npm run build` | repo root | 0 | ~40s | PASS | AC-7 | 53.2kB 유지 |
+| 2026-07-11T19:2xZ | dev server | browser JS: computed CSS 검사 | localhost:3000 | — | — | PASS | AC-11, AC-12 | mix-blend-mode:screen, opacity 0.6 고정(정지/스크롤 동일), --ws-swap 0.9s 고정 |
+| 2026-07-11T19:2xZ | dev server | console error 검사 | localhost:3000 | — | — | PASS | AC-6 | 에러 0건 |
+| 2026-07-11T19:2xZ | 산술 | 본문 텍스트 대비 계산 | — | — | — | PASS | AC-11 | 0.6×오렌지 screen 블렌드 위 밝은 텍스트(#f2f1ec) 대비 ≈ 4.9:1 (AA 4.5:1 충족); 퍼플은 더 여유 |
+
 ## rev 2 (2026-07-11) — 단독 실루엣 · 중앙 확대 · 성별 교대
 
 | Timestamp UTC | Target | Command | CWD | Exit | Duration | Result | AC IDs | Notes |
