@@ -59,7 +59,10 @@ task 브랜치 `chore/adopt-workflow-v8.1.1`에 있고, protected `main`에는 p
 ## Risks and Blockers
 
 - Open Findings: none (P3는 MANIFEST 주석으로 해소)
-- Known Risks: MODEL_RUNTIME_PIN 전 항목 CANDIDATE, PROJECT_SCOPE READY_FOR_APPROVAL. 승인 전에는 라우팅 대상 Runtime이 없다.
+- Known Risks:
+  - MODEL_RUNTIME_PIN 전 항목 CANDIDATE, PROJECT_SCOPE READY_FOR_APPROVAL. 승인 전에는 라우팅 대상 Runtime이 없다.
+  - **REMOTE DIVERGENCE:** 이 채택은 base `2663a83` 기준이나, 그 사이 `origin/main`이 10커밋 앞섰다(`9660225` — "manager inline edit feature with 6-digit password gate" 등, 다른 세션/도구가 push). `main`은 `app/**`, `components/**`, `data/site.ts` **및 `docs/DEV_LOG.md`·`docs/HANDOFF.md`**를 수정했다. 따라서 이 브랜치를 `main`에 merge하면 최소 `docs/DEV_LOG.md`·`docs/HANDOFF.md`에서 **충돌**한다. 이 HANDOFF는 아직 `main`의 manager-edit 기능을 반영하지 않는다.
+  - 보안 관찰(범위 밖, 미조치): `origin/main` 커밋 `017265f`가 manager password `450815`를 커밋 메시지/코드에 평문 노출. 이 채택 task는 app 소스를 건드리지 않으므로 미조치. 사용자 검토 권장.
 - Blocker: None
-- Approval Needed: MODEL_RUNTIME_PIN 승인 · 유료-use cap · repo classification=Public · `main` merge(배포) 여부 — PROJECT_SCOPE §7
+- Approval Needed: MODEL_RUNTIME_PIN 승인 · 유료-use cap · repo classification=Public · **merge 전 `main`(9660225)에 rebase/merge하여 DEV_LOG/HANDOFF 충돌 재조정** · `main` merge(배포) 여부 — PROJECT_SCOPE §7
 - Do NOT: `main` 등 protected 브랜치로 직접 push/merge를 승인 없이 하지 말 것(= Netlify prod 배포); 애플리케이션 소스/의존성/배포 설정 변경 금지; 아카이브된 v6/v7 문서를 활성 지침으로 사용 금지; magenta를 그라데이션 밖 단독 색으로 사용 금지.
