@@ -1,10 +1,21 @@
 # Test Evidence: scroll-workout-silhouettes
 
-- Overall Result: PASS (기계 검증 전 항목 PASS; 시각적 미관 확인만 환경 제약으로 Human 확인 대기 — 아래 참조)
-- Implementation Base: bdaae284e5ae75a4679baf07e5a7c7f9164a9ccd
-- Implementation Head: SELF — implementation commit (WorkoutSilhouettes/ScrollEnergy/globals.css/page.tsx)
-- Verified Target: working tree == implementation commit 내용 (commit 직전 검증, 이후 파일 무변경)
+- Overall Result: PASS (rev 1·rev 2 기계 검증 전 항목 PASS; 시각적 미관 확인은 데모 아티팩트로 Human 수행)
+- Implementation Base: bdaae284e5ae75a4679baf07e5a7c7f9164a9ccd (rev 1) / 13ba737 (rev 2)
+- Implementation Head: f3b01ca (rev 1) / 4a62808 (rev 2)
+- Verified Target: 각 rev의 implementation commit (commit 직전 working tree 검증, 이후 파일 무변경)
 - Environment: Windows 11 Pro, Node v24.18.0, Next.js 14.2.15 (dev server + production build), Claude Code Browser pane (headless)
+
+## rev 2 (2026-07-11) — 단독 실루엣 · 중앙 확대 · 성별 교대
+
+| Timestamp UTC | Target | Command | CWD | Exit | Duration | Result | AC IDs | Notes |
+|---|---|---|---|---:|---:|---|---|---|
+| 2026-07-11T18:5xZ | working tree | `npm run build` | repo root | 0 | ~40s | PASS | AC-7 | 53.2kB 유지 (SVG가 쌍→단독으로 절반) |
+| 2026-07-11T19:0xZ | dev server | browser JS: 씬 전수 검사 (station 0–7 × bridge on/off) | localhost:3000 | — | — | PASS | AC-1, AC-2, AC-9 | 항상 1씬·1명만 표시; s0~s7 = M,F,M,F,M,F,M,F; 브릿지 run-m/run-f가 다음 종목 성별과 일치 |
+| 2026-07-11T19:0xZ | dev server | browser JS: 기하 검사 (375×812) | localhost:3000 | — | — | PASS | AC-10 | svg 중심 오프셋 x=0/y=0 (정중앙), 인물 높이 350px = 뷰포트 43% (667px 폰 기준 ~52%) |
+| 2026-07-11T19:0xZ | dev server | console error + overflow 검사 | localhost:3000 | — | — | PASS | AC-6 | 에러 0건, scrollWidth==vw, layer opacity 0.055 유지 |
+
+## rev 1 (2026-07-11) — 최초 구현 (남녀 한 쌍, 하단 배치; rev 2로 대체됨)
 
 | Timestamp UTC | Target | Command | CWD | Exit | Duration | Result | AC IDs | Notes |
 |---|---|---|---|---:|---:|---|---|---|

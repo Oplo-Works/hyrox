@@ -2,11 +2,11 @@
 
 - Feature ID: scroll-workout-silhouettes
 - Risk: Standard
-- Bundle ID: scroll-workout-silhouettes-R1
-- PLAN Revision: 1
-- SPEC: docs/features/scroll-workout-silhouettes/SPEC.md (rev 1, APPROVED)
-- Status: DONE
-- Base Branch/Commit: feat/scroll-workout-silhouettes @ bdaae284e5ae75a4679baf07e5a7c7f9164a9ccd (branched from main)
+- Bundle ID: scroll-workout-silhouettes-R2
+- PLAN Revision: 2
+- SPEC: docs/features/scroll-workout-silhouettes/SPEC.md (rev 2, APPROVED)
+- Status: IN_PROGRESS
+- Base Branch/Commit: feat/scroll-workout-silhouettes @ 13ba737 (rev 1은 main 반영·배포 완료)
 
 ## Baseline
 
@@ -41,6 +41,7 @@
 |---|---|---|---|---|---|---|---|
 | S1 | 스크롤 진행에 따라 남녀 실루엣 쌍이 8종목을 레이스 순서로 수행하는 오버레이 표시 (크로스페이드 + 종목 모션 포함) | AC-1, AC-2, AC-6, AC-7, AC-8 | components/WorkoutSilhouettes.tsx (신규), components/ScrollEnergy.tsx, app/globals.css, app/page.tsx | 없음 | npm run build + browser(375px) 확인 | 신규 파일 삭제 + 3개 파일 diff revert | DONE |
 | S2 | 스크롤 중/정지 상태 연출(역동↔은은), reduced-motion 숨김, 320/375/390/768/desktop 가독성·성능 QA | AC-3, AC-4, AC-5 | app/globals.css (미세 조정), components/WorkoutSilhouettes.tsx | 없음 | browser 5개 폭 + reduced-motion 에뮬레이션 + console 확인 | CSS 조정 revert | DONE (시각 확인 항목은 TEST_EVIDENCE의 환경 제약 참고) |
+| S3 | (rev 2) 단독 실루엣으로 전환: 씬당 1명 + 종목별 성별 교대(브릿지 포함), viewBox 재구성으로 인물 확대(~50% 목표), 화면 세로 중앙 배치, 데모 아티팩트 갱신 | AC-9, AC-10 (+AC-1~8 회귀 유지) | components/WorkoutSilhouettes.tsx, app/globals.css | 없음 | npm run build + browser 기하/씬 매핑 검사 + 데모 재생성 | rev 1 커밋(f3b01ca 상태)으로 두 파일 revert | DRAFT |
 
 ## Dependencies / Assumptions
 
@@ -57,10 +58,12 @@
 ## Approval Bundle
 
 - Mode: STANDARD_BUNDLE
-- Bundle ID: scroll-workout-silhouettes-R1
-- SPEC Revision approved: 1
-- PLAN Revision approved: 1
+- Bundle ID: scroll-workout-silhouettes-R2
+- SPEC Revision approved: 2
+- PLAN Revision approved: 2
 - Decision: APPROVED
-- User message: 2026-07-11, "승인 — 구현 진행" (한 메시지로 SPEC rev 1 + PLAN rev 1 동시 승인)
+- User message: 2026-07-11, "승인 — 구현 진행" (한 메시지로 SPEC rev 2 + PLAN rev 2 동시 승인)
+- Prior bundle R1: SPEC rev 1 + PLAN rev 1 — 2026-07-11 "승인 — 구현 진행"으로 승인,
+  Human 리뷰 APPROVED 후 main 반영·배포 완료 (13ba737)
 - Constraints / expiry: push는 `origin/feat/scroll-workout-silhouettes`까지만 (AUTO_AT_CLOSE).
   `main` merge/push는 Netlify prod deploy를 유발하므로 별도 승인 필요.
