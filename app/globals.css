@@ -376,13 +376,9 @@ body[data-scrolling="true"] main > section::before {
   opacity: 0.5;
 }
 
-/* 스틱 피겨 스트로크 */
+/* rev 4: 필드 근육 실루엣 — 아웃라인은 컴포넌트가 기하로 생성, 여기선 fill만 */
 .ws-limb {
-  stroke: currentColor;
-  stroke-width: 6.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  fill: none;
+  fill: currentColor;
 }
 
 .ws-back {
@@ -390,10 +386,7 @@ body[data-scrolling="true"] main > section::before {
 }
 
 .ws-torso {
-  stroke: currentColor;
-  stroke-width: 9;
-  stroke-linecap: round;
-  fill: none;
+  fill: currentColor;
 }
 
 .ws-head {
@@ -401,10 +394,7 @@ body[data-scrolling="true"] main > section::before {
 }
 
 .ws-hair {
-  stroke: currentColor;
-  stroke-width: 3.5;
-  stroke-linecap: round;
-  fill: none;
+  fill: currentColor;
 }
 
 .ws-gear {
@@ -426,8 +416,9 @@ body[data-scrolling="true"] main > section::before {
 
 .ws-bag {
   stroke: currentColor;
-  stroke-width: 11;
+  stroke-width: 7;
   stroke-linecap: round;
+  opacity: 0.85; /* 어깨 위 샌드백이 팔·머리와 한 덩어리로 뭉쳐 보이지 않도록 */
 }
 
 /* 남 = 오렌지(주도), 여 = 퍼플(보조) — Nitro 색 위계 */
@@ -478,10 +469,7 @@ body[data-station="7"]:not([data-bridge="true"]) .ws-scene--s7 {
   animation: ws-swap-b var(--ws-swap, 3s) linear infinite;
 }
 
-/* 여자 실루엣은 토르소를 살짝 슬림하게 (rev 2: 한 명만 크게 보이므로 구분 보강) */
-.ws-athlete--f .ws-torso {
-  stroke-width: 8;
-}
+/* (rev 4) 남녀 체형 구분은 컴포넌트의 폭 프로필 기하로 처리 — CSS 오버라이드 불필요 */
 
 @keyframes ws-swap-a {
   0%,
