@@ -2,71 +2,69 @@
 
 ## Identity
 
-- Status: DONE
-- Task ID: scroll-workout-silhouettes (rev 2 + rev 3)
-- Stage: WF:CLOSE
+- Status: READY_FOR_REVIEW
+- Task ID: scroll-workout-silhouettes (rev 4 + 4b)
+- Stage: WF:REVIEW
 - Risk: Standard
-- Updated At: 2026-07-11T19:35Z
+- Updated At: 2026-07-11T22:40Z
 
 ## Context Summary
 
-rev 1(쌍, 하단) 배포 후 같은 날 rev 2(단독 실루엣·중앙·확대·성별 교대, 4a62808)와
-rev 3(선명 모드, 72e546a)을 연속 진행. rev 3 = 사용자 지시 "스크롤중 역동 + 선명하게 배포":
-정지/스크롤 상태 구분 제거(항상 0.9s 역동), 표시를 **screen 블렌드 + opacity 0.6**으로 —
-어두운 배경에선 선명하게 빛나되 밝은 본문 텍스트는 블렌드 특성상 유지(대비 ≥4.9:1).
-100% 불투명 오버레이는 원 요구(가독성)와 충돌해 블렌드 방식 선택. 같은 메시지가 rev 2 리뷰
-승인 + rev 3 승인 + main 배포 지시를 겸함. 데모 아티팩트 같은 URL로 rev 3 갱신 완료.
+rev 4 = "화장실 사인 → 진짜 fit한 운동선수" + rev 4b = 사용자 레퍼런스(포토-트레이스 스타일)
+반영. 스틱 피겨를 **파라메트릭 근육 실루엣**으로 교체: 비대칭 근육(LimbSpec — 종아리 후면/
+quad 전면/이두·삼두), 두상 유닛(턱/후두/승모근), 운동화 발, 측면 토르소(가슴/등/둔근),
+포니테일. 검증 2단: ① 3-렌즈 코드 검증 — blocker 2(SVG path 문법 오류로 인한 조용한 절단
+렌더)+should-fix 2(관절 winding, 발 방향) 수정, ② 씬별 시각 QA 워크플로우(에이전트가 PNG
+판독) — 10/10 "reads-as-athlete", findings 15건 전부 반영(RUN 대측 보행, Row 지면 정렬+캐치
+재포즈, Lunge 딥 런지 등). 최종: build/lint PASS, 195 path 문법 전수 PASS, 20프레임 bbox PASS.
+**Human 리뷰 대기**: 데모 아티팩트(10씬 애니메이션)에서 미관 판단 후 main 배포 결정.
 
 ## Ownership
 
-- Outgoing Role / Runtime: Main Driver / claude-deep-fable (observed `claude-fable-5`, CANDIDATE)
-- Next Role: Human
+- Outgoing Role / Runtime: Main Driver / claude-main (observed `claude-sonnet-5`, CANDIDATE)
+- Next Role: Human (리뷰어 Runtime 미승인 상태 — rev 1~3과 동일하게 데모 아티팩트로 직접 검토)
 - Next Runtime ID: Unassigned
-- Next Action: Netlify 배포 확인 + 실기기에서 선명도·역동성 체감 확인.
-  조정 포인트: `.workout-silhouettes` opacity(0.6)·`--ws-swap`(0.9s) 각 한 줄.
-- Reason: 배포 검증과 체감 판단은 Human 몫.
+- Next Action: 데모 아티팩트 확인 → 승인 시 "main 배포" 지시 (별도 승인 필요: Netlify prod deploy)
+- Reason: 미관 판단과 배포 승인은 Human 몫.
 
 ## Git and Worktree
 
-- Branch / Worktree: `feat/scroll-workout-silhouettes` → `main` ff-merge (Human 승인)
-- Implementation Base: 13ba737
-- Implementation Head: 72e546a (rev 2: 4a62808, rev 3: 72e546a)
-- Implementation Commits: 4a62808, 72e546a
-- Verified Target: 72e546a (+ merge 후 main에서 build 재검증 — 결과는 chat Output Block)
-- Review Range: 13ba737..72e546a
-- Review Packet Metadata State: 578ff04 (rev 2) / rev 3은 close commit에 포함
-- Review Artifact Metadata State: N/A (Human 직접 검토 — 데모 아티팩트, DEV_LOG 기록)
-- Close Metadata State: SELF — resolve via Git history
-- Worktree State: REPO_CLEAN
+- Branch / Worktree: `feat/scroll-workout-silhouettes`
+- Base HEAD: ea331e0 (rev 2+3 close, main과 동일 지점)
+- Implementation Base: ea331e0
+- Implementation Head: SELF — resolve via Git history (rev 4 implementation commit)
+- Implementation Commits: rev 4 구현 1건 (components/WorkoutSilhouettes.tsx, app/globals.css)
+- Verified Target: rev 4 implementation commit (커밋 직전 working tree에서 전 검증 수행, 이후 무변경)
+- Review Range: ea331e0..<rev 4 head>
+- Review Packet Metadata State: SELF — resolve via Git history
+- Review Artifact Metadata State: N/A (Human 직접 검토 — 데모 아티팩트)
+- Close Metadata State: N/A (승인 후 CLOSE에서 생성)
+- Worktree State: REPO_CLEAN (커밋 후)
 - Preserved User Changes: none
 
 ## Publish
 
-- Push Intent: AUTO_AT_CLOSE + Human 명시 승인(main)
-- Approved Target: `origin/main` (protected; deploy-triggering — 2026-07-11 "…배포해줘"로 승인)
-  및 `origin/feat/scroll-workout-silhouettes`
-- Expected Remote Head: SELF — resolve close metadata commit
-- Last Reconciled Remote Head: origin/main@13ba737 (rev 1 close; divergence 없음 확인)
+- Push Intent: AUTO_AT_CLOSE (feature 브랜치까지; main은 별도 승인)
+- Approved Target: `origin/feat/scroll-workout-silhouettes`
+- Expected Remote Head: SELF — resolve review packet metadata commit
+- Last Reconciled Remote Head: origin/feat/scroll-workout-silhouettes@ea331e0
 - Push Result: NOT_ATTEMPTED (기록 시점; 실제 결과는 chat Output Block)
 
 ## Scope, Validation, and Decisions
 
-- Approved Inputs: SPEC rev 3 + PLAN rev 3 (Bundle R3; R2는 같은 날 선행 승인)
-- AC State: AC-1~AC-2, AC-5~AC-12 PASS (AC-3·AC-4는 rev 3에서 SUPERSEDED)
-- Evidence: docs/features/scroll-workout-silhouettes/TEST_EVIDENCE.md (rev 1~3 섹션)
-- Review: Human 직접 검토 (데모 아티팩트; 리뷰어 Runtime 미승인 상태)
-- Human Decision: APPROVED (2026-07-11 "좋아. 스크롤중 역동 + 선명하게 배포해줘" — rev 2 리뷰
-  승인 + rev 3 승인 + main 배포 지시)
+- Approved Inputs: SPEC rev 4 + PLAN rev 4 (Bundle R4 — 사용자 메시지가 요구+승인)
+- AC State: AC-13 기계 검증 PASS (시각 최종 판단 Human 대기); AC-1~12 회귀 PASS
+- Evidence: docs/features/scroll-workout-silhouettes/TEST_EVIDENCE.md (rev 4 섹션 + findings 수정 기록)
+- Review: pending — Human 데모 아티팩트 검토
+- Human Decision: pending
 
 ## Risks and Blockers
 
-- Open Findings: none
+- Open Findings: none (워크플로우 findings 4건 전부 수정·재검증)
 - Known Risks:
-  - 선명 모드에서 실루엣이 어두운 텍스트 요소(예: 오렌지 CTA 버튼의 어두운 글자) 위를 지날 때
-    국소적으로 대비가 낮아질 수 있음 — screen 블렌드로 밝은 본문 텍스트(대다수)는 보호됨.
-  - Browser pane 환경 제약으로 모션 시각 확인은 데모 아티팩트/실기기 기반.
-  - 체감 속도·진하기는 CSS 한 줄(opacity 0.6 / --ws-swap 0.9s) 조정으로 즉시 대응 가능.
+  - 미관(체형 비율·동작 느낌)은 주관적 — 폭 프로필 상수(ARM_W/LEG_W/TORSO_W) 몇 줄로 즉시 조정 가능.
+  - Browser pane 컴포지터 제약으로 모션 체감은 데모 아티팩트/실기기 기준.
 - Blocker: None
-- Approval Needed: None (이번 main push/deploy는 승인 완료; 다음 배포는 다시 별도 승인)
-- Do NOT: HYROX 공식 로고/이미지·"Official HYROX" 워딩 금지; 마젠타 단독 사용 금지(그라데이션
-  내부만); Don/Clinic/PT/의료 콘텐츠 금지; 결제/로그인/RSVP 금지(MVP 범위 밖); 시크릿 커밋 금지.
+- Approval Needed: main merge/push(= Netlify prod deploy) — Human 지시 필요
+- Do NOT: 승인 없이 main push 금지; HYROX 공식 자산/워딩 금지; magenta 단독 사용 금지;
+  Don/Clinic/PT/의료 콘텐츠 금지; 시크릿 커밋 금지.

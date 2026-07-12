@@ -2,10 +2,23 @@
 
 - Feature ID: scroll-workout-silhouettes
 - Risk: Standard
-- Bundle ID: scroll-workout-silhouettes-R3
-- SPEC Revision: 3
+- Bundle ID: scroll-workout-silhouettes-R4
+- SPEC Revision: 4
 - Status: APPROVED
 - Last Updated: 2026-07-11
+- Revision note (rev 4, 사용자 요청 "실루엣이 너무 화장실 사인 figure 같아. 진짜 fit한 운동선수
+  같은 figure 실루엣으로"): 스틱 피겨(선 스트로크 + 원 머리) 렌더링을 **필드(filled) 근육질
+  애슬리트 실루엣**으로 교체 — 올림픽 픽토그램 스타일. 2프레임 교차·씬 전환·성별 교대·색
+  위계·블렌드 모드(rev 3)는 전부 유지. 렌더링 레이어를 파라메트릭 근육 아웃라인 생성기
+  (테이퍼드 사지: 삼각근/이두/전완, 대퇴/종아리; 측면 토르소: 가슴/등/둔근; 주먹·발·포니테일)로
+  교체하고, 스켈레톤 포즈 데이터는 유지하되 **두꺼워진 체형에 맞춰 3개 씬 미세 좌표 조정**
+  (RUN 앞팔, LUNGE 머리/팔/샌드백 y, WALLBALL 팔/볼 — 볼은 ws-fill→ws-gear 아웃라인).
+  신규 AC-13.
+- Revision note (rev 4b, 사용자 레퍼런스 이미지 2장 제공 — 사진 트레이싱 스타일 피트니스 실루엣):
+  픽토그램 수준을 넘어 **포토-트레이스 스타일**로 상향: ① 사지 근육을 **비대칭 프로필**로
+  (종아리=후면 볼록/정강이 직선, 대퇴=전면 quad, 이두/삼두 구분), ② 원형 머리 →
+  **두상 유닛**(이마/턱/후두/목덜미/승모근 라인), ③ 발 캡슐 → **운동화 형태**(힐컵/밑창/토박스).
+  레퍼런스 스톡 이미지 자체는 라이선스상 사용 불가 — 스타일 목표로만 참조, 자산은 전부 오리지널.
 - Revision note (rev 2, 사용자 요청 4건): ① 남녀 한 쌍 → **한 명**으로, ② 크기를 모바일 화면의
   **약 50%** 로 확대, ③ 하단 → **화면 세로 중앙** 배치, ④ 종목이 바뀔 때마다 **성별도 교대**
   (SkiErg=남 시작, 이후 남↔여 교대; 러닝 브릿지는 다음 종목의 선수와 동일 성별).
@@ -83,10 +96,11 @@
 | AC-10 | (rev 2) 실루엣이 모바일 화면 세로 **중앙**에 위치하고, 인물 높이가 뷰포트의 **약 40–55%** (목표 ~50%)를 차지한다 | manual (browser, 375px) | PASS |
 | AC-11 | (rev 3, AC-3 대체) 레이어는 `mix-blend-mode: screen` + opacity 0.6 — 어두운 배경에서 선명하게 보이되 밝은 본문 텍스트 대비 ≥ 4.5:1 유지 | CSS 검사 + 대비 산술 | Pending |
 | AC-12 | (rev 3, AC-4 대체) 정지/스크롤 구분 없이 항상 역동적으로 재생 (`--ws-swap` 0.9s 고정) | CSS 검사 | Pending |
+| AC-13 | (rev 4) 실루엣이 스틱 피겨가 아닌 **근육질 필드 실루엣**으로 렌더링된다: 테이퍼드 사지(어깨/이두·대퇴/종아리 볼륨), 측면 토르소(가슴·등·둔근 윤곽), 주먹·발 형상 포함. 씬 구성·성별 교대·색·블렌드는 rev 2~3과 동일 유지 | manual (demo + browser) + 기하 검증 | Pending |
 
 ## Approval
 
 - Mode: STANDARD_BUNDLE_IN_PLAN
 - Standard ledger: docs/features/scroll-workout-silhouettes/PLAN.md#approval-bundle
 - High decision: N/A
-- User message: 2026-07-11, "승인 — 구현 진행" (rev 1 번들); 2026-07-11, "승인 — 구현 진행" (rev 2 번들, AskUserQuestion 응답); 2026-07-11, "좋아. 스크롤중 역동 + 선명하게 배포해줘" (rev 3 — 요구+승인+배포 지시 동시)
+- User message: 2026-07-11, "승인 — 구현 진행" (rev 1 번들); 2026-07-11, "승인 — 구현 진행" (rev 2 번들, AskUserQuestion 응답); 2026-07-11, "좋아. 스크롤중 역동 + 선명하게 배포해줘" (rev 3 — 요구+승인+배포 지시 동시); 2026-07-11, "실루엣이 너무 화장실 사인 figure 같아. 진짜 fit한 운동선수와 같은 figure 실루엣으로 만들어줘" (rev 4 — 요구+승인; 배포는 데모 확인 후 별도)

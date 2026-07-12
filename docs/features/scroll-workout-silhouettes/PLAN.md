@@ -2,11 +2,11 @@
 
 - Feature ID: scroll-workout-silhouettes
 - Risk: Standard
-- Bundle ID: scroll-workout-silhouettes-R3
-- PLAN Revision: 3
-- SPEC: docs/features/scroll-workout-silhouettes/SPEC.md (rev 3, APPROVED)
+- Bundle ID: scroll-workout-silhouettes-R4
+- PLAN Revision: 4
+- SPEC: docs/features/scroll-workout-silhouettes/SPEC.md (rev 4, APPROVED)
 - Status: IN_PROGRESS
-- Base Branch/Commit: feat/scroll-workout-silhouettes @ 13ba737 (rev 1은 main 반영·배포 완료)
+- Base Branch/Commit: feat/scroll-workout-silhouettes @ ea331e0 (rev 1~3은 main 반영·배포 완료)
 
 ## Baseline
 
@@ -42,7 +42,8 @@
 | S1 | 스크롤 진행에 따라 남녀 실루엣 쌍이 8종목을 레이스 순서로 수행하는 오버레이 표시 (크로스페이드 + 종목 모션 포함) | AC-1, AC-2, AC-6, AC-7, AC-8 | components/WorkoutSilhouettes.tsx (신규), components/ScrollEnergy.tsx, app/globals.css, app/page.tsx | 없음 | npm run build + browser(375px) 확인 | 신규 파일 삭제 + 3개 파일 diff revert | DONE |
 | S2 | 스크롤 중/정지 상태 연출(역동↔은은), reduced-motion 숨김, 320/375/390/768/desktop 가독성·성능 QA | AC-3, AC-4, AC-5 | app/globals.css (미세 조정), components/WorkoutSilhouettes.tsx | 없음 | browser 5개 폭 + reduced-motion 에뮬레이션 + console 확인 | CSS 조정 revert | DONE (시각 확인 항목은 TEST_EVIDENCE의 환경 제약 참고) |
 | S3 | (rev 2) 단독 실루엣으로 전환: 씬당 1명 + 종목별 성별 교대(브릿지 포함), viewBox 재구성으로 인물 확대(~50% 목표), 화면 세로 중앙 배치, 데모 아티팩트 갱신 | AC-9, AC-10 (+AC-1~8 회귀 유지) | components/WorkoutSilhouettes.tsx, app/globals.css | 없음 | npm run build + browser 기하/씬 매핑 검사 + 데모 재생성 | rev 1 커밋(f3b01ca 상태)으로 두 파일 revert | DONE |
-| S4 | (rev 3) 선명 모드: screen 블렌드 + opacity 0.6, 항상 역동(0.9s 고정, 상태 구분 제거), 데모 갱신 후 main 배포 | AC-11, AC-12 | app/globals.css | 없음 | npm run build + browser CSS 검사 + 대비 산술 | globals.css 해당 블록 revert | DRAFT |
+| S4 | (rev 3) 선명 모드: screen 블렌드 + opacity 0.6, 항상 역동(0.9s 고정, 상태 구분 제거), 데모 갱신 후 main 배포 | AC-11, AC-12 | app/globals.css | 없음 | npm run build + browser CSS 검사 + 대비 산술 | globals.css 해당 블록 revert | DONE |
+| S5 | (rev 4) 스틱 피겨 → 근육질 필드 실루엣: 파라메트릭 근육 아웃라인 생성기(스켈레톤 재사용, 테이퍼드 사지/토르소/주먹/발/포니테일), CSS를 stroke→fill로 전환, 데모 갱신 | AC-13 (+AC-1~12 회귀 유지) | components/WorkoutSilhouettes.tsx, app/globals.css | 없음 | npm run build + browser 기하 검증(씬별 bbox·접지) + 검증 워크플로우 + 데모 갱신 | 두 파일을 ea331e0 상태로 revert | DRAFT |
 
 ## Dependencies / Assumptions
 
@@ -59,12 +60,13 @@
 ## Approval Bundle
 
 - Mode: STANDARD_BUNDLE
-- Bundle ID: scroll-workout-silhouettes-R3
-- SPEC Revision approved: 3
-- PLAN Revision approved: 3
+- Bundle ID: scroll-workout-silhouettes-R4
+- SPEC Revision approved: 4
+- PLAN Revision approved: 4
 - Decision: APPROVED
-- User message: 2026-07-11, "좋아. 스크롤중 역동 + 선명하게 배포해줘" — rev 2 리뷰 승인 +
-  rev 3 요구·승인·main 배포 지시를 한 메시지로 (R2: 2026-07-11 "승인 — 구현 진행")
+- User message: 2026-07-11, "실루엣이 너무 화장실 사인 figure 같아. 진짜 fit한 운동선수와 같은
+  figure 실루엣으로 만들어줘" — rev 4 요구+승인 (배포는 데모 확인 후 별도 지시).
+  (R3: 2026-07-11 "좋아. 스크롤중 역동 + 선명하게 배포해줘"; R2: 2026-07-11 "승인 — 구현 진행")
 - Prior bundle R1: SPEC rev 1 + PLAN rev 1 — 2026-07-11 "승인 — 구현 진행"으로 승인,
   Human 리뷰 APPROVED 후 main 반영·배포 완료 (13ba737)
 - Constraints / expiry: push는 `origin/feat/scroll-workout-silhouettes`까지만 (AUTO_AT_CLOSE).
