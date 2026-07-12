@@ -188,3 +188,14 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 - Publish Intent/Target: AUTO_AT_CLOSE + Human 명시 승인 → origin/main (ff-merge, Netlify prod deploy 유발); feature 브랜치는 선행 push 완료
 - Decisions / Risks / Follow-ups: 레퍼런스 스톡 이미지는 라이선스상 미사용(스타일 참조만, 전부 오리지널 기하). 체형·속도 조정은 LimbSpec/TORSO 상수·--ws-swap 한 줄. Netlify 배포 결과 확인 필요.
 - Next: DONE + Human (배포·실기기 체감 확인)
+
+## 2026-07-11T23:30:00Z — scroll-workout-silhouettes (rev 5)
+- Stage: WF:CLOSE  - Role/Runtime: Main Driver / claude-main (observed claude-opus-4-8)  - Risk: Standard
+- Implementation: 9657f91..98442ef (+ review packet bbcdf5e)
+- Review: 5-에이전트 시각 QA(realism) + Human 데모 아티팩트 검토 — QA verdict "몸통이 실제 solid 인체로 읽힘", findings(목-어깨 접합) 13건 반영
+- Human Decision: APPROVED (2026-07-11 "다좋아. git push origin main")
+- Summary: rev 4 조립형(사지가 얇은 몸통에 점으로 pin-join) 느낌 제거 → 통합 인체 실루엣. 어깨 flare+허리+골반 토르소, 삼각근/골반 mass에서 사지 기원, headNeckPath 재작성(목<어깨 폭 + 승모근 flare로 "머리 꽂힌" 노치 제거). 포즈별 목 조정(SkiErg/Rowing/Sled Pull/Lunge). 씬/성별 교대/블렌드 유지.
+- Validation: TEST_EVIDENCE rev 5 섹션 — build/lint PASS, 195 path 엄격 파서 invalid 0, 20프레임 bbox/NaN/console 0
+- Publish Intent/Target: AUTO_AT_CLOSE + Human 명시 승인 → origin/main (ff-merge, Netlify prod deploy 유발); feature 브랜치 선행 push 완료
+- Decisions / Risks / Follow-ups: 체형·목두께·머리크기·속도는 TORSO/LimbSpec/deltR/pelvR/headR/--ws-swap 상수로 즉시 조정. 포니테일은 화면 고정 방향(nice-to-have).
+- Next: DONE + Human (배포·실기기 체감 확인)
