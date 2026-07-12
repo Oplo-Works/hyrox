@@ -166,23 +166,24 @@ const ARM_F: LimbSpec = {
   loMinus: [2.4, 2.6, 1.9, 1.5],
 };
 
-/* 토르소(측면): front = 가슴 쪽, back = 등/둔근 쪽. t: 0=목 → 1=엉덩이 */
+/* 토르소(측면): front = 가슴/복부 쪽, back = 승모근/등/둔근 쪽. t: 0=목 → 1=골반.
+   0.13 부근 어깨 flare, 0.55 부근 허리 잘록, 0.85 부근 둔근 — 실제 상체 실루엣. */
 const TORSO_M = {
-  front: [[0, 3.2], [0.25, 4.9], [0.6, 3.8], [1, 3.3]] as WidthProfile,
-  back: [[0, 3.0], [0.25, 4.6], [0.6, 3.5], [0.92, 5.2], [1, 4.3]] as WidthProfile,
+  front: [[0, 2.4], [0.14, 5.6], [0.33, 5.0], [0.57, 3.5], [0.82, 3.9], [1, 3.5]] as WidthProfile,
+  back: [[0, 2.6], [0.14, 6.0], [0.33, 5.1], [0.57, 3.7], [0.85, 5.7], [1, 4.7]] as WidthProfile,
 };
 const TORSO_F = {
-  front: [[0, 2.8], [0.3, 4.6], [0.62, 3.2], [1, 3.4]] as WidthProfile,
-  back: [[0, 2.6], [0.25, 4.0], [0.6, 3.1], [0.9, 5.5], [1, 4.5]] as WidthProfile,
+  front: [[0, 2.1], [0.15, 4.9], [0.35, 4.5], [0.6, 2.9], [0.82, 3.5], [1, 3.6]] as WidthProfile,
+  back: [[0, 2.3], [0.14, 5.0], [0.34, 4.3], [0.58, 3.0], [0.85, 5.9], [1, 4.9]] as WidthProfile,
 };
 
-/** 측면 토르소: 가슴·복부·둔근 윤곽의 닫힌 path */
+/** 측면 토르소: 어깨 flare·허리·둔근 윤곽의 닫힌 path */
 function torsoPath(neck: Pt, hip: Pt, female?: boolean): string {
   const prof = female ? TORSO_F : TORSO_M;
   const axis = unit(sub(hip, neck));
   let front = perp(axis);
   if (front[0] < 0) front = mul(front, -1); // 항상 +x(진행 방향)가 가슴
-  const STEPS = 6;
+  const STEPS = 12;
   const fPts: Pt[] = [];
   const bPts: Pt[] = [];
   for (let i = 0; i <= STEPS; i++) {
@@ -201,6 +202,11 @@ function torsoPath(neck: Pt, hip: Pt, female?: boolean): string {
     smoothSegment(bPts).slice(1) +
     ` Q ${fmt(neckCtrl)} ${fmt(fPts[0])} Z`
   );
+}
+
+/** 어깨 삼각근 + 골반 덩어리 — 사지가 몸통에서 자연스럽게 뻗어나오도록 뿌리를 감싼다. */
+function shoulderPt(neck: Pt, hip: Pt, female?: boolean): Pt {
+  return lerpPt(neck, hip, female ? 0.16 : 0.15);
 }
 
 /** 발 = 운동화 형태 (힐컵·밑창·토박스). 정강이에 수직, 진행 방향(+x) 우선. */
@@ -228,28 +234,36 @@ function footPath(knee: Pt, ankle: Pt, female?: boolean): string {
 }
 
 /**
- * 두상 유닛: 두개골·이마·턱·후두·목덜미·승모근을 한 닫힌 path로.
- * 원+막대 대신 실제 인체 옆모습 윤곽 — 아래쪽은 토르소 안으로 겹쳐 이어붙는다.
+ * 두상 + 목 + 승모근을 한 닫힌 path로. 목은 어깨보다 가늘게(throat/nape 노치 보장),
+ * 아래는 승모근이 어깨 폭까지 오목하게 flare해 토르소와 union — 목이 "꽂힌" 느낌 제거.
  */
-function headNeckPath(neck: Pt, head: Pt, r: number, female?: boolean): string {
-  const u = unit(sub(head, neck)); // 정수리 방향
+function headNeckPath(neck: Pt, head: Pt, hip: Pt, r: number, female?: boolean): string {
+  const u = unit(sub(head, neck)); // 머리 축 (정수리 방향)
   let f = perp(u); // 얼굴 방향 (+x 우선)
   if (f[0] < 0) f = mul(f, -1);
+  const prof = female ? TORSO_F : TORSO_M;
+  const sh = shoulderPt(neck, hip, female);
+  let bf = perp(unit(sub(hip, neck))); // 몸통 기준 앞쪽
+  if (bf[0] < 0) bf = mul(bf, -1);
+  const shFront = widthAt(prof.front, 0.17) * 0.94;
+  const shBack = widthAt(prof.back, 0.17) * 0.94;
   const P = (fx: number, ux: number): Pt => add(add(head, mul(f, fx * r)), mul(u, ux * r));
-  const crown = P(0, 1.05);
-  const brow = P(0.98, 0.15);
-  const chin = P(female ? 0.7 : 0.78, female ? -0.78 : -0.85);
-  const jawN = add(neck, mul(f, female ? 2.2 : 2.6));
-  const baseF = add(lerpPt(neck, head, -0.12), mul(f, female ? 2.2 : 2.6));
-  const baseB = sub(lerpPt(neck, head, -0.15), mul(f, female ? 3.2 : 3.9));
-  const nape = P(-0.72, -0.55);
+  const crown = P(0, 1.02);
+  const brow = P(0.82, 0.2);
+  const chin = P(0.7, female ? -0.82 : -0.88);
+  const throat = add(neck, mul(f, female ? 1.9 : 2.2)); // 가는 목 앞
+  const clavF = add(sh, mul(bf, shFront)); // 앞 어깨(넓음)
+  const trapB = sub(sh, mul(bf, shBack)); // 뒤 어깨/승모근 밑(넓음)
+  const nape = add(sub(neck, mul(f, female ? 1.5 : 1.8)), mul(u, 0.15 * r)); // 가는 목 뒤
+  const occ = P(-0.92, 0.28); // 후두
   return (
     `M ${fmt(crown)}` +
-    ` Q ${fmt(P(0.95, 0.72))} ${fmt(brow)}` + // 이마
-    ` Q ${fmt(P(1.02, -0.45))} ${fmt(chin)}` + // 얼굴→턱
-    ` L ${fmt(jawN)} L ${fmt(baseF)} L ${fmt(baseB)}` + // 목 앞→토르소 안
-    ` Q ${fmt(sub(add(neck, mul(u, 2)), mul(f, female ? 3.4 : 4.1)))} ${fmt(nape)}` + // 승모근→목덜미
-    ` Q ${fmt(P(-1.08, 0.4))} ${fmt(crown)} Z` // 후두→정수리
+    ` Q ${fmt(P(0.92, 0.72))} ${fmt(brow)}` + // 이마
+    ` Q ${fmt(P(1.02, -0.5))} ${fmt(chin)}` + // 얼굴 → 턱
+    ` Q ${fmt(throat)} ${fmt(clavF)}` + // 목 앞(오목) → 앞 어깨
+    ` L ${fmt(trapB)}` + // 어깨 밑(토르소 안에 묻힘)
+    ` Q ${fmt(nape)} ${fmt(occ)}` + // 승모근(오목) → 목 뒤 → 후두
+    ` Q ${fmt(P(-1.0, 0.72))} ${fmt(crown)} Z` // 후두 → 정수리
   );
 }
 
@@ -262,25 +276,32 @@ function AthleteFigure({ pose, female }: { pose: Pose; female?: boolean }) {
   const headR = female ? 5.5 : 5.9;
   const fistR = female ? 2.2 : 2.5;
   const [hx, hy] = head;
+  // 사지는 목이 아니라 어깨/골반에서 뻗어나온다
+  const sh = shoulderPt(neck, hip, female);
+  const deltR = female ? 3.0 : 3.4;
+  const pelvR = female ? 4.4 : 4.6;
   return (
     <>
       <g className="ws-back">
-        <path d={limbPath(neck, armB[0], armB[1], armSpec)} className="ws-limb" />
+        <path d={limbPath(sh, armB[0], armB[1], armSpec)} className="ws-limb" />
         <circle cx={armB[1][0]} cy={armB[1][1]} r={fistR} className="ws-limb" />
       </g>
       <g className="ws-back">
         <path d={limbPath(hip, legB[0], legB[1], legSpec)} className="ws-limb" />
         <path d={footPath(legB[0], legB[1], female)} className="ws-limb" />
       </g>
+      {/* 골반·삼각근 덩어리 (몸통과 union) */}
+      <circle cx={hip[0]} cy={hip[1]} r={pelvR} className="ws-torso" />
       <path d={torsoPath(neck, hip, female)} className="ws-torso" />
-      <path d={headNeckPath(neck, head, headR, female)} className="ws-head" />
+      <circle cx={sh[0]} cy={sh[1]} r={deltR} className="ws-torso" />
+      <path d={headNeckPath(neck, head, hip, headR, female)} className="ws-head" />
       {female && (
         <path
           d={`M ${r1(hx + 0.5)} ${r1(hy - 5.4)} Q ${r1(hx - 8.5)} ${r1(hy - 5.2)} ${r1(hx - 11)} ${r1(hy + 0.5)} Q ${r1(hx - 12.5)} ${r1(hy + 4.5)} ${r1(hx - 15)} ${r1(hy + 8)} Q ${r1(hx - 11)} ${r1(hy + 4)} ${r1(hx - 9.2)} ${r1(hy + 1)} Q ${r1(hx - 7)} ${r1(hy - 1.8)} ${r1(hx + 0.5)} ${r1(hy - 2.4)} Z`}
           className="ws-hair"
         />
       )}
-      <path d={limbPath(neck, armF[0], armF[1], armSpec)} className="ws-limb" />
+      <path d={limbPath(sh, armF[0], armF[1], armSpec)} className="ws-limb" />
       <circle cx={armF[1][0]} cy={armF[1][1]} r={fistR} className="ws-limb" />
       <path d={limbPath(hip, legF[0], legF[1], legSpec)} className="ws-limb" />
       <path d={footPath(legF[0], legF[1], female)} className="ws-limb" />
@@ -317,8 +338,8 @@ const STATIONS: SceneDef[] = [
     id: "skierg",
     a: {
       pose: {
-        head: [59, 38], neck: [58, 50], hip: [52, 84],
-        armF: [[70, 31], [79, 21]], armB: [[65, 30], [74, 19]],
+        head: [54, 34], neck: [58, 50], hip: [52, 84],
+        armF: [[71, 32], [80, 21]], armB: [[66, 31], [75, 19]],
         legF: [[55, 102], [53, 121]], legB: [[48, 103], [44, 121]],
       },
       gear: (
@@ -390,7 +411,7 @@ const STATIONS: SceneDef[] = [
     },
     b: {
       pose: {
-        head: [31, 54], neck: [36, 64], hip: [47, 94],
+        head: [34, 52], neck: [37, 64], hip: [47, 94],
         armF: [[41, 76], [55, 88]], armB: [[39, 80], [53, 91]],
         legF: [[56, 105], [64, 121]], legB: [[48, 107], [41, 121]],
       },
@@ -441,7 +462,7 @@ const STATIONS: SceneDef[] = [
     },
     b: {
       pose: {
-        head: [26, 79], neck: [30, 88], hip: [37, 112],
+        head: [22, 74], neck: [30, 88], hip: [37, 112],
         armF: [[36, 99], [43, 101]], armB: [[34, 101], [41, 103]],
         legF: [[58, 108], [80, 113]], legB: [[56, 110], [78, 115]],
       },
@@ -492,7 +513,7 @@ const STATIONS: SceneDef[] = [
     id: "lunge",
     a: {
       pose: {
-        head: [56, 52], neck: [54, 65], hip: [55, 101],
+        head: [55, 56], neck: [54, 65], hip: [55, 101],
         armF: [[63, 73], [68, 66]], armB: [[45, 73], [40, 66]],
         legF: [[68, 104], [66, 121]], legB: [[44, 114], [31, 120]],
       },
@@ -500,7 +521,7 @@ const STATIONS: SceneDef[] = [
     },
     b: {
       pose: {
-        head: [56, 36], neck: [54, 49], hip: [54, 84],
+        head: [55, 40], neck: [54, 49], hip: [54, 84],
         armF: [[63, 57], [68, 50]], armB: [[45, 57], [40, 50]],
         legF: [[63, 102], [66, 121]], legB: [[46, 106], [34, 119]],
       },
