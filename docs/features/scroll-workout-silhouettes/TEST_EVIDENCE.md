@@ -1,6 +1,28 @@
 # Test Evidence: scroll-workout-silhouettes
 
-- Overall Result: PASS (rev 1~4 기계 검증 전 항목 PASS; rev 4는 headless 스크린샷 시각 검증 포함, 최종 미관 판단은 데모 아티팩트로 Human 수행)
+- Overall Result: PASS (rev 1~5 기계 검증 전 항목 PASS; rev 5는 5-에이전트 시각 QA + headless 스크린샷 반복, 최종 미관 판단은 데모 아티팩트로 Human 수행)
+
+## rev 5 (2026-07-11) — 통합 인체 실루엣 (조립형 → 실제 사람 형태)
+
+- 사용자 피드백 "figure가 너무 엉성해 → 실제 사람 모양의 실루엣". 근본 원인: 사지가 얇은 몸통에
+  점(point)으로 pin-join되어 "조립형"으로 읽힘. 재구축: 어깨 flare+허리+골반 토르소, 삼각근/골반
+  덩어리에서 사지 기원, headNeckPath 재작성(목<어깨 폭, 승모근 flare로 노치 제거).
+
+| Timestamp UTC | Target | Command | Result | AC IDs | Notes |
+|---|---|---|---|---|---|
+| 2026-07-11T23:xxZ | working tree | `npm run build` | PASS | AC-7 | 경고/에러 0 |
+| 2026-07-11T23:xxZ | dev server(:3000) | browser JS: 20프레임 bbox + NaN + console error | PASS | AC-13 | 20/20 viewBox 내, NaN 0, console error 0 |
+| 2026-07-11T23:xxZ | node | 엄격 SVG path 파서 195개 | PASS | AC-13 | invalid 0 |
+| 2026-07-11T23:xxZ | headless Chrome | 10씬×2프레임 그리드(review8/9) + 4씬 확대(zoom5/6) | PASS | AC-13 | 통합 몸통·어깨·골반, 목-승모근 접합 확인 |
+| 2026-07-11T23:xxZ | 데모 아티팩트 | rev5-real-human-form 갱신 | PASS | AC-13 | Human 미관 검토용 |
+
+### rev 5 시각 QA 워크플로우 (5 에이전트, PNG 판독)
+
+- realism verdict: 재구축 후 "몸통이 실제 solid 인체로 읽힘" — 남은 유일한 조립형 tell = **목·어깨
+  접합부**(nape/throat 노치, 직립 포즈에서 목이 승모근에 삼켜짐). findings 13건 반영:
+  headNeckPath 재작성으로 노치 제거 + 목 taper 보장; 포즈별 목 길이 조정(SkiErg A 머리를 팔
+  밖으로, Rowing B 목 길이 확보, Sled Pull B 머리 기울기 완화, Lunge 목 단축).
+- 재검증: build PASS, 195 path invalid 0, 20프레임 bbox/NaN/console 0.
 - Implementation Base: bdaae284e5ae75a4679baf07e5a7c7f9164a9ccd (rev 1) / 13ba737 (rev 2) / ea331e0 (rev 4)
 - Implementation Head: f3b01ca (rev 1) / 4a62808 (rev 2) / 72e546a (rev 3) / rev 4는 커밋 예정 working tree
 - Verified Target: 각 rev의 implementation commit (commit 직전 working tree 검증, 이후 파일 무변경)
