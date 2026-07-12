@@ -199,3 +199,14 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 - Publish Intent/Target: AUTO_AT_CLOSE + Human 명시 승인 → origin/main (ff-merge, Netlify prod deploy 유발); feature 브랜치 선행 push 완료
 - Decisions / Risks / Follow-ups: 체형·목두께·머리크기·속도는 TORSO/LimbSpec/deltR/pelvR/headR/--ws-swap 상수로 즉시 조정. 포니테일은 화면 고정 방향(nice-to-have).
 - Next: DONE + Human (배포·실기기 체감 확인)
+
+## 2026-07-12T01:05:00Z — scroll-workout-silhouettes (rev 6)
+- Stage: WF:CLOSE  - Role/Runtime: Main Driver / Claude Code (observed claude-fable-5)  - Risk: Standard
+- Implementation: 6dd91ff..24c8fcb (+ review packet d0e6c5d)
+- Review: 기계 검증(JS 기하·씬 셀렉터·computed style) + Human 데모 아티팩트 검토 (rev6-pictogram-demo)
+- Human Decision: APPROVED (2026-07-12 "git push origin main")
+- Summary: rev 5 근육 실루엣 → 라인 픽토그램 (사용자 레퍼런스 이미지 = 머티리얼 심볼 스타일 운동 아이콘). 균일 두께 라운드 스트로크 사지·몸통(남 5.4/여 4.8, LINE_W SVG 속성 단일 원본) + 분리된 점 머리(HEAD_GAP inset — SkiErg B 겹침 -1.29 발견·수정, 전 프레임 최소 gap 1.15). 손·발·근육·포니테일 제거(유니섹스, 성별 교대는 색+선 두께). 포즈·씬·기어·블렌드·0.9s 교차 유지.
+- Validation: TEST_EVIDENCE rev 6 섹션 — build/lint PASS, computed style(색·두께·캡) PASS, 씬 셀렉터 매핑 전수 PASS, 20프레임 head-gap PASS, console 0 error. 스크린샷/rAF는 Browser pane hidden으로 NOT_RUN(환경 제약) — JS 검증 + 데모 아티팩트로 대체.
+- Publish Intent/Target: AUTO_AT_CLOSE + Human 명시 승인 → origin/main (ff-merge, Netlify prod deploy 유발) + origin/feat/scroll-workout-silhouettes-rev6
+- Decisions / Risks / Follow-ups: 레퍼런스 아이콘(구글 머티리얼 심볼)은 스타일 문법만 참조 — path 복제 없음, 자산 전부 오리지널. 스타일 조정은 LINE_W/HEAD_R/HEAD_GAP/--ws-swap 상수. Netlify 배포 결과 확인 필요.
+- Next: DONE + Human (배포·실기기 체감 확인)

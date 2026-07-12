@@ -5,7 +5,7 @@
 - Bundle ID: scroll-workout-silhouettes-R6
 - PLAN Revision: 6
 - SPEC: docs/features/scroll-workout-silhouettes/SPEC.md (rev 6, APPROVED)
-- Status: IN_PROGRESS
+- Status: DONE
 - Base Branch/Commit: feat/scroll-workout-silhouettes-rev6 @ 6dd91ff (rev 1~5는 main 반영·배포 완료)
 
 ## Baseline
@@ -44,7 +44,7 @@
 | S3 | (rev 2) 단독 실루엣으로 전환: 씬당 1명 + 종목별 성별 교대(브릿지 포함), viewBox 재구성으로 인물 확대(~50% 목표), 화면 세로 중앙 배치, 데모 아티팩트 갱신 | AC-9, AC-10 (+AC-1~8 회귀 유지) | components/WorkoutSilhouettes.tsx, app/globals.css | 없음 | npm run build + browser 기하/씬 매핑 검사 + 데모 재생성 | rev 1 커밋(f3b01ca 상태)으로 두 파일 revert | DONE |
 | S4 | (rev 3) 선명 모드: screen 블렌드 + opacity 0.6, 항상 역동(0.9s 고정, 상태 구분 제거), 데모 갱신 후 main 배포 | AC-11, AC-12 | app/globals.css | 없음 | npm run build + browser CSS 검사 + 대비 산술 | globals.css 해당 블록 revert | DONE |
 | S5 | (rev 4) 스틱 피겨 → 근육질 필드 실루엣: 파라메트릭 근육 아웃라인 생성기(스켈레톤 재사용, 테이퍼드 사지/토르소/주먹/발/포니테일), CSS를 stroke→fill로 전환, 데모 갱신 | AC-13 (+AC-1~12 회귀 유지) | components/WorkoutSilhouettes.tsx, app/globals.css | 없음 | npm run build + browser 기하 검증(씬별 bbox·접지) + 검증 워크플로우 + 데모 갱신 | 두 파일을 ea331e0 상태로 revert | DONE (rev 5 통합 인체 재구축 포함, 98442ef로 main 반영 — HANDOFF rev 5 참조) |
-| S6 | (rev 6) 근육 실루엣 → 라인 픽토그램(레퍼런스 이미지 스타일): 렌더러를 라운드 스트로크 폴리라인 + 점 머리로 교체(HEAD_GAP 분리 보장, LINE_W SVG 속성 단일 원본), 근육 생성기·포니테일 제거, CSS fill→stroke 전환, 데모 아티팩트 신규 발행 | AC-14 (+AC-1~12 회귀 유지) | components/WorkoutSilhouettes.tsx, app/globals.css | 없음 | npm run build + npm run lint + browser 기하 검증(20프레임 head-gap·씬 셀렉터 매핑·computed style) + 데모 아티팩트 | 두 파일을 6dd91ff 상태로 revert | IN_PROGRESS |
+| S6 | (rev 6) 근육 실루엣 → 라인 픽토그램(레퍼런스 이미지 스타일): 렌더러를 라운드 스트로크 폴리라인 + 점 머리로 교체(HEAD_GAP 분리 보장, LINE_W SVG 속성 단일 원본), 근육 생성기·포니테일 제거, CSS fill→stroke 전환, 데모 아티팩트 신규 발행 | AC-14 (+AC-1~12 회귀 유지) | components/WorkoutSilhouettes.tsx, app/globals.css | 없음 | npm run build + npm run lint + browser 기하 검증(20프레임 head-gap·씬 셀렉터 매핑·computed style) + 데모 아티팩트 | 두 파일을 6dd91ff 상태로 revert | DONE |
 
 ## Dependencies / Assumptions
 
