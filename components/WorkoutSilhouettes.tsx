@@ -2,16 +2,18 @@ import type { ReactNode } from "react";
 
 /**
  * WorkoutSilhouettes — 스크롤 진행에 따라 HYROX 8개 스테이션을 레이스 순서대로
- * 수행하는 단독 실루엣 배경 레이어. 순수 장식(aria-hidden, pointer-events 없음).
+ * 수행하는 단독 피겨 배경 레이어. 순수 장식(aria-hidden, pointer-events 없음).
  *
- * - 모든 실루엣은 직접 그린 오리지널 픽토그램 스타일 SVG (공식 자산 미사용).
- * - rev 4: 스틱 피겨 → 필드(filled) 근육질 애슬리트 실루엣. 스켈레톤 포즈에서
- *   파라메트릭 근육 아웃라인(테이퍼드 사지·측면 토르소·주먹·발·포니테일)을 생성한다.
- *   폭 프로필 상수(ARM_W/LEG_W/TORSO_W)만 조정하면 체형이 바뀐다.
+ * - 모든 피겨는 직접 그린 오리지널 픽토그램 스타일 SVG (공식 자산 미사용).
+ * - rev 6: 필드 근육 실루엣 → **라인 픽토그램** (머티리얼 심볼 운동 아이콘 스타일,
+ *   사용자 레퍼런스 이미지 기준): 균일 두께의 라운드 스트로크 사지·몸통 + 몸에서
+ *   분리된 점(dot) 머리. 손·발·근육·머리카락 디테일 없음. 두께·머리 크기는
+ *   LINE_W/HEAD_R 상수와 globals.css `--ws-line`으로 조정.
  * - 각 종목은 2개 프레임(A/B)으로 구성되며 CSS가 교차 재생해 동작을 표현한다.
  * - 씬마다 선수는 한 명이고 종목이 바뀔 때마다 성별이 교대한다 (rev 2):
  *   짝수 스테이션=남(오렌지), 홀수=여(퍼플). 러닝 브릿지는 다음 종목과 동일 성별
  *   (run-m/run-f 두 씬을 두고 globals.css가 data-station 짝홀로 선택).
+ *   rev 6부터 픽토그램은 유니섹스 — 성별 교대는 색(+미세한 선 두께)으로만 표현.
  * - 활성 스테이션은 ScrollEnergy가 body[data-station] / body[data-bridge]로 지정하고,
  *   표시·전환·모션은 전부 globals.css에서 처리한다 (이 컴포넌트는 서버 컴포넌트).
  *
@@ -24,7 +26,7 @@ interface Pose {
   head: Pt;
   neck: Pt;
   hip: Pt;
-  /** [팔꿈치, 손] — F는 앞(진하게), B는 뒤(흐리게) */
+  /** [팔꿈치, 손] — F는 앞, B는 뒤 */
   armF: readonly [Pt, Pt];
   armB: readonly [Pt, Pt];
   /** [무릎, 발] */
@@ -43,268 +45,43 @@ interface SceneDef {
   b: FrameDef;
 }
 
-/* ── 벡터/경로 유틸 ─────────────────────────────────────────────── */
+/* ── 렌더 유틸 ─────────────────────────────────────────────────── */
 
-const sub = (a: Pt, b: Pt): Pt => [a[0] - b[0], a[1] - b[1]];
-const add = (a: Pt, b: Pt): Pt => [a[0] + b[0], a[1] + b[1]];
-const mul = (a: Pt, s: number): Pt => [a[0] * s, a[1] * s];
-const lerpPt = (a: Pt, b: Pt, t: number): Pt => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
-const unit = (a: Pt): Pt => {
-  const l = Math.hypot(a[0], a[1]) || 1;
-  return [a[0] / l, a[1] / l];
-};
-const perp = (a: Pt): Pt => [-a[1], a[0]];
 const r1 = (n: number) => Math.round(n * 10) / 10;
 const fmt = (p: Pt) => `${r1(p[0])} ${r1(p[1])}`;
+const lerpPt = (a: Pt, b: Pt, t: number): Pt => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
 
-/** [t, width] 키프레임을 t(0~1)에서 선형 보간 */
-type WidthProfile = readonly (readonly [number, number])[];
-function widthAt(profile: WidthProfile, t: number): number {
-  if (t <= profile[0][0]) return profile[0][1];
-  for (let i = 1; i < profile.length; i++) {
-    const [t1, w1] = profile[i];
-    const [t0, w0] = profile[i - 1];
-    if (t <= t1) return w0 + ((w1 - w0) * (t - t0)) / (t1 - t0);
-  }
-  return profile[profile.length - 1][1];
-}
+/** 머리(점) 크기 — 픽토그램 비례: 머리 지름 ≈ 선 두께의 약 2.2배 */
+const HEAD_R = { m: 5.8, f: 5.4 };
+/** 사지·몸통 선 두께 — Scene이 SVG 속성으로 지정 (CSS는 색·캡만 담당) */
+export const LINE_W = { m: 5.4, f: 4.8 };
+/** 머리(점)와 몸통 스트로크 사이 최소 간격 — 분리된 점 머리 특징 보장 */
+const HEAD_GAP = 1.2;
 
-/** 촘촘한 점열을 midpoint-Q 방식으로 부드럽게 잇는다 (시작·끝점은 정확히 통과) */
-function smoothSegment(pts: Pt[]): string {
-  if (pts.length < 3) return pts.map((p, i) => `${i === 0 ? "M" : "L"} ${fmt(p)}`).join(" ");
-  let d = `M ${fmt(pts[0])}`;
-  for (let i = 1; i < pts.length - 1; i++) {
-    d += ` Q ${fmt(pts[i])} ${fmt(lerpPt(pts[i], pts[i + 1], 0.5))}`;
-  }
-  d += ` L ${fmt(pts[pts.length - 1])}`;
-  return d;
-}
-
-/** 원을 path 서브패스로 (여러 도형을 한 <path>에 합치기 위함).
- *  sweep=0: 캡슐 아웃라인과 같은 음(-) 방향 — nonzero fill에서 겹침이 구멍이 되지 않도록. */
-function circleSub(c: Pt, r: number): string {
-  return ` M ${r1(c[0] + r)} ${r1(c[1])} A ${r1(r)} ${r1(r)} 0 1 0 ${r1(c[0] - r)} ${r1(c[1])} A ${r1(r)} ${r1(r)} 0 1 0 ${r1(c[0] + r)} ${r1(c[1])} Z`;
-}
-
-/**
- * 직선 세그먼트 하나의 근육 캡슐 아웃라인(닫힌 서브패스).
- * 법선이 하나뿐이라 굽힘 자기교차가 원천적으로 없다.
- * wPlus/wMinus: +법선/−법선 쪽 폭 (t=0/⅓/⅔/1) — 비대칭 근육(종아리 후면, 대퇴 전면 등).
- * capA/capB: 끝 볼록 캡 크기 계수(0 = 평평).
- */
-type SegWidths = [number, number, number, number];
-function segOutline(a: Pt, b: Pt, wPlus: SegWidths, wMinus: SegWidths, capA: number, capB: number): string {
-  const dir = unit(sub(b, a));
-  const n = perp(dir);
-  const ts = [0, 1 / 3, 2 / 3, 1];
-  const centers = ts.map((t) => lerpPt(a, b, t));
-  const sideA = centers.map((c, i) => add(c, mul(n, wPlus[i])));
-  const sideB = centers.map((c, i) => sub(c, mul(n, wMinus[i]))).reverse();
-  const capW = (wPlus[3] + wMinus[3]) / 2;
-  const rootW = (wPlus[0] + wMinus[0]) / 2;
-  const capBCtrl = add(b, mul(dir, capW * capB));
-  const capACtrl = sub(a, mul(dir, rootW * capA));
-  // 주의: smoothSegment(sideB).slice(1)이 'M'만 제거하고 sideB[0] 좌표쌍을 그대로 내보내므로,
-  // 여기서는 명령어(+제어점)만 붙인다 — 끝점을 중복 출력하면 SVG 문법 오류가 된다.
-  const capBJoin = capB > 0 ? ` Q ${fmt(capBCtrl)}` : ` L`;
-  const capAJoin = capA > 0 ? ` Q ${fmt(capACtrl)} ${fmt(sideA[0])} Z` : ` L ${fmt(sideA[0])} Z`;
-  return smoothSegment(sideA) + capBJoin + smoothSegment(sideB).slice(1) + capAJoin;
-}
-
-/** 사지 한 종류의 비대칭 근육 스펙: 상/하 세그먼트 × +/− 법선 쪽 폭 4점 */
-interface LimbSpec {
-  upPlus: SegWidths;
-  upMinus: SegWidths;
-  loPlus: SegWidths;
-  loMinus: SegWidths;
-}
-
-/**
- * 2세그먼트 사지(root→joint→end): 상완/대퇴 캡슐 + 하완/하퇴 캡슐 + 관절 원.
- * 서브패스 3개가 같은 색으로 겹쳐 하나의 실루엣으로 합쳐진다 (굽힘 결함 없음).
- * 세그먼트가 아래(+y)를 향할 때 +법선 = 몸 뒤쪽(후면) — 종아리/햄스트링 볼록이 뒤로 간다.
- */
-function limbPath(root: Pt, joint: Pt, end: Pt, spec: LimbSpec): string {
-  const jointW = (spec.upPlus[3] + spec.upMinus[3]) / 2;
-  const upper = segOutline(root, joint, spec.upPlus, spec.upMinus, 1.1, 0);
-  const lower = segOutline(joint, end, spec.loPlus, spec.loMinus, 0, 0.35);
-  return upper + lower + circleSub(joint, jointW);
-}
-
-/** 단순 대칭 캡슐 */
-function capsulePath(a: Pt, b: Pt, wA: number, wB: number): string {
-  const m1 = wA + (wB - wA) / 3;
-  const m2 = wA + ((wB - wA) * 2) / 3;
-  const w: SegWidths = [wA, m1, m2, wB];
-  return segOutline(a, b, w, w, 0.9, 0.9);
-}
-
-/* ── 체형 스펙 (비대칭 근육: 아래로 향한 세그먼트 기준 +법선 = 후면) ── */
-
-const LEG_M: LimbSpec = {
-  upPlus: [5.0, 5.6, 4.4, 3.7], // 둔근→햄스트링 (후면)
-  upMinus: [5.0, 6.0, 4.7, 3.7], // 대퇴 quad (전면)
-  loPlus: [3.7, 5.0, 3.6, 1.9], // 종아리 (후면 볼록)
-  loMinus: [3.7, 3.3, 2.5, 1.9], // 정강이 (직선)
-};
-const ARM_M: LimbSpec = {
-  upPlus: [4.2, 4.4, 3.4, 2.9], // 삼두
-  upMinus: [4.2, 4.7, 3.5, 2.9], // 이두
-  loPlus: [2.9, 3.4, 2.4, 1.7], // 신전근
-  loMinus: [2.9, 3.2, 2.2, 1.7], // 굴곡근
-};
-const LEG_F: LimbSpec = {
-  upPlus: [4.7, 5.3, 4.1, 3.4],
-  upMinus: [4.7, 5.6, 4.3, 3.4],
-  loPlus: [3.4, 4.6, 3.3, 1.8],
-  loMinus: [3.4, 3.0, 2.3, 1.8],
-};
-const ARM_F: LimbSpec = {
-  upPlus: [3.5, 3.7, 2.9, 2.4],
-  upMinus: [3.5, 3.9, 2.9, 2.4],
-  loPlus: [2.4, 2.8, 2.0, 1.5],
-  loMinus: [2.4, 2.6, 1.9, 1.5],
-};
-
-/* 토르소(측면): front = 가슴/복부 쪽, back = 승모근/등/둔근 쪽. t: 0=목 → 1=골반.
-   0.13 부근 어깨 flare, 0.55 부근 허리 잘록, 0.85 부근 둔근 — 실제 상체 실루엣. */
-const TORSO_M = {
-  front: [[0, 2.4], [0.14, 5.6], [0.33, 5.0], [0.57, 3.5], [0.82, 3.9], [1, 3.5]] as WidthProfile,
-  back: [[0, 2.6], [0.14, 6.0], [0.33, 5.1], [0.57, 3.7], [0.85, 5.7], [1, 4.7]] as WidthProfile,
-};
-const TORSO_F = {
-  front: [[0, 2.1], [0.15, 4.9], [0.35, 4.5], [0.6, 2.9], [0.82, 3.5], [1, 3.6]] as WidthProfile,
-  back: [[0, 2.3], [0.14, 5.0], [0.34, 4.3], [0.58, 3.0], [0.85, 5.9], [1, 4.9]] as WidthProfile,
-};
-
-/** 측면 토르소: 어깨 flare·허리·둔근 윤곽의 닫힌 path */
-function torsoPath(neck: Pt, hip: Pt, female?: boolean): string {
-  const prof = female ? TORSO_F : TORSO_M;
-  const axis = unit(sub(hip, neck));
-  let front = perp(axis);
-  if (front[0] < 0) front = mul(front, -1); // 항상 +x(진행 방향)가 가슴
-  const STEPS = 12;
-  const fPts: Pt[] = [];
-  const bPts: Pt[] = [];
-  for (let i = 0; i <= STEPS; i++) {
-    const t = i / STEPS;
-    const c = lerpPt(neck, hip, t);
-    fPts.push(add(c, mul(front, widthAt(prof.front, t))));
-    bPts.push(sub(c, mul(front, widthAt(prof.back, t))));
-  }
-  bPts.reverse();
-  const crotchCtrl = add(hip, mul(axis, 3.4));
-  const neckCtrl = sub(neck, mul(axis, 2.2));
-  // smoothSegment(bPts).slice(1)이 bPts[0] 좌표쌍을 내보내므로 제어점까지만 붙인다 (문법 오류 방지)
-  return (
-    smoothSegment(fPts) +
-    ` Q ${fmt(crotchCtrl)}` +
-    smoothSegment(bPts).slice(1) +
-    ` Q ${fmt(neckCtrl)} ${fmt(fPts[0])} Z`
-  );
-}
-
-/** 어깨 삼각근 + 골반 덩어리 — 사지가 몸통에서 자연스럽게 뻗어나오도록 뿌리를 감싼다. */
-function shoulderPt(neck: Pt, hip: Pt, female?: boolean): Pt {
-  return lerpPt(neck, hip, female ? 0.16 : 0.15);
-}
-
-/** 발 = 운동화 형태 (힐컵·밑창·토박스). 정강이에 수직, 진행 방향(+x) 우선. */
-function footPath(knee: Pt, ankle: Pt, female?: boolean): string {
-  const shin = unit(sub(ankle, knee));
-  let dir = perp(shin);
-  // 발끝은 항상 진행 방향(+x); 수직 경계에선 위쪽(-y, 로잉 풋플레이트) 우선
-  if (dir[0] < 0 || (dir[0] === 0 && dir[1] > 0)) dir = mul(dir, -1);
-  let gd = perp(dir); // 밑창이 향하는 쪽 (화면 아래 우선)
-  if (gd[1] < 0) gd = mul(gd, -1);
-  const L = female ? 6.2 : 6.8;
-  const H = female ? 2.4 : 2.7;
-  const P = (dx: number, dy: number): Pt => add(add(ankle, mul(dir, dx)), mul(gd, dy));
-  const pts: Pt[] = [
-    P(-0.6, -0.6), // 발목 위 (다리 안으로)
-    P(-2.3, 0.6), // 힐컵 뒤
-    P(-1.9, H), // 힐 밑창
-    P(L * 0.45, H + 0.2), // 밑창 중간
-    P(L, H * 0.8), // 토 밑창
-    P(L + 0.8, H * 0.3), // 토 팁
-    P(L * 0.7, -0.1), // 토박스 위
-    P(1.6, -0.8), // 발등
-  ];
-  return smoothSegment([...pts, pts[0]]) + " Z";
-}
-
-/**
- * 두상 + 목 + 승모근을 한 닫힌 path로. 목은 어깨보다 가늘게(throat/nape 노치 보장),
- * 아래는 승모근이 어깨 폭까지 오목하게 flare해 토르소와 union — 목이 "꽂힌" 느낌 제거.
- */
-function headNeckPath(neck: Pt, head: Pt, hip: Pt, r: number, female?: boolean): string {
-  const u = unit(sub(head, neck)); // 머리 축 (정수리 방향)
-  let f = perp(u); // 얼굴 방향 (+x 우선)
-  if (f[0] < 0) f = mul(f, -1);
-  const prof = female ? TORSO_F : TORSO_M;
-  const sh = shoulderPt(neck, hip, female);
-  let bf = perp(unit(sub(hip, neck))); // 몸통 기준 앞쪽
-  if (bf[0] < 0) bf = mul(bf, -1);
-  const shFront = widthAt(prof.front, 0.17) * 0.94;
-  const shBack = widthAt(prof.back, 0.17) * 0.94;
-  const P = (fx: number, ux: number): Pt => add(add(head, mul(f, fx * r)), mul(u, ux * r));
-  const crown = P(0, 1.02);
-  const brow = P(0.82, 0.2);
-  const chin = P(0.7, female ? -0.82 : -0.88);
-  const throat = add(neck, mul(f, female ? 1.9 : 2.2)); // 가는 목 앞
-  const clavF = add(sh, mul(bf, shFront)); // 앞 어깨(넓음)
-  const trapB = sub(sh, mul(bf, shBack)); // 뒤 어깨/승모근 밑(넓음)
-  const nape = add(sub(neck, mul(f, female ? 1.5 : 1.8)), mul(u, 0.15 * r)); // 가는 목 뒤
-  const occ = P(-0.92, 0.28); // 후두
-  return (
-    `M ${fmt(crown)}` +
-    ` Q ${fmt(P(0.92, 0.72))} ${fmt(brow)}` + // 이마
-    ` Q ${fmt(P(1.02, -0.5))} ${fmt(chin)}` + // 얼굴 → 턱
-    ` Q ${fmt(throat)} ${fmt(clavF)}` + // 목 앞(오목) → 앞 어깨
-    ` L ${fmt(trapB)}` + // 어깨 밑(토르소 안에 묻힘)
-    ` Q ${fmt(nape)} ${fmt(occ)}` + // 승모근(오목) → 목 뒤 → 후두
-    ` Q ${fmt(P(-1.0, 0.72))} ${fmt(crown)} Z` // 후두 → 정수리
-  );
-}
-
-/* ── 근육질 애슬리트 피겨 ──────────────────────────────────────── */
+/* ── 라인 픽토그램 피겨 (머티리얼 운동 아이콘 스타일) ───────────── */
 
 function AthleteFigure({ pose, female }: { pose: Pose; female?: boolean }) {
   const { head, neck, hip, armF, armB, legF, legB } = pose;
-  const armSpec = female ? ARM_F : ARM_M;
-  const legSpec = female ? LEG_F : LEG_M;
-  const headR = female ? 5.5 : 5.9;
-  const fistR = female ? 2.2 : 2.5;
-  const [hx, hy] = head;
-  // 사지는 목이 아니라 어깨/골반에서 뻗어나온다
-  const sh = shoulderPt(neck, hip, female);
-  const deltR = female ? 3.0 : 3.4;
-  const pelvR = female ? 4.4 : 4.6;
+  const headR = female ? HEAD_R.f : HEAD_R.m;
+  const lineW = female ? LINE_W.f : LINE_W.m;
+  // 팔은 목 바로 아래 어깨 지점에서 시작 (몸통 축 12% 지점)
+  const sh = lerpPt(neck, hip, 0.12);
+  // 머리가 목에 가까운 웅크림 포즈에서도 점 머리가 몸통과 겹치지 않도록,
+  // 필요한 만큼만 몸통 시작점을 골반 쪽으로 내린다
+  const axisLen = Math.hypot(hip[0] - neck[0], hip[1] - neck[1]) || 1;
+  const headDist = Math.hypot(head[0] - neck[0], head[1] - neck[1]);
+  const inset = Math.max(0, headR + lineW / 2 + HEAD_GAP - headDist);
+  const torsoTop = lerpPt(neck, hip, Math.min(inset / axisLen, 0.3));
+  const limb = (root: Pt, seg: readonly [Pt, Pt]) =>
+    `M ${fmt(root)} L ${fmt(seg[0])} L ${fmt(seg[1])}`;
   return (
     <>
-      <g className="ws-back">
-        <path d={limbPath(sh, armB[0], armB[1], armSpec)} className="ws-limb" />
-        <circle cx={armB[1][0]} cy={armB[1][1]} r={fistR} className="ws-limb" />
-      </g>
-      <g className="ws-back">
-        <path d={limbPath(hip, legB[0], legB[1], legSpec)} className="ws-limb" />
-        <path d={footPath(legB[0], legB[1], female)} className="ws-limb" />
-      </g>
-      {/* 골반·삼각근 덩어리 (몸통과 union) */}
-      <circle cx={hip[0]} cy={hip[1]} r={pelvR} className="ws-torso" />
-      <path d={torsoPath(neck, hip, female)} className="ws-torso" />
-      <circle cx={sh[0]} cy={sh[1]} r={deltR} className="ws-torso" />
-      <path d={headNeckPath(neck, head, hip, headR, female)} className="ws-head" />
-      {female && (
-        <path
-          d={`M ${r1(hx + 0.5)} ${r1(hy - 5.4)} Q ${r1(hx - 8.5)} ${r1(hy - 5.2)} ${r1(hx - 11)} ${r1(hy + 0.5)} Q ${r1(hx - 12.5)} ${r1(hy + 4.5)} ${r1(hx - 15)} ${r1(hy + 8)} Q ${r1(hx - 11)} ${r1(hy + 4)} ${r1(hx - 9.2)} ${r1(hy + 1)} Q ${r1(hx - 7)} ${r1(hy - 1.8)} ${r1(hx + 0.5)} ${r1(hy - 2.4)} Z`}
-          className="ws-hair"
-        />
-      )}
-      <path d={limbPath(sh, armF[0], armF[1], armSpec)} className="ws-limb" />
-      <circle cx={armF[1][0]} cy={armF[1][1]} r={fistR} className="ws-limb" />
-      <path d={limbPath(hip, legF[0], legF[1], legSpec)} className="ws-limb" />
-      <path d={footPath(legF[0], legF[1], female)} className="ws-limb" />
+      <path d={limb(sh, armB)} className="ws-limb" />
+      <path d={limb(hip, legB)} className="ws-limb" />
+      <path d={`M ${fmt(torsoTop)} L ${fmt(hip)}`} className="ws-torso" />
+      <circle cx={head[0]} cy={head[1]} r={headR} className="ws-head" />
+      <path d={limb(sh, armF)} className="ws-limb" />
+      <path d={limb(hip, legF)} className="ws-limb" />
     </>
   );
 }
@@ -580,7 +357,10 @@ function Frames({ def, female }: { def: SceneDef; female?: boolean }) {
 function Scene({ label, def, female }: { label: string; def: SceneDef; female?: boolean }) {
   return (
     <g className={`ws-scene ws-scene--${label}`}>
-      <g className={`ws-athlete ${female ? "ws-athlete--f" : "ws-athlete--m"}`}>
+      <g
+        className={`ws-athlete ${female ? "ws-athlete--f" : "ws-athlete--m"}`}
+        strokeWidth={female ? LINE_W.f : LINE_W.m}
+      >
         <Frames def={def} female={female} />
       </g>
     </g>

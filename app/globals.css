@@ -376,24 +376,18 @@ body[data-scrolling="true"] main > section::before {
   opacity: 0.5;
 }
 
-/* rev 4: 필드 근육 실루엣 — 아웃라인은 컴포넌트가 기하로 생성, 여기선 fill만 */
-.ws-limb {
-  fill: currentColor;
-}
-
-.ws-back {
-  opacity: 0.5;
-}
-
+/* rev 6: 라인 픽토그램 (머티리얼 운동 아이콘 스타일) — 균일 두께 라운드
+   스트로크 사지·몸통 + 점 머리. 선 두께는 컴포넌트 LINE_W가 SVG 속성으로
+   지정한다 (머리-몸통 간격 계산과 원본 일치를 위해 CSS에서 지정하지 않음). */
+.ws-limb,
 .ws-torso {
-  fill: currentColor;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .ws-head {
-  fill: currentColor;
-}
-
-.ws-hair {
   fill: currentColor;
 }
 
@@ -426,6 +420,7 @@ body[data-scrolling="true"] main > section::before {
   color: var(--color-orange);
 }
 
+/* 픽토그램은 유니섹스 — 성별은 색 + 미세한 선 두께(컴포넌트 LINE_W)로만 구분 */
 .ws-athlete--f {
   color: var(--color-purple);
 }
@@ -468,8 +463,6 @@ body[data-station="7"]:not([data-bridge="true"]) .ws-scene--s7 {
   opacity: 0;
   animation: ws-swap-b var(--ws-swap, 3s) linear infinite;
 }
-
-/* (rev 4) 남녀 체형 구분은 컴포넌트의 폭 프로필 기하로 처리 — CSS 오버라이드 불필요 */
 
 @keyframes ws-swap-a {
   0%,
