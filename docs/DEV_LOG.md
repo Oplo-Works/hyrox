@@ -177,3 +177,14 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 - Publish Intent/Target: AUTO_AT_CLOSE + Human 명시 승인 → origin/main (ff-merge, Netlify prod deploy 유발) + origin/feat/scroll-workout-silhouettes
 - Decisions / Risks / Follow-ups: 어두운 글자 요소(CTA 버튼 라벨) 위 국소 대비 저하 가능 — 체감 확인 후 필요 시 opacity 조정. Netlify 배포 결과 확인 필요.
 - Next: DONE + Human (배포·체감 확인)
+
+## 2026-07-11T22:55:00Z — scroll-workout-silhouettes (rev 4)
+- Stage: WF:CLOSE  - Role/Runtime: Main Driver / claude-main (observed claude-sonnet-5)  - Risk: Standard
+- Implementation: ea331e0..6efd9ab (+ review packet c707d9a)
+- Review: 2단 멀티에이전트 검증 + Human 데모 아티팩트 검토 — ① 3-렌즈 코드 검증(blocker 2: SVG path 캡-조인 문법 오류로 인한 조용한 절단 렌더, 관절 원 winding; should-fix 2 — 전부 수정) ② 씬별 시각 QA 워크플로우(5 에이전트 PNG 판독, 10/10 reads-as-athlete, findings 15건 전부 반영)
+- Human Decision: APPROVED (2026-07-11 "main 에 push 해줘" — 데모 확인 후 배포 지시; rev 4 요구는 같은 날 "진짜 fit한 운동선수 같은 실루엣" + 레퍼런스 이미지 2장)
+- Summary: 스틱 피겨 → 포토-트레이스 스타일 파라메트릭 근육 실루엣. 비대칭 근육(종아리 후면/quad 전면/이두·삼두), 두상 유닛(턱/후두/승모근), 운동화 발, 측면 토르소(가슴/등/둔근), 포니테일. QA 반영: RUN 대측 보행, Row 캐치 재포즈+지면 정렬(+20y), Lunge 딥 런지, SkiErg 머리 가림 해소, Sled Pull 손-로프 가시화, Wall Ball 볼 궤적, Burpee 무릎 회수. 씬/가시성/성별 교대/블렌드(rev 3)는 유지.
+- Validation: TEST_EVIDENCE rev 4·4b 섹션 — build/lint PASS, 엄격 path 파서 195개 invalid 0, 20프레임 bbox PASS, 최종 그리드 스크린샷 확인, 데모 아티팩트 갱신(rev4b-photo-traced)
+- Publish Intent/Target: AUTO_AT_CLOSE + Human 명시 승인 → origin/main (ff-merge, Netlify prod deploy 유발); feature 브랜치는 선행 push 완료
+- Decisions / Risks / Follow-ups: 레퍼런스 스톡 이미지는 라이선스상 미사용(스타일 참조만, 전부 오리지널 기하). 체형·속도 조정은 LimbSpec/TORSO 상수·--ws-swap 한 줄. Netlify 배포 결과 확인 필요.
+- Next: DONE + Human (배포·실기기 체감 확인)
