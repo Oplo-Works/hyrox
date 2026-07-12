@@ -2,10 +2,19 @@
 
 - Feature ID: scroll-workout-silhouettes
 - Risk: Standard
-- Bundle ID: scroll-workout-silhouettes-R4
-- SPEC Revision: 4
+- Bundle ID: scroll-workout-silhouettes-R6
+- SPEC Revision: 6
 - Status: APPROVED
 - Last Updated: 2026-07-11
+- Revision note (rev 6, 사용자 요청 "background 에 운동하는 figure 를 여기 첨부한 image 에 있는
+  figure 와 똑같은 디자인으로 바꿔줘" — 첨부: 주간 트레이닝 플랜 그래픽, 머티리얼 심볼 운동
+  아이콘 스타일 오렌지 라인 픽토그램): rev 5의 필드 근육 실루엣 렌더링을 **라인 픽토그램**으로
+  교체 — ① 사지·몸통 = 균일 두께 라운드 스트로크(cap/join round, 남 5.4/여 4.8, 컴포넌트
+  LINE_W가 SVG 속성으로 지정), ② 머리 = 몸통에서 분리된 채워진 점(HEAD_GAP 로직으로 전
+  프레임 간격 보장), ③ 손·발·근육·포니테일 디테일 제거(레퍼런스는 유니섹스 — 성별 교대는
+  색 + 미세 선 두께로만 표현). 스켈레톤 포즈 데이터·씬 구성·성별 색 교대·기어·블렌드·0.9s
+  교차는 전부 유지. 레퍼런스 이미지의 아이콘 자체(구글 머티리얼 심볼)는 복제하지 않고 스타일
+  문법만 적용 — 자산은 전부 오리지널. 신규 AC-14.
 - Revision note (rev 4, 사용자 요청 "실루엣이 너무 화장실 사인 figure 같아. 진짜 fit한 운동선수
   같은 figure 실루엣으로"): 스틱 피겨(선 스트로크 + 원 머리) 렌더링을 **필드(filled) 근육질
   애슬리트 실루엣**으로 교체 — 올림픽 픽토그램 스타일. 2프레임 교차·씬 전환·성별 교대·색
@@ -102,11 +111,12 @@
 | AC-10 | (rev 2) 실루엣이 모바일 화면 세로 **중앙**에 위치하고, 인물 높이가 뷰포트의 **약 40–55%** (목표 ~50%)를 차지한다 | manual (browser, 375px) | PASS |
 | AC-11 | (rev 3, AC-3 대체) 레이어는 `mix-blend-mode: screen` + opacity 0.6 — 어두운 배경에서 선명하게 보이되 밝은 본문 텍스트 대비 ≥ 4.5:1 유지 | CSS 검사 + 대비 산술 | Pending |
 | AC-12 | (rev 3, AC-4 대체) 정지/스크롤 구분 없이 항상 역동적으로 재생 (`--ws-swap` 0.9s 고정) | CSS 검사 | Pending |
-| AC-13 | (rev 4) 실루엣이 스틱 피겨가 아닌 **근육질 필드 실루엣**으로 렌더링된다: 테이퍼드 사지(어깨/이두·대퇴/종아리 볼륨), 측면 토르소(가슴·등·둔근 윤곽), 주먹·발 형상 포함. 씬 구성·성별 교대·색·블렌드는 rev 2~3과 동일 유지 | manual (demo + browser) + 기하 검증 | Pending |
+| AC-13 | (rev 4) 실루엣이 스틱 피겨가 아닌 **근육질 필드 실루엣**으로 렌더링된다: 테이퍼드 사지(어깨/이두·대퇴/종아리 볼륨), 측면 토르소(가슴·등·둔근 윤곽), 주먹·발 형상 포함. 씬 구성·성별 교대·색·블렌드는 rev 2~3과 동일 유지 | manual (demo + browser) + 기하 검증 | SUPERSEDED (rev 6, AC-14로 대체) |
+| AC-14 | (rev 6) 피겨가 레퍼런스 이미지의 **라인 픽토그램 스타일**로 렌더링된다: 균일 두께 라운드 스트로크 사지·몸통 + 몸통과 분리된 점 머리(전 20프레임 gap > 0), 손·발·근육·머리카락 디테일 없음. 씬 구성·성별 색 교대·기어·블렌드·0.9s 교차는 유지 | 기하 검증(JS) + CSS 검사 + 데모 아티팩트 Human 검토 | Pending |
 
 ## Approval
 
 - Mode: STANDARD_BUNDLE_IN_PLAN
 - Standard ledger: docs/features/scroll-workout-silhouettes/PLAN.md#approval-bundle
 - High decision: N/A
-- User message: 2026-07-11, "승인 — 구현 진행" (rev 1 번들); 2026-07-11, "승인 — 구현 진행" (rev 2 번들, AskUserQuestion 응답); 2026-07-11, "좋아. 스크롤중 역동 + 선명하게 배포해줘" (rev 3 — 요구+승인+배포 지시 동시); 2026-07-11, "실루엣이 너무 화장실 사인 figure 같아. 진짜 fit한 운동선수와 같은 figure 실루엣으로 만들어줘" (rev 4 — 요구+승인; 배포는 데모 확인 후 별도)
+- User message: 2026-07-11, "승인 — 구현 진행" (rev 1 번들); 2026-07-11, "승인 — 구현 진행" (rev 2 번들, AskUserQuestion 응답); 2026-07-11, "좋아. 스크롤중 역동 + 선명하게 배포해줘" (rev 3 — 요구+승인+배포 지시 동시); 2026-07-11, "실루엣이 너무 화장실 사인 figure 같아. 진짜 fit한 운동선수와 같은 figure 실루엣으로 만들어줘" (rev 4 — 요구+승인; 배포는 데모 확인 후 별도); 2026-07-11, "background 에 운동하는 figure 를 여기 첨부한 image 에 있는 figure 와 똑같은 디자인으로 바꿔줘" + 레퍼런스 이미지 첨부 (rev 6 — 요구+승인; 배포는 데모 확인 후 별도)

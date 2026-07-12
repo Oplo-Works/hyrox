@@ -1,6 +1,30 @@
 # Test Evidence: scroll-workout-silhouettes
 
-- Overall Result: PASS (rev 1~5 기계 검증 전 항목 PASS; rev 5는 5-에이전트 시각 QA + headless 스크린샷 반복, 최종 미관 판단은 데모 아티팩트로 Human 수행)
+- Overall Result: PASS (rev 1~6 기계 검증 전 항목 PASS; rev 6 최종 미관 판단은 데모 아티팩트로 Human 수행)
+
+## rev 6 (2026-07-11) — 근육 실루엣 → 라인 픽토그램 (AC-14)
+
+- 사용자 레퍼런스 이미지(주간 트레이닝 플랜 그래픽의 머티리얼 심볼 스타일 운동 아이콘)에 맞춰
+  렌더러 교체: 균일 두께 라운드 스트로크 폴리라인(팔 2, 다리 2, 몸통 1) + 분리된 점 머리.
+  포즈·씬·성별 색 교대·기어·블렌드·0.9s 교차 유지. 포니테일·주먹·운동화·근육 생성기 제거.
+
+| Timestamp UTC | Target | Command | Result | AC IDs | Notes |
+|---|---|---|---|---|---|
+| 2026-07-12T00:xxZ | working tree | `npm run build` | PASS | AC-7 | 경고/에러 0 (수정 전·후 2회) |
+| 2026-07-12T00:xxZ | working tree | `npm run lint` | PASS | AC-7 | warnings/errors 0 |
+| 2026-07-12T00:xxZ | dev server(:3000) | browser JS: computed style 검사 (stroke/fill/cap/두께/색) | PASS | AC-14, AC-8 | 남 오렌지 5.4px·여 퍼플 4.8px round cap, 머리 fill, ws-hair 0개, 씬 10/프레임 20/사지 80 |
+| 2026-07-12T00:xxZ | dev server(:3000) | browser JS: 씬 셀렉터 매핑 전수 (station 0~7 + bridge 짝/홀) | PASS | AC-1, AC-2, AC-9 회귀 | 각 상태에서 정확히 해당 씬 1개만 매칭, 브릿지 run-m/run-f 교대 정상 |
+| 2026-07-12T00:xxZ | dev server(:3000) | browser JS: 20프레임 head-torso gap 검증 | PASS | AC-14 | 초기 1건 겹침(SkiErg B, -1.29) → HEAD_GAP 로직 추가 후 전 프레임 최소 gap 1.15 |
+| 2026-07-12T00:xxZ | 데모 아티팩트 | rev6-pictogram-demo 발행 (10씬 애니메이션) | PASS | AC-14 | Human 미관 검토용 — 사이트 렌더 SVG 그대로 추출 |
+| 2026-07-12T00:xxZ | dev server(:3000) | 스크린샷/rAF 기반 검증 | NOT_RUN | — | Browser pane visibilityState=hidden으로 렌더러 프레임 정지(rAF·스크린샷 불가) — 환경 제약. 대체: 위 JS 기하·셀렉터 검증 + 데모 아티팩트 |
+
+### rev 6 구현 노트
+
+- 선 두께 원본을 컴포넌트 `LINE_W`(SVG 속성) 한 곳으로 통일 — CSS는 색·캡만 담당.
+  머리-몸통 분리는 `HEAD_GAP` 상수로 보장(머리가 목에 가까운 포즈에서만 몸통 시작점을
+  골반 쪽으로 필요한 만큼 inset).
+- AC-3~5(가독성 블렌드·reduced-motion)·AC-10(크기/배치)은 CSS 미변경으로 회귀 영향 없음.
+- 레퍼런스 아이콘(구글 머티리얼 심볼)은 스타일 문법만 참조 — path 복제 없음, 자산 전부 오리지널.
 
 ## rev 5 (2026-07-11) — 통합 인체 실루엣 (조립형 → 실제 사람 형태)
 
