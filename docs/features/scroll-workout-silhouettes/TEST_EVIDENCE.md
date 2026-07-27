@@ -1,6 +1,26 @@
 # Test Evidence: scroll-workout-silhouettes
 
-- Overall Result: PASS (rev 1~6 기계 검증 전 항목 PASS; rev 6 최종 미관 판단은 데모 아티팩트로 Human 수행)
+- Overall Result: PASS for rev 7 implementation scope; AC-5 actual media emulation NOT_RUN;
+  Human 모바일 미관 확인 대기
+
+## rev 7 (2026-07-27) — 참고 이미지 8종 기반 채움형 픽토그램 (AC-15)
+
+- 입력 이미지는 8개 동작의 포즈와 장비 구도 참고용으로만 사용했다. 사이트에는 원본 비트맵,
+  텍스트, 로고, 외부 SVG path를 포함하지 않았다.
+- 렌더러를 채움형 몸통 + 굵은 캡슐형 사지 + 짧은 발로 교체하고, 대형 장비는 인체 뒤,
+  Farmer's Carry/Sandbag 휴대 장비는 앞 레이어로 분리했다. 채움 면적 증가에 맞춰 screen
+  opacity를 0.32, 높이를 최대 54vh로 보정했다.
+
+| Timestamp EDT | Target | Command | Result | AC IDs | Notes |
+|---|---|---|---|---|---|
+| 2026-07-27 | working tree | `npm run build` | PASS | AC-7, AC-15 | Next.js production build, type/lint 포함, 경고/에러 0 |
+| 2026-07-27 | working tree | `npm run lint` | PASS | AC-7, AC-15 | ESLint warnings/errors 0 |
+| 2026-07-27 | working tree | `git diff --check` | PASS | AC-15 | whitespace error 0 (Windows line-ending 안내만 존재) |
+| 2026-07-27 | dev server `:3012` | Browser 390px station scroll visual check | PASS | AC-1, AC-2, AC-9, AC-15 | 10 scenes/20 frames, 8 station mapping 및 2-frame motion 유지 |
+| 2026-07-27 | dev server `:3012` | Browser 320×760 overflow/size check | PASS | AC-10, AC-15 | `scrollWidth <= innerWidth`, SVG 높이 54vh 이하 |
+| 2026-07-27 | dev server `:3012` | Browser console + CSS check | PASS | AC-6, AC-12, AC-15 | console warn/error 0, opacity 0.32 |
+| 2026-07-27 | dev server `:3012` | prefers-reduced-motion 실제 에뮬레이션 | NOT_RUN | AC-5 | Browser viewport는 지원하지만 media emulation API가 없어 CSS rule 존재만 확인; rev 7에서 해당 rule 미변경 |
+| 2026-07-27 | working tree | Independent read-only review (`gpt-5.6-sol`) | PASS | AC-15 | 1차 대비/크기/장비/문서 findings 반영 후 재검토, remaining findings 0 |
 
 ## rev 6 (2026-07-11) — 근육 실루엣 → 라인 픽토그램 (AC-14)
 

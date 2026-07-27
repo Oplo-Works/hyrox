@@ -344,17 +344,15 @@ body[data-scrolling="true"] main > section::before {
 }
 
 /* ── Workout silhouettes — 스크롤 연동 HYROX 스테이션 배경 ──────────
-   rev 3 (선명 모드): screen 블렌드 + 60% 불투명 — 어두운 배경 위에선
-   실루엣이 선명하게 빛나고, 밝은 본문 텍스트는 블렌드 특성상 그대로
-   남아 가독성을 지킨다 (텍스트 대비 ≥ 4.9:1, SPEC AC-11).
-   동작은 항상 역동(0.9s) — 정지/스크롤 구분 없음 (AC-12). */
+   rev 7: 채움형 픽토그램의 넓어진 면적을 보정해 screen 블렌드 강도를 32%로
+   낮춘다. 동작은 항상 역동(0.9s) — 정지/스크롤 구분 없음. */
 .workout-silhouettes {
   position: fixed;
   inset: 0;
   z-index: 30; /* scroll-energy(35)·StickyCTA(40)·Header(50) 아래 */
   pointer-events: none;
   overflow: hidden;
-  opacity: 0.6;
+  opacity: 0.32;
   mix-blend-mode: screen;
   --ws-swap: 0.9s; /* 2프레임 동작 교차 주기 — 항상 역동 */
 }
@@ -365,7 +363,7 @@ body[data-scrolling="true"] main > section::before {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  height: min(58vh, 104vw, 520px);
+  height: min(54vh, 104vw, 520px);
   width: auto;
 }
 
@@ -376,43 +374,52 @@ body[data-scrolling="true"] main > section::before {
   opacity: 0.5;
 }
 
-/* rev 6: 라인 픽토그램 (머티리얼 운동 아이콘 스타일) — 균일 두께 라운드
-   스트로크 사지·몸통 + 점 머리. 선 두께는 컴포넌트 LINE_W가 SVG 속성으로
-   지정한다 (머리-몸통 간격 계산과 원본 일치를 위해 CSS에서 지정하지 않음). */
+/* rev 7: 참고 이미지의 채움형 station pictogram 문법.
+   몸통은 넓은 어깨/좁은 허리의 면, 사지는 굵은 라운드 캡으로 렌더링한다. */
 .ws-limb,
-.ws-torso {
+.ws-foot {
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
+.ws-limb--back {
+  opacity: 0.72;
+}
+
+.ws-torso,
 .ws-head {
   fill: currentColor;
 }
 
 .ws-gear {
   stroke: currentColor;
-  stroke-width: 2.5;
+  stroke-width: 3.2;
   stroke-linecap: round;
   stroke-linejoin: round;
   fill: none;
-  opacity: 0.75;
+  opacity: 0.82;
 }
 
 .ws-gear--thin {
-  stroke-width: 1.5;
+  stroke-width: 1.8;
 }
 
-.ws-fill {
+.ws-fill,
+.ws-gear-solid {
   fill: currentColor;
 }
 
 .ws-bag {
+  fill: currentColor;
+  opacity: 0.78;
+}
+
+.ws-target {
+  fill: none;
   stroke: currentColor;
-  stroke-width: 7;
-  stroke-linecap: round;
-  opacity: 0.85; /* 어깨 위 샌드백이 팔·머리와 한 덩어리로 뭉쳐 보이지 않도록 */
+  stroke-width: 2.5;
 }
 
 /* 남 = 오렌지(주도), 여 = 퍼플(보조) — Nitro 색 위계 */
@@ -420,7 +427,7 @@ body[data-scrolling="true"] main > section::before {
   color: var(--color-orange);
 }
 
-/* 픽토그램은 유니섹스 — 성별은 색 + 미세한 선 두께(컴포넌트 LINE_W)로만 구분 */
+/* 픽토그램은 유니섹스 — 성별은 색 + 미세한 체형 차이로만 구분 */
 .ws-athlete--f {
   color: var(--color-purple);
 }

@@ -2,11 +2,11 @@
 
 - Feature ID: scroll-workout-silhouettes
 - Risk: Standard
-- Bundle ID: scroll-workout-silhouettes-R6
-- PLAN Revision: 6
-- SPEC: docs/features/scroll-workout-silhouettes/SPEC.md (rev 6, APPROVED)
+- Bundle ID: scroll-workout-silhouettes-R7
+- PLAN Revision: 7
+- SPEC: docs/features/scroll-workout-silhouettes/SPEC.md (rev 7, APPROVED)
 - Status: DONE
-- Base Branch/Commit: feat/scroll-workout-silhouettes-rev6 @ 6dd91ff (rev 1~5는 main 반영·배포 완료)
+- Base Branch/Commit: codex/scroll-pictograms-r7 @ abe1fa5 (rev 1~6는 main 반영·배포 완료)
 
 ## Baseline
 
@@ -18,9 +18,8 @@
 
 ## Design Notes (구현 방향)
 
-- **레이어 방식**: 섹션 배경(`hero-bg` 등)이 불투명하므로 "콘텐츠 뒤" 배치는 보이지 않는다.
-  기존 `.scroll-energy`와 동일하게 초저투명 fixed 오버레이(pointer-events: none)로 구현하되,
-  불투명도를 매우 낮게(정지 ≤0.06 / 스크롤 ≤0.12) 유지해 가독성을 보장한다.
+- **레이어 방식**: rev 1의 정지 ≤0.06/스크롤 ≤0.12 상태 구분은 rev 3에서 superseded.
+  rev 7 현재값은 채움 면적을 보정한 fixed screen overlay opacity 0.32이며, 최대 높이는 54vh다.
 - **스테이션 산출**: `ScrollEnergy`의 기존 rAF 핸들러에서
   `station = clamp(floor(progress * 8), 0, 7)`을 계산해 `body[data-station]`으로 노출.
   구간 내 위치(0~1)도 `--station-progress`로 노출해 러닝 브릿지(구간 앞 ~18%)와
@@ -28,12 +27,12 @@
 - **실루엣**: 종목별 남/여 각 1포즈(총 16) + 러닝 남/여(2) = 18개의 오리지널 SVG path.
   각 피겨는 2~3개 서브그룹(팔/몸통/기구 등)으로 나눠 CSS transform keyframes로
   종목 특유의 동작(스키에르그 풀다운, 슬레드 푸시 왕복, 로잉 슬라이드, 월볼 스쿼트+볼 상승 등)을 반복.
-- **상태 연동**: `body[data-scrolling="true"]`에서 불투명도·재생속도 상승,
-  정지 시 느린 루프 + 저불투명(사용자 선택: "은은하게 계속").
+- **상태 연동**: rev 1의 스크롤/정지 속도 차등은 rev 3에서 superseded. 현재는 상태와 무관하게
+  0.9s 2-frame 교차를 유지한다.
 - **색**: 남 실루엣 오렌지 틴트(주도), 여 실루엣 퍼플 틴트(보조). 마젠타는 사용하지 않거나
   그라데이션 내부에서만. 초록 미사용.
-- **접근성/성능**: `aria-hidden="true"`, `prefers-reduced-motion`에서 레이어 숨김,
-  비활성 스테이션 그룹은 `visibility: hidden` + `animation-play-state: paused`로 GPU 부하 제한.
+- **접근성/성능**: `aria-hidden="true"`, `prefers-reduced-motion`에서 레이어 숨김.
+  비활성 스테이션 그룹은 `visibility: hidden`; 별도 animation pause 규칙은 현재 없음.
 
 ## Slices
 
@@ -45,6 +44,7 @@
 | S4 | (rev 3) 선명 모드: screen 블렌드 + opacity 0.6, 항상 역동(0.9s 고정, 상태 구분 제거), 데모 갱신 후 main 배포 | AC-11, AC-12 | app/globals.css | 없음 | npm run build + browser CSS 검사 + 대비 산술 | globals.css 해당 블록 revert | DONE |
 | S5 | (rev 4) 스틱 피겨 → 근육질 필드 실루엣: 파라메트릭 근육 아웃라인 생성기(스켈레톤 재사용, 테이퍼드 사지/토르소/주먹/발/포니테일), CSS를 stroke→fill로 전환, 데모 갱신 | AC-13 (+AC-1~12 회귀 유지) | components/WorkoutSilhouettes.tsx, app/globals.css | 없음 | npm run build + browser 기하 검증(씬별 bbox·접지) + 검증 워크플로우 + 데모 갱신 | 두 파일을 ea331e0 상태로 revert | DONE (rev 5 통합 인체 재구축 포함, 98442ef로 main 반영 — HANDOFF rev 5 참조) |
 | S6 | (rev 6) 근육 실루엣 → 라인 픽토그램(레퍼런스 이미지 스타일): 렌더러를 라운드 스트로크 폴리라인 + 점 머리로 교체(HEAD_GAP 분리 보장, LINE_W SVG 속성 단일 원본), 근육 생성기·포니테일 제거, CSS fill→stroke 전환, 데모 아티팩트 신규 발행 | AC-14 (+AC-1~12 회귀 유지) | components/WorkoutSilhouettes.tsx, app/globals.css | 없음 | npm run build + npm run lint + browser 기하 검증(20프레임 head-gap·씬 셀렉터 매핑·computed style) + 데모 아티팩트 | 두 파일을 6dd91ff 상태로 revert | DONE |
+| S7 | (rev 7) 참고 이미지 8종 동작 구도 기반 채움형 오리지널 SVG: 면 몸통+굵은 사지+발, 대형 장비 뒤/휴대 장비 앞 레이어, Burpee/Sled Pull/Row/Lunge/Wall Ball 포즈 재작성, opacity 0.32·최대 54vh 가독성 보정 | AC-15 (+AC-1/2/6~10/12 회귀 유지; AC-5 실제 에뮬레이션 NOT_RUN) | components/WorkoutSilhouettes.tsx, app/globals.css | 없음 | npm run build + npm run lint + browser 320/390px + console/overflow 검사 | 두 파일을 abe1fa5 상태로 revert | DONE |
 
 ## Dependencies / Assumptions
 
@@ -61,15 +61,18 @@
 ## Approval Bundle
 
 - Mode: STANDARD_BUNDLE
-- Bundle ID: scroll-workout-silhouettes-R6
-- SPEC Revision approved: 6
-- PLAN Revision approved: 6
+- Bundle ID: scroll-workout-silhouettes-R7
+- SPEC Revision approved: 7
+- PLAN Revision approved: 7
 - Decision: APPROVED
-- User message: 2026-07-11, "background 에 운동하는 figure 를 여기 첨부한 image 에 있는 figure 와
+- User message: 2026-07-27, "스크롤시 운동 라인이 있는데, 픽토그램이 어설퍼서 바꿔야할거 같아.
+  첨부한 이미지의 8가지 운동 픽토그램을 따서 써줘봐" + 참고 이미지 첨부 — rev 7 요구+승인
+  (push/배포는 별도 승인).
+  2026-07-11, "background 에 운동하는 figure 를 여기 첨부한 image 에 있는 figure 와
   똑같은 디자인으로 바꿔줘" + 레퍼런스 이미지 첨부 — rev 6 요구+승인 (배포는 데모 확인 후 별도 지시).
   (R4/R5: 2026-07-11 "실루엣이 너무 화장실 사인 figure 같아…" / "figure가 너무 엉성해…" — main 반영·배포 완료)
   (R3: 2026-07-11 "좋아. 스크롤중 역동 + 선명하게 배포해줘"; R2: 2026-07-11 "승인 — 구현 진행")
 - Prior bundle R1: SPEC rev 1 + PLAN rev 1 — 2026-07-11 "승인 — 구현 진행"으로 승인,
   Human 리뷰 APPROVED 후 main 반영·배포 완료 (13ba737)
-- Constraints / expiry: push는 `origin/feat/scroll-workout-silhouettes`까지만 (AUTO_AT_CLOSE).
-  `main` merge/push는 Netlify prod deploy를 유발하므로 별도 승인 필요.
+- Constraints / expiry: rev 7은 local feature branch까지. push 및 `main` merge/push는 Netlify
+  production deploy를 유발하므로 별도 승인 필요.

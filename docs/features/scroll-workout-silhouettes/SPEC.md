@@ -2,10 +2,18 @@
 
 - Feature ID: scroll-workout-silhouettes
 - Risk: Standard
-- Bundle ID: scroll-workout-silhouettes-R6
-- SPEC Revision: 6
+- Bundle ID: scroll-workout-silhouettes-R7
+- SPEC Revision: 7
 - Status: APPROVED
-- Last Updated: 2026-07-11
+- Last Updated: 2026-07-27
+- Revision note (rev 7, 사용자 요청 "첨부한 이미지의 8가지 운동 픽토그램을 따서 써줘"):
+  rev 6의 얇은 라인 피겨를 사용자 제공 8-station 참고 이미지의 **채움형 운동 픽토그램 문법**으로
+  교체한다. ① 넓은 어깨·좁은 허리의 채움형 몸통, ② 굵은 라운드 캡 사지와 짧은 발,
+  ③ 장비를 인체 뒤 레이어에 배치, ④ SkiErg/Sled Push/Sled Pull/Burpee Broad Jump/Row/
+  Farmer's Carry/Sandbag Lunge/Wall Ball 포즈와 장비 구도를 참고 이미지 기준으로 재작성한다.
+  참고 이미지는 포즈 확인에만 사용하며 원본 비트맵/path/텍스트는 포함하지 않는다. 채움 면적 증가에
+  맞춰 screen 레이어 opacity를 0.60→0.32로 낮추고 높이를 최대 54vh로 제한해 모바일 본문
+  가독성을 유지한다. 신규 AC-15.
 - Revision note (rev 6, 사용자 요청 "background 에 운동하는 figure 를 여기 첨부한 image 에 있는
   figure 와 똑같은 디자인으로 바꿔줘" — 첨부: 주간 트레이닝 플랜 그래픽, 머티리얼 심볼 운동
   아이콘 스타일 오렌지 라인 픽토그램): rev 5의 필드 근육 실루엣 렌더링을 **라인 픽토그램**으로
@@ -103,7 +111,7 @@
 | AC-2 | 종목 구간 전환부에 러닝 실루엣 브릿지가 잠깐 표시된다 | manual (browser) | PASS |
 | AC-3 | 실루엣 유효 불투명도는 스크롤 중 ≤ 0.12, 정지 시 ≤ 0.06 수준으로 본문 텍스트 가독성을 해치지 않는다 (320/375/768/desktop에서 확인) | manual (browser + CSS 검사) | PASS |
 | AC-4 | 스크롤 중에는 종목 동작 애니메이션이 역동적으로 재생되고, 멈추면 옅어진 채 느린 루프를 유지한다 | manual (browser) | PASS |
-| AC-5 | `prefers-reduced-motion: reduce`에서 실루엣 레이어가 표시되지 않는다 | manual (emulation) | PASS |
+| AC-5 | `prefers-reduced-motion: reduce`에서 실루엣 레이어가 표시되지 않는다 | manual (emulation) | NOT_RUN (CSSOM rule verified; current Browser media emulation unavailable) |
 | AC-6 | 레이어는 `aria-hidden`·`pointer-events: none`이며 layout shift, 스크롤 성능 저하(jank), 콘솔 에러가 없다 | manual (browser + console) | PASS |
 | AC-7 | HYROX 공식 로고/이미지/워딩 미사용, 신규 dependency 없음, `npm run build` PASS | build + diff review | PASS |
 | AC-8 | 색상은 Nitro 위계 준수: 오렌지 주도 + 퍼플 보조 틴트, 마젠타는 그라데이션 내부에서만 사용 | diff review + browser | PASS |
@@ -113,10 +121,11 @@
 | AC-12 | (rev 3, AC-4 대체) 정지/스크롤 구분 없이 항상 역동적으로 재생 (`--ws-swap` 0.9s 고정) | CSS 검사 | Pending |
 | AC-13 | (rev 4) 실루엣이 스틱 피겨가 아닌 **근육질 필드 실루엣**으로 렌더링된다: 테이퍼드 사지(어깨/이두·대퇴/종아리 볼륨), 측면 토르소(가슴·등·둔근 윤곽), 주먹·발 형상 포함. 씬 구성·성별 교대·색·블렌드는 rev 2~3과 동일 유지 | manual (demo + browser) + 기하 검증 | SUPERSEDED (rev 6, AC-14로 대체) |
 | AC-14 | (rev 6) 피겨가 레퍼런스 이미지의 **라인 픽토그램 스타일**로 렌더링된다: 균일 두께 라운드 스트로크 사지·몸통 + 몸통과 분리된 점 머리(전 20프레임 gap > 0), 손·발·근육·머리카락 디테일 없음. 씬 구성·성별 색 교대·기어·블렌드·0.9s 교차는 유지 | 기하 검증(JS) + CSS 검사 + 데모 아티팩트 Human 검토 | PASS (기계 검증 + Human 2026-07-12 "git push origin main" 승인) |
+| AC-15 | (rev 7) 8개 스테이션이 참고 이미지의 동작 구도로 읽히는 **채움형 오리지널 SVG 픽토그램**으로 렌더링된다. 외부/공식 이미지·path는 포함하지 않고, 대형 장비는 뒤/휴대 장비는 앞 레이어에 배치하며, screen opacity 0.32와 최대 54vh에서 320/390px 가로 overflow·console error 없이 동작한다 | build + lint + browser(320/390px) + diff review | PASS |
 
 ## Approval
 
 - Mode: STANDARD_BUNDLE_IN_PLAN
 - Standard ledger: docs/features/scroll-workout-silhouettes/PLAN.md#approval-bundle
 - High decision: N/A
-- User message: 2026-07-11, "승인 — 구현 진행" (rev 1 번들); 2026-07-11, "승인 — 구현 진행" (rev 2 번들, AskUserQuestion 응답); 2026-07-11, "좋아. 스크롤중 역동 + 선명하게 배포해줘" (rev 3 — 요구+승인+배포 지시 동시); 2026-07-11, "실루엣이 너무 화장실 사인 figure 같아. 진짜 fit한 운동선수와 같은 figure 실루엣으로 만들어줘" (rev 4 — 요구+승인; 배포는 데모 확인 후 별도); 2026-07-11, "background 에 운동하는 figure 를 여기 첨부한 image 에 있는 figure 와 똑같은 디자인으로 바꿔줘" + 레퍼런스 이미지 첨부 (rev 6 — 요구+승인; 배포는 데모 확인 후 별도)
+- User message: 2026-07-27, "스크롤시 운동 라인이 있는데, 픽토그램이 어설퍼서 바꿔야할거 같아. 첨부한 이미지의 8가지 운동 픽토그램을 따서 써줘봐" + 참고 이미지 첨부 (rev 7 요구+승인; push/배포는 별도 승인); 2026-07-11, "승인 — 구현 진행" (rev 1 번들); 2026-07-11, "승인 — 구현 진행" (rev 2 번들, AskUserQuestion 응답); 2026-07-11, "좋아. 스크롤중 역동 + 선명하게 배포해줘" (rev 3 — 요구+승인+배포 지시 동시); 2026-07-11, "실루엣이 너무 화장실 사인 figure 같아. 진짜 fit한 운동선수와 같은 figure 실루엣으로 만들어줘" (rev 4 — 요구+승인; 배포는 데모 확인 후 별도); 2026-07-11, "background 에 운동하는 figure 를 여기 첨부한 image 에 있는 figure 와 똑같은 디자인으로 바꿔줘" + 레퍼런스 이미지 첨부 (rev 6 — 요구+승인; 배포는 데모 확인 후 별도)
