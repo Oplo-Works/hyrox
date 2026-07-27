@@ -3,41 +3,40 @@
 ## Identity
 
 - Status: NEEDS_APPROVAL
-- Task ID: scroll-workout-silhouettes (rev 7)
-- Stage: WF:REVIEW
+- Task ID: scroll-workout-silhouettes (rev 9 — 기능 철회)
+- Stage: WF:CLOSE (push/deploy 승인 대기)
 - Risk: Standard
 - Updated At: 2026-07-27
 
 ## Context Summary
 
-사용자 제공 8-station 참고 이미지의 동작 구도를 바탕으로 rev 6 라인 피겨를 채움형 오리지널
-SVG 픽토그램으로 교체했다. SkiErg, Sled Push, Sled Pull, Burpee Broad Jump, Row,
-Farmer's Carry, Sandbag Lunge, Wall Ball 8종 모두 넓은 어깨/좁은 허리의 면 몸통, 굵은
-라운드 사지, 짧은 발, 장비 구도로 재작성했다. 장비는 인체 뒤 레이어로 이동했고 채움 면적
-증가에 맞춰 screen opacity를 0.60에서 0.32로 낮추고 높이를 최대 54vh로 제한했다.
+배경 인물 실루엣 레이어를 사이트에서 **완전히 제거**했다.
 
-참고 이미지는 포즈 확인에만 사용했다. 원본 비트맵, 텍스트, 로고, 외부 SVG path는 저장소나
-사이트에 포함하지 않았다.
+rev 1~8에 걸쳐 렌더링 방식을 여섯 번 교체했으나(스틱 → 근육 실루엣 → 통합 인체 →
+라인 픽토그램 → 채움 픽토그램 → FK 리그 정지 픽토그램) Human 시각 승인에 도달하지 못했다.
+rev 8 후반부에는 헤드리스 Chrome 렌더링으로 결과를 직접 확인하며 8종목을 다시 그리고
+기구(SkiErg 플라이휠·썰매 원판·로워 레일/체인·케틀벨·샌드백·월볼 타깃)까지 넣었지만
+사용자 판단은 여전히 미달이었고, 2026-07-27 "그냥 background 에 이미지를 빼자"로 철회 지시가 내려왔다.
+
+제거 후에도 `ScrollEnergy`의 추상 장식(진행 바·레인·플래시)과 나머지 페이지는 그대로다.
 
 ## Ownership
 
-- Outgoing Role / Runtime: Main Driver / Codex (user requested `gpt-5.6-sol`; exact active model not independently observable)
-- Next Role: Human visual reviewer
-- Next Runtime ID: Unassigned
-- Next Action: `http://127.0.0.1:3012/`의 390px 미리보기에서 8종 스크롤 피규어 체감 확인
-- Reason: build/lint/browser 검증은 완료됐고 production push 전 미관 승인만 남음
+- Outgoing Role / Runtime: Main Driver / Claude Code (observed claude-opus-5)
+- Next Role: Human Approver
+- Next Action: `main` 반영 여부 결정 — 라이브 사이트에서 rev 6 실루엣이 사라지는 변경이다
+- Reason: build/lint/browser 검증 완료. push 자체와 Netlify 프로덕션 배포는 별도 승인 사항
 
 ## Git and Worktree
 
 - Branch / Worktree: `codex/scroll-pictograms-r7`
-- Base HEAD: `abe1fa5`
-- Implementation Base: `abe1fa5`
-- Implementation Head: `313e853`
-- Implementation Commits: `313e853` (`feat: refine workout station pictograms`)
-- Verified Target: `313e853`
-- Review Range: `abe1fa5..313e853`
-- Handoff Metadata State: SELF — resolve with `git log -1`
-- Worktree State: REPO_CLEAN after this metadata commit
+- Base HEAD: `b245d02`
+- Implementation Base: `b245d02`
+- Implementation Head: SELF — resolve with `git log -1`
+- Verified Target: implementation head
+- Review Range: `b245d02..HEAD`
+- Handoff Metadata State: SELF
+- Worktree State: REPO_CLEAN after this commit
 - Preserved User Changes: none
 
 ## Publish
@@ -47,35 +46,34 @@ Farmer's Carry, Sandbag Lunge, Wall Ball 8종 모두 넓은 어깨/좁은 허리
 - Expected Remote Head: N/A
 - Last Reconciled Remote Head: `origin/main@abe1fa5`
 - Push Result: NOT_ATTEMPTED
-- Note: `main` push triggers Netlify production deploy and requires separate explicit approval
+- Note: 이 브랜치에는 rev 7 커밋(`313e853`, `b245d02`)도 포함되어 있다. `main`에 반영하면
+  실루엣 레이어가 라이브에서 사라지고 Netlify 프로덕션 배포가 트리거된다 — 별도 승인 필요.
 
 ## Scope, Validation, and Decisions
 
-- Approved Inputs: SPEC rev 7 + PLAN rev 7
-- AC State: AC-15 PASS; AC-1/2/6~10/12 regression PASS; AC-5 actual emulation NOT_RUN (CSS unchanged)
-- Evidence: `docs/features/scroll-workout-silhouettes/TEST_EVIDENCE.md` rev 7
+- Approved Inputs: SPEC rev 9 + PLAN rev 9 (CANCELLED — 제거 슬라이스 S10만 실행)
+- AC State: AC-1~AC-21 전부 N/A (검증 대상 기능 제거됨)
 - Build: PASS (`npm run build`, Next.js 14.2.15)
-- Lint: PASS (`npm run lint`, warnings/errors 0)
-- Browser: PASS (320/390px, overflow false, console warn/error 0, 10 scenes/20 frames, max 54vh)
-- Image generation decision: imagegen skill routed this as an existing repo-native SVG/vector task, so direct
-  SVG editing was used instead of generating or embedding raster assets
-- Review: Independent read-only reviewer PASS after contrast/size/equipment/docs findings were addressed
-- Human Decision: mobile visual acceptance pending
+- Lint: PASS (`npm run lint`, 0 warnings/errors)
+- Browser: PASS (390px — 잔존 실루엣 마크업 0, `data-station`/`data-bridge` 제거 확인,
+  가로 overflow 없음 `scrollWidth 390 == innerWidth 390`)
+- 페이지 SSR HTML: 172KB → 62KB (실루엣 SVG 마크업 제거분)
+- Human Decision: 제거 자체는 사용자 지시로 확정. push/deploy는 미승인
 
 ## Files
 
-- `components/WorkoutSilhouettes.tsx`
-- `app/globals.css`
-- `docs/features/scroll-workout-silhouettes/SPEC.md`
-- `docs/features/scroll-workout-silhouettes/PLAN.md`
-- `docs/features/scroll-workout-silhouettes/TEST_EVIDENCE.md`
-- `docs/HANDOFF.md`
+- `app/page.tsx` — 레이어 마운트 해제
+- `app/globals.css` — `.workout-silhouettes` / `.ws-*` 블록 전체 삭제 (549 → 344줄)
+- `components/ScrollEnergy.tsx` — 스테이션 매핑 제거
+- `components/WorkoutSilhouettes.tsx` — **삭제**
+- `docs/features/scroll-workout-silhouettes/SPEC.md`, `PLAN.md`
+- `docs/HANDOFF.md`, `docs/DEV_LOG.md`
 
 ## Risks and Blockers
 
-- Open Findings: none from build/lint/browser checks
-- Known Risk: filled pictogram aesthetics are subjective; Human should review all 8 scroll stations before push
-- Blocker: none
-- Approval Needed: visual acceptance and any push/main/deploy instruction
+- Open Findings: 없음
+- Known Risk: `main` 반영 시 라이브 사이트에서 배경 실루엣이 사라진다 (의도된 변경이나 프로덕션 영향)
+- Blocker: 없음
+- Approval Needed: push 및 `main` merge/push(= Netlify 프로덕션 배포)
 - Do NOT: HYROX official assets/wording, magenta standalone, Don/Clinic/PT/medical content,
   payment/login/RSVP, secrets

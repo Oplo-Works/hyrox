@@ -210,3 +210,14 @@ NY/NJ Hybrid Race Club Website (MVP v0.1)
 - Publish Intent/Target: AUTO_AT_CLOSE + Human 명시 승인 → origin/main (ff-merge, Netlify prod deploy 유발) + origin/feat/scroll-workout-silhouettes-rev6
 - Decisions / Risks / Follow-ups: 레퍼런스 아이콘(구글 머티리얼 심볼)은 스타일 문법만 참조 — path 복제 없음, 자산 전부 오리지널. 스타일 조정은 LINE_W/HEAD_R/HEAD_GAP/--ws-swap 상수. Netlify 배포 결과 확인 필요.
 - Next: DONE + Human (배포·실기기 체감 확인)
+
+## 2026-07-27T07:40:00Z — scroll-workout-silhouettes (rev 9 — 기능 철회)
+- Stage: WF:CLOSE  - Role/Runtime: Main Driver / Claude Code (observed claude-opus-5)  - Risk: Standard
+- Implementation: b245d02..SELF
+- Review: 셀프 검증 (build/lint/browser). 제거 작업이라 독립 리뷰어 미배정.
+- Human Decision: 제거 지시 확정 (2026-07-27 "아직도 이상해. 그냥 background 에 이미지를 빼자") / push·deploy는 NEEDS_APPROVAL
+- Summary: 배경 인물 실루엣 레이어 전면 제거. `WorkoutSilhouettes.tsx` 삭제, `page.tsx` 마운트 해제, `globals.css`의 `.workout-silhouettes`·`.ws-*` 블록 삭제(549→344줄), `ScrollEnergy`의 스테이션 매핑(`data-station`/`data-bridge`/`STATION_COUNT`/`RUN_BRIDGE_RATIO`) 제거. 진행 바·레인·플래시 등 추상 장식은 유지.
+- Validation: build PASS, lint PASS, browser 390px — 잔존 마크업 0, dataset 정리 확인, 가로 overflow 없음(390==390). SSR HTML 172KB→62KB.
+- Publish Intent/Target: NEEDS_APPROVAL — `main` 반영은 라이브에서 rev 6 실루엣 제거 + Netlify prod deploy 유발
+- Decisions / Risks / Follow-ups: rev 1~8에서 렌더링 방식을 6회 교체했으나 시각 승인 미달. rev 8 후반 헤드리스 Chrome 렌더로 결과를 직접 확인하는 루프를 확보했고(이전에는 Browser pane 미표시로 결과를 못 봄), 그 상태로 8종목+기구를 재작성했지만 판단은 미달. 되살릴 경우 `b245d02..` 커밋에 FK 리그 + 8종목 정지 픽토그램이 남아 있다.
+- Next: Human (push/main 반영 여부 결정)
