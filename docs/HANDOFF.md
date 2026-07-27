@@ -2,69 +2,80 @@
 
 ## Identity
 
-- Status: DONE
-- Task ID: scroll-workout-silhouettes (rev 6)
-- Stage: WF:CLOSE
+- Status: NEEDS_APPROVAL
+- Task ID: scroll-workout-silhouettes (rev 7)
+- Stage: WF:REVIEW
 - Risk: Standard
-- Updated At: 2026-07-12T01:05Z
+- Updated At: 2026-07-27
 
 ## Context Summary
 
-rev 6 완료·배포: rev 5 근육 실루엣 → **라인 픽토그램**(사용자 레퍼런스 이미지 = 머티리얼 심볼
-스타일 운동 아이콘). 균일 두께 라운드 스트로크 사지·몸통 + 분리된 점 머리(HEAD_GAP 보장),
-손·발·근육·포니테일 제거(유니섹스 — 성별 교대는 색+미세 선 두께). 포즈·씬·기어·블렌드·0.9s
-교차 유지. 기계 검증 + 데모 아티팩트(rev6-pictogram-demo) Human 검토 후
-"git push origin main"(2026-07-12)으로 승인 — main ff-merge + push(Netlify prod deploy 트리거).
-스타일 조정은 LINE_W/HEAD_R/HEAD_GAP 상수(컴포넌트)로 즉시 가능.
+사용자 제공 8-station 참고 이미지의 동작 구도를 바탕으로 rev 6 라인 피겨를 채움형 오리지널
+SVG 픽토그램으로 교체했다. SkiErg, Sled Push, Sled Pull, Burpee Broad Jump, Row,
+Farmer's Carry, Sandbag Lunge, Wall Ball 8종 모두 넓은 어깨/좁은 허리의 면 몸통, 굵은
+라운드 사지, 짧은 발, 장비 구도로 재작성했다. 장비는 인체 뒤 레이어로 이동했고 채움 면적
+증가에 맞춰 screen opacity를 0.60에서 0.32로 낮추고 높이를 최대 54vh로 제한했다.
+
+참고 이미지는 포즈 확인에만 사용했다. 원본 비트맵, 텍스트, 로고, 외부 SVG path는 저장소나
+사이트에 포함하지 않았다.
 
 ## Ownership
 
-- Outgoing Role / Runtime: Main Driver / Claude Code (observed `claude-fable-5`, CANDIDATE)
-- Next Role: Human
+- Outgoing Role / Runtime: Main Driver / Codex (user requested `gpt-5.6-sol`; exact active model not independently observable)
+- Next Role: Human visual reviewer
 - Next Runtime ID: Unassigned
-- Next Action: Netlify 대시보드에서 main 최신 커밋 배포 확인 + 실기기에서 픽토그램 체감 확인
-- Reason: 배포 검증과 미관 체감은 Human 몫.
+- Next Action: `http://127.0.0.1:3012/`의 390px 미리보기에서 8종 스크롤 피규어 체감 확인
+- Reason: build/lint/browser 검증은 완료됐고 production push 전 미관 승인만 남음
 
 ## Git and Worktree
 
-- Branch / Worktree: `main` (feature `feat/scroll-workout-silhouettes-rev6` ff-merge 완료)
-- Base HEAD: 6dd91ff
-- Implementation Base: 6dd91ff
-- Implementation Head: 24c8fcb (rev 6 구현)
-- Implementation Commits: 24c8fcb (구현), d0e6c5d (리뷰 패킷)
-- Verified Target: 24c8fcb (+ merge 후 main에서 상태 무변경 — ff-only)
-- Review Range: 6dd91ff..24c8fcb
-- Review Packet Metadata State: d0e6c5d
-- Review Artifact Metadata State: N/A (Human 직접 검토 — 데모 아티팩트 rev6-pictogram-demo)
-- Close Metadata State: SELF — resolve via Git history
-- Worktree State: REPO_CLEAN
+- Branch / Worktree: `codex/scroll-pictograms-r7`
+- Base HEAD: `abe1fa5`
+- Implementation Base: `abe1fa5`
+- Implementation Head: `313e853`
+- Implementation Commits: `313e853` (`feat: refine workout station pictograms`)
+- Verified Target: `313e853`
+- Review Range: `abe1fa5..313e853`
+- Handoff Metadata State: SELF — resolve with `git log -1`
+- Worktree State: REPO_CLEAN after this metadata commit
 - Preserved User Changes: none
 
 ## Publish
 
-- Push Intent: AUTO_AT_CLOSE + Human 명시 승인(main)
-- Approved Target: `origin/main` (protected; deploy-triggering — 2026-07-12 "git push origin main"으로 승인)
-- Expected Remote Head: SELF — resolve close metadata commit
-- Last Reconciled Remote Head: origin/main@6dd91ff (divergence 없음 확인 후 ff-merge)
-- Push Result: NOT_ATTEMPTED (기록 시점; 실제 결과는 chat Output Block)
+- Push Intent: NEEDS_APPROVAL
+- Approved Target: none
+- Expected Remote Head: N/A
+- Last Reconciled Remote Head: `origin/main@abe1fa5`
+- Push Result: NOT_ATTEMPTED
+- Note: `main` push triggers Netlify production deploy and requires separate explicit approval
 
 ## Scope, Validation, and Decisions
 
-- Approved Inputs: SPEC rev 6 + PLAN rev 6 (요구="첨부 이미지의 figure와 똑같은 디자인으로")
-- AC State: AC-14 PASS (기계 검증 + Human 데모 검토·승인); AC-1/2/7/8/9 회귀 PASS;
-  AC-3~5/10~12 CSS 미변경으로 영향 없음; AC-13 SUPERSEDED
-- Evidence: docs/features/scroll-workout-silhouettes/TEST_EVIDENCE.md (rev 6 섹션)
-- Review: Human 데모 아티팩트 검토 (rev6-pictogram-demo)
-- Human Decision: APPROVED (2026-07-12 "git push origin main")
+- Approved Inputs: SPEC rev 7 + PLAN rev 7
+- AC State: AC-15 PASS; AC-1/2/6~10/12 regression PASS; AC-5 actual emulation NOT_RUN (CSS unchanged)
+- Evidence: `docs/features/scroll-workout-silhouettes/TEST_EVIDENCE.md` rev 7
+- Build: PASS (`npm run build`, Next.js 14.2.15)
+- Lint: PASS (`npm run lint`, warnings/errors 0)
+- Browser: PASS (320/390px, overflow false, console warn/error 0, 10 scenes/20 frames, max 54vh)
+- Image generation decision: imagegen skill routed this as an existing repo-native SVG/vector task, so direct
+  SVG editing was used instead of generating or embedding raster assets
+- Review: Independent read-only reviewer PASS after contrast/size/equipment/docs findings were addressed
+- Human Decision: mobile visual acceptance pending
+
+## Files
+
+- `components/WorkoutSilhouettes.tsx`
+- `app/globals.css`
+- `docs/features/scroll-workout-silhouettes/SPEC.md`
+- `docs/features/scroll-workout-silhouettes/PLAN.md`
+- `docs/features/scroll-workout-silhouettes/TEST_EVIDENCE.md`
+- `docs/HANDOFF.md`
 
 ## Risks and Blockers
 
-- Open Findings: none
-- Known Risks:
-  - 선 두께·머리 크기·간격·속도는 LINE_W/HEAD_R/HEAD_GAP/`--ws-swap` 상수로 즉시 조정.
-  - 이번 세션 Browser pane hidden으로 스크린샷 실측 불가 — JS 기하·셀렉터 검증 + 데모
-    아티팩트로 대체. 실기기 체감 확인 권장.
-- Blocker: None
-- Approval Needed: None (이번 main push는 승인 완료; 다음 배포는 다시 별도 승인)
-- Do NOT: HYROX 공식 자산/워딩 금지; magenta 단독 사용 금지; Don/Clinic/PT/의료 콘텐츠 금지;
-  결제/로그인/RSVP 금지(MVP 범위 밖); 시크릿 커밋 금지.
+- Open Findings: none from build/lint/browser checks
+- Known Risk: filled pictogram aesthetics are subjective; Human should review all 8 scroll stations before push
+- Blocker: none
+- Approval Needed: visual acceptance and any push/main/deploy instruction
+- Do NOT: HYROX official assets/wording, magenta standalone, Don/Clinic/PT/medical content,
+  payment/login/RSVP, secrets
